@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DockExaRobotCtrl module &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="DockKobuki2Ctrl module" href="DockKobuki2Ctrl.html" />
+    <link rel="prev" title="DockWidgets" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../apis.html">Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Include.html">Overview</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../apis.html#include">Include</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../modules.html">Include</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../AudioRecognition/modules.html">AudioRecognition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../SpeechSynthesis/modules.html">SpeechSynthesis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Dialog/modules.html">Dialog</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="modules.html">DockWidgets</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">DockExaRobotCtrl module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="DockKobuki2Ctrl.html">DockKobuki2Ctrl module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="DockLogger.html">DockLogger module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="DockPathPlanSim.html">DockPathPlanSim module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="DockProcessMonitor.html">DockProcessMonitor module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="DockServerConnect.html">DockServerConnect module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="DockStellaB2Ctrl.html">DockStellaB2Ctrl module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../ExternalComm/modules.html">ExternalComm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../MdiBackground/modules.html">MdiBackground</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Misc/modules.html">Misc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../MobileRobot/modules.html">MobileRobot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../MultiProcessing/modules.html">MultiProcessing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../PathPlanning/modules.html">PathPlanning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ROSIntegration/modules.html">ROSIntegration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../SubWindow/modules.html">SubWindow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../SubWindow/SerialTerm/modules.html">SerialTerm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../TrajectoryGenerator/modules.html">TrajectoryGenerator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../apis.html#library">Library</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../apis.html">Modules</a> &raquo;</li>
+          <li><a href="modules.html">DockWidgets</a> &raquo;</li>
+      <li>DockExaRobotCtrl module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/Inc/DockWidgets/DockExaRobotCtrl.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-DockExaRobotCtrl">
+<span id="dockexarobotctrl-module"></span><h1>DockExaRobotCtrl module<a class="headerlink" href="#module-DockExaRobotCtrl" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">DockExaRobotCtrl.</span></span><span class="sig-name descname"><span class="pre">DockExaRobotCtrl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QDockWidget</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.closeEvent">
+<span class="sig-name descname"><span class="pre">closeEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QCloseEvent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.closeEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.closeEvent" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.initCtrlWidget">
+<span class="sig-name descname"><span class="pre">initCtrlWidget</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.initCtrlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.initCtrlWidget" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.initFeedbackTable">
+<span class="sig-name descname"><span class="pre">initFeedbackTable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.initFeedbackTable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.initFeedbackTable" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.initMenuBar">
+<span class="sig-name descname"><span class="pre">initMenuBar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.initMenuBar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.initMenuBar" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.initUi">
+<span class="sig-name descname"><span class="pre">initUi</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.initUi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.initUi" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.on_changed_monitoring_state">
+<span class="sig-name descname"><span class="pre">on_changed_monitoring_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.on_changed_monitoring_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.on_changed_monitoring_state" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.on_click_btn_init">
+<span class="sig-name descname"><span class="pre">on_click_btn_init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.on_click_btn_init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.on_click_btn_init" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.on_click_btn_move">
+<span class="sig-name descname"><span class="pre">on_click_btn_move</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.on_click_btn_move"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.on_click_btn_move" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.on_click_btn_refresh">
+<span class="sig-name descname"><span class="pre">on_click_btn_refresh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.on_click_btn_refresh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.on_click_btn_refresh" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.on_click_btn_reset">
+<span class="sig-name descname"><span class="pre">on_click_btn_reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.on_click_btn_reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.on_click_btn_reset" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.on_click_btn_serial_connect">
+<span class="sig-name descname"><span class="pre">on_click_btn_serial_connect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.on_click_btn_serial_connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.on_click_btn_serial_connect" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.on_click_btn_serial_disconnect">
+<span class="sig-name descname"><span class="pre">on_click_btn_serial_disconnect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.on_click_btn_serial_disconnect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.on_click_btn_serial_disconnect" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.on_click_btn_stop">
+<span class="sig-name descname"><span class="pre">on_click_btn_stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.on_click_btn_stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.on_click_btn_stop" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.on_serial_connect">
+<span class="sig-name descname"><span class="pre">on_serial_connect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.on_serial_connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.on_serial_connect" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.on_serial_disconnect">
+<span class="sig-name descname"><span class="pre">on_serial_disconnect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.on_serial_disconnect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.on_serial_disconnect" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.on_serial_error">
+<span class="sig-name descname"><span class="pre">on_serial_error</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.on_serial_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.on_serial_error" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.on_value_changed_center_vel">
+<span class="sig-name descname"><span class="pre">on_value_changed_center_vel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.on_value_changed_center_vel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.on_value_changed_center_vel" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.on_value_changed_left_wheel">
+<span class="sig-name descname"><span class="pre">on_value_changed_left_wheel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.on_value_changed_left_wheel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.on_value_changed_left_wheel" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.on_value_changed_right_wheel">
+<span class="sig-name descname"><span class="pre">on_value_changed_right_wheel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.on_value_changed_right_wheel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.on_value_changed_right_wheel" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.on_value_changed_yaw_rate">
+<span class="sig-name descname"><span class="pre">on_value_changed_yaw_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.on_value_changed_yaw_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.on_value_changed_yaw_rate" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.set_fb_encoder">
+<span class="sig-name descname"><span class="pre">set_fb_encoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anRightEnc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anLeftEnc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.set_fb_encoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.set_fb_encoder" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.set_fb_fw_version">
+<span class="sig-name descname"><span class="pre">set_fb_fw_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">astrVer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.set_fb_fw_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.set_fb_fw_version" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.set_fb_hw_version">
+<span class="sig-name descname"><span class="pre">set_fb_hw_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">astrVer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.set_fb_hw_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.set_fb_hw_version" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.set_fb_state">
+<span class="sig-name descname"><span class="pre">set_fb_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anState</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.set_fb_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.set_fb_state" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.set_fb_velocity">
+<span class="sig-name descname"><span class="pre">set_fb_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">afRightVel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">afLeftVel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#DockExaRobotCtrl.set_fb_velocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.set_fb_velocity" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.DockExaRobotCtrl.sig_close">
+<span class="sig-name descname"><span class="pre">sig_close</span></span><a class="headerlink" href="#DockExaRobotCtrl.DockExaRobotCtrl.sig_close" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.QTableWidgetFeedback">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">DockExaRobotCtrl.</span></span><span class="sig-name descname"><span class="pre">QTableWidgetFeedback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#QTableWidgetFeedback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.QTableWidgetFeedback" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QTableWidget</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.QTableWidgetFeedback.initUi">
+<span class="sig-name descname"><span class="pre">initUi</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#QTableWidgetFeedback.initUi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.QTableWidgetFeedback.initUi" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.QTableWidgetFeedback.listTableHHeader">
+<span class="sig-name descname"><span class="pre">listTableHHeader</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#DockExaRobotCtrl.QTableWidgetFeedback.listTableHHeader" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.QTableWidgetFeedback.listTableVHeader">
+<span class="sig-name descname"><span class="pre">listTableVHeader</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#DockExaRobotCtrl.QTableWidgetFeedback.listTableVHeader" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.QTableWidgetFeedback.set_encoder_value">
+<span class="sig-name descname"><span class="pre">set_encoder_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anRightEnc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anLeftEnc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#QTableWidgetFeedback.set_encoder_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.QTableWidgetFeedback.set_encoder_value" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.QTableWidgetFeedback.set_fw_version">
+<span class="sig-name descname"><span class="pre">set_fw_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">astrVer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#QTableWidgetFeedback.set_fw_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.QTableWidgetFeedback.set_fw_version" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.QTableWidgetFeedback.set_hw_version">
+<span class="sig-name descname"><span class="pre">set_hw_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">astrVer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#QTableWidgetFeedback.set_hw_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.QTableWidgetFeedback.set_hw_version" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.QTableWidgetFeedback.set_state">
+<span class="sig-name descname"><span class="pre">set_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anState</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#QTableWidgetFeedback.set_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.QTableWidgetFeedback.set_state" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.QTableWidgetFeedback.set_table_items">
+<span class="sig-name descname"><span class="pre">set_table_items</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atupleVel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atupleEnc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anState</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">astrFWVer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">astrHWVer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#QTableWidgetFeedback.set_table_items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.QTableWidgetFeedback.set_table_items" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockExaRobotCtrl.QTableWidgetFeedback.set_velocity_value">
+<span class="sig-name descname"><span class="pre">set_velocity_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">afRightVel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">afLeftVel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockExaRobotCtrl.html#QTableWidgetFeedback.set_velocity_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockExaRobotCtrl.QTableWidgetFeedback.set_velocity_value" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="DockWidgets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="DockKobuki2Ctrl.html" class="btn btn-neutral float-right" title="DockKobuki2Ctrl module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

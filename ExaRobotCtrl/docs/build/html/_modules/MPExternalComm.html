@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MPExternalComm &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>MPExternalComm</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for MPExternalComm</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="c1"># File Name    : MPExternalComm.py</span>
+<span class="c1"># Project Name : ExaRobotCtrl</span>
+<span class="c1"># Author       : Raim.Delgado</span>
+<span class="c1"># Organization : SeoulTech</span>
+<span class="c1"># Description  :</span>
+<span class="c1"># [Revision History]</span>
+<span class="c1"># &gt;&gt; 2022.05.05 - First Commit</span>
+<span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="k">as</span> <span class="nn">mp</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="k">import</span> <span class="n">Queue</span>
+<span class="c1"># from multiprocessing.connection import PipeConnection</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Union</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">psutil</span>
+
+<span class="n">FILE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>  <span class="c1"># %PROJECT_ROOT%/Library/Socket</span>
+<span class="n">ROOT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">FILE_PATH</span><span class="p">))</span>
+<span class="n">INCLUDE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Include&quot;</span><span class="p">)</span>
+<span class="n">EXTERNAL_COMM_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;ExternalComm&quot;</span><span class="p">)</span>
+<span class="n">MDI_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;MdiBackground&quot;</span><span class="p">)</span>
+<span class="n">DOCK_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;DockWidgets&quot;</span><span class="p">)</span>
+<span class="n">MISC_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;Misc&quot;</span><span class="p">)</span>
+<span class="n">RESOURCES_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;Resources&quot;</span><span class="p">)</span>
+<span class="n">MULTIPROCESS_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;MultiProcessing&quot;</span><span class="p">)</span>
+<span class="n">LIBRARY_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Library&quot;</span><span class="p">)</span>
+<span class="n">SERIAL_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">LIBRARY_PATH</span><span class="p">,</span> <span class="s2">&quot;Serial&quot;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">DOCK_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">LIBRARY_PATH</span><span class="p">,</span> <span class="n">SERIAL_PATH</span><span class="p">,</span>
+                 <span class="n">MULTIPROCESS_PATH</span><span class="p">,</span> <span class="n">EXTERNAL_COMM_PATH</span><span class="p">])</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+<span class="k">del</span> <span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">DOCK_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">LIBRARY_PATH</span><span class="p">,</span> <span class="n">SERIAL_PATH</span><span class="p">,</span> <span class="n">MULTIPROCESS_PATH</span><span class="p">,</span> <span class="n">EXTERNAL_COMM_PATH</span>
+
+<span class="kn">from</span> <span class="nn">Commons</span> <span class="k">import</span> <span class="n">PySignal</span>
+<span class="kn">from</span> <span class="nn">MultiProcessing.MultiProcessBase</span> <span class="k">import</span> <span class="n">CMultiProcessBase</span>
+<span class="kn">from</span> <span class="nn">ExternalComm.ExternalCommServer</span> <span class="k">import</span> <span class="n">CExternalComm</span>
+
+<span class="n">gExternalComm</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<span class="c1"># dict: CMD, VALUE</span>
+<span class="c1"># pipeChild is an instance of PipeConnection on Windows, but this is different on Linux</span>
+<div class="viewcode-block" id="proc_external_comm"><a class="viewcode-back" href="../Inc/MultiProcessing/MPExternalComm.html#MPExternalComm.proc_external_comm">[docs]</a><span class="k">def</span> <span class="nf">proc_external_comm</span><span class="p">(</span><span class="n">pipeChild</span><span class="p">,</span> <span class="n">feedbackQueue</span><span class="p">:</span> <span class="n">Queue</span><span class="p">,</span> <span class="n">feedbackQueueBk</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Queue</span><span class="p">,</span> <span class="kc">None</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    External 통신에 대한 프로세스이다.</span>
+<span class="sd">    </span>
+<span class="sd">    Pipe로 통해 온 메시지를 처리한다.</span>
+<span class="sd">    </span>
+<span class="sd">    Command 리스트 : CREATE, START, STOP, SEND_RAW, REMOVE_CLIENT, RELEASE</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        pipeChild (Pipe): external_comm Pipe object</span>
+<span class="sd">        feedbackQueue (Queue): external_comm Queue object</span>
+<span class="sd">        feedbackQueueBk (Union[Queue, None]): external_comm QueueBK object </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">gExternalComm</span>
+
+    <span class="n">n_pid</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span>
+    <span class="n">str_name</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">current_process</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">this_proc</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="n">n_pid</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="n">this_proc</span><span class="o">.</span><span class="n">is_running</span><span class="p">():</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pipeChild</span><span class="o">.</span><span class="n">poll</span><span class="p">(</span><span class="kc">None</span><span class="p">):</span>
+                <span class="n">dict_cmd</span> <span class="o">=</span> <span class="n">pipeChild</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">cmd</span> <span class="o">=</span> <span class="n">dict_cmd</span><span class="p">[</span><span class="s2">&quot;CMD&quot;</span><span class="p">]</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">dict_cmd</span><span class="p">[</span><span class="s2">&quot;VAL&quot;</span><span class="p">]</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+                <span class="k">if</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;CREATE&quot;</span><span class="p">:</span>
+                    <span class="n">gExternalComm</span> <span class="o">=</span> <span class="n">CExternalComm</span><span class="p">()</span>
+                    <span class="c1"># common signals</span>
+                    <span class="n">gExternalComm</span><span class="o">.</span><span class="n">sig_start</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">on_comm_status</span><span class="p">(</span><span class="s2">&quot;START&quot;</span><span class="p">,</span> <span class="n">feedbackQueue</span><span class="p">))</span>
+                    <span class="n">gExternalComm</span><span class="o">.</span><span class="n">sig_stop</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">on_comm_status</span><span class="p">(</span><span class="s2">&quot;STOP&quot;</span><span class="p">,</span> <span class="n">feedbackQueue</span><span class="p">))</span>
+                    <span class="n">gExternalComm</span><span class="o">.</span><span class="n">sig_error</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">on_comm_status</span><span class="p">(</span><span class="s2">&quot;ERROR&quot;</span><span class="p">,</span> <span class="n">feedbackQueue</span><span class="p">))</span>
+                    <span class="n">gExternalComm</span><span class="o">.</span><span class="n">sig_accept_client</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">on_client_connect</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">feedbackQueue</span><span class="p">))</span>
+                    <span class="n">gExternalComm</span><span class="o">.</span><span class="n">sig_disconnect_client</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">on_client_disconnect</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">feedbackQueue</span><span class="p">))</span>
+                    <span class="n">gExternalComm</span><span class="o">.</span><span class="n">sig_recv_raw</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">on_recv_raw</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">feedbackQueue</span><span class="p">))</span>
+                    <span class="n">gExternalComm</span><span class="o">.</span><span class="n">sig_emg_stop</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">on_emg_stop</span><span class="p">(</span><span class="n">feedbackQueue</span><span class="p">))</span>
+                    <span class="n">gExternalComm</span><span class="o">.</span><span class="n">sig_move_pose</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">angle</span><span class="p">:</span> <span class="n">on_move_pose</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">feedbackQueue</span><span class="p">))</span>
+
+                <span class="k">elif</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;START&quot;</span><span class="p">:</span>
+                    <span class="n">addr</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="n">val</span>
+                    <span class="n">gExternalComm</span><span class="o">.</span><span class="n">start_server</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">port</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">addr</span><span class="p">))</span>
+
+                <span class="k">elif</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;STOP&quot;</span><span class="p">:</span>
+                    <span class="n">gExternalComm</span><span class="o">.</span><span class="n">stop_server</span><span class="p">()</span>
+
+                <span class="k">elif</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;SEND_RAW&quot;</span><span class="p">:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+                    <span class="n">gExternalComm</span><span class="o">.</span><span class="n">send_raw</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                    
+                <span class="k">elif</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;SEND_TTS&quot;</span><span class="p">:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+                    <span class="n">gExternalComm</span><span class="o">.</span><span class="n">send_tts_msg</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+                <span class="k">elif</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;REMOVE_CLIENT&quot;</span><span class="p">:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+                    <span class="n">gExternalComm</span><span class="o">.</span><span class="n">disconnect_client</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+                <span class="k">elif</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;RELEASE&quot;</span><span class="p">:</span>
+                    <span class="n">gExternalComm</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">)</span>
+
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">1e-6</span><span class="p">)</span></div>
+
+
+<span class="c1">## COMMON ##</span>
+<div class="viewcode-block" id="on_comm_status"><a class="viewcode-back" href="../Inc/MultiProcessing/MPExternalComm.html#MPExternalComm.on_comm_status">[docs]</a><span class="k">def</span> <span class="nf">on_comm_status</span><span class="p">(</span><span class="n">astrStatus</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="n">mp</span><span class="o">.</span><span class="n">Queue</span><span class="p">):</span>
+    <span class="n">dict_msg</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">dict_msg</span><span class="p">[</span><span class="s1">&#39;SERVER_STATUS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">astrStatus</span>
+    <span class="n">q</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">dict_msg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="on_client_connect"><a class="viewcode-back" href="../Inc/MultiProcessing/MPExternalComm.html#MPExternalComm.on_client_connect">[docs]</a><span class="k">def</span> <span class="nf">on_client_connect</span><span class="p">(</span><span class="n">tplAddrPort</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="n">mp</span><span class="o">.</span><span class="n">Queue</span><span class="p">):</span>
+    <span class="n">dict_msg</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">dict_msg</span><span class="p">[</span><span class="s1">&#39;CLIENT_CONNECT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tplAddrPort</span>
+    <span class="n">q</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">dict_msg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="on_client_disconnect"><a class="viewcode-back" href="../Inc/MultiProcessing/MPExternalComm.html#MPExternalComm.on_client_disconnect">[docs]</a><span class="k">def</span> <span class="nf">on_client_disconnect</span><span class="p">(</span><span class="n">tplAddrPort</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="n">mp</span><span class="o">.</span><span class="n">Queue</span><span class="p">):</span>
+    <span class="n">dict_msg</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">dict_msg</span><span class="p">[</span><span class="s1">&#39;CLIENT_DISCONNECT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tplAddrPort</span>
+    <span class="n">q</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">dict_msg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="on_recv_raw"><a class="viewcode-back" href="../Inc/MultiProcessing/MPExternalComm.html#MPExternalComm.on_recv_raw">[docs]</a><span class="k">def</span> <span class="nf">on_recv_raw</span><span class="p">(</span><span class="n">abData</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="n">mp</span><span class="o">.</span><span class="n">Queue</span><span class="p">):</span>
+    <span class="n">dict_msg</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">dict_msg</span><span class="p">[</span><span class="s1">&#39;RECV_RAW&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">abData</span>
+    <span class="n">q</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">dict_msg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="on_emg_stop"><a class="viewcode-back" href="../Inc/MultiProcessing/MPExternalComm.html#MPExternalComm.on_emg_stop">[docs]</a><span class="k">def</span> <span class="nf">on_emg_stop</span><span class="p">(</span><span class="n">q</span><span class="p">:</span> <span class="n">mp</span><span class="o">.</span><span class="n">Queue</span><span class="p">):</span>
+    <span class="n">dict_msg</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">dict_msg</span><span class="p">[</span><span class="s1">&#39;EMG_STOP&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">q</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">dict_msg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="on_move_pose"><a class="viewcode-back" href="../Inc/MultiProcessing/MPExternalComm.html#MPExternalComm.on_move_pose">[docs]</a><span class="k">def</span> <span class="nf">on_move_pose</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="n">mp</span><span class="o">.</span><span class="n">Queue</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">angle</span><span class="p">)</span>
+    <span class="n">dict_msg</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">dict_msg</span><span class="p">[</span><span class="s1">&#39;MOVE_POSE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">angle</span><span class="p">)</span>
+    <span class="n">q</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">dict_msg</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

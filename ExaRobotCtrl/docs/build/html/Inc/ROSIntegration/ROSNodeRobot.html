@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ROSNodeRobot module &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ROSNodeTfPub module" href="ROSNodeTfPub.html" />
+    <link rel="prev" title="ROSNodeBase module" href="ROSNodeBase.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../apis.html">Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Include.html">Overview</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../apis.html#include">Include</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../modules.html">Include</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../AudioRecognition/modules.html">AudioRecognition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../SpeechSynthesis/modules.html">SpeechSynthesis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Dialog/modules.html">Dialog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../DockWidgets/modules.html">DockWidgets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ExternalComm/modules.html">ExternalComm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../MdiBackground/modules.html">MdiBackground</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Misc/modules.html">Misc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../MobileRobot/modules.html">MobileRobot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../MultiProcessing/modules.html">MultiProcessing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../PathPlanning/modules.html">PathPlanning</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="modules.html">ROSIntegration</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ROSLaunch.html">ROSLaunch module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ROSNavigator.html">ROSNavigator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ROSNodeBase.html">ROSNodeBase module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">ROSNodeRobot module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ROSNodeTfPub.html">ROSNodeTfPub module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ROSNodeVelPub.html">ROSNodeVelPub module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RosNodeVelSub.html">RosNodeVelSub module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../SubWindow/modules.html">SubWindow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../SubWindow/SerialTerm/modules.html">SerialTerm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../TrajectoryGenerator/modules.html">TrajectoryGenerator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../apis.html#library">Library</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../apis.html">Modules</a> &raquo;</li>
+          <li><a href="modules.html">ROSIntegration</a> &raquo;</li>
+      <li>ROSNodeRobot module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/Inc/ROSIntegration/ROSNodeRobot.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-ROSNodeRobot">
+<span id="rosnoderobot-module"></span><h1>ROSNodeRobot module<a class="headerlink" href="#module-ROSNodeRobot" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ROSNodeRobot.CROSNodeRobot">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ROSNodeRobot.</span></span><span class="sig-name descname"><span class="pre">CROSNodeRobot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">afPeriod</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">astrPubTopicTf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'odom'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">astrSubTopicVel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cmd_vel'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ROSNodeRobot.html#CROSNodeRobot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ROSNodeRobot.CROSNodeRobot" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="ROSNodeBase.html#ROSNodeBase.CROSNodeBase" title="ROSNodeBase.CROSNodeBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CROSNodeBase</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ROSNodeRobot.CROSNodeRobot.cmd_vel_callback">
+<span class="sig-name descname"><span class="pre">cmd_vel_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Twist</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ROSNodeRobot.html#CROSNodeRobot.cmd_vel_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ROSNodeRobot.CROSNodeRobot.cmd_vel_callback" title="Permalink to this definition"></a></dt>
+<dd><p>cmd_vel 구독시 Callback 함수</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>msg</strong> (<em>Twist</em>) – cmd_vel (선속도, 각속도)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ROSNodeRobot.CROSNodeRobot.destroy_topic">
+<span class="sig-name descname"><span class="pre">destroy_topic</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ROSNodeRobot.html#CROSNodeRobot.destroy_topic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ROSNodeRobot.CROSNodeRobot.destroy_topic" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ROSNodeRobot.CROSNodeRobot.quaternion_from_euler">
+<span class="sig-name descname"><span class="pre">quaternion_from_euler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">roll</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ROSNodeRobot.html#CROSNodeRobot.quaternion_from_euler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ROSNodeRobot.CROSNodeRobot.quaternion_from_euler" title="Permalink to this definition"></a></dt>
+<dd><p>euler 좌표계에서 quaternion 좌표계로 변경</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>roll</strong> (<em>float</em>) – X축 기준 회전각도</p></li>
+<li><p><strong>pitch</strong> (<em>float</em>) – Y축 기준 회전각도</p></li>
+<li><p><strong>yaw</strong> (<em>float</em>) – Z축 기준 회전각도</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>_description_</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>_type_</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ROSNodeRobot.CROSNodeRobot.start_timer">
+<span class="sig-name descname"><span class="pre">start_timer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ROSNodeRobot.html#CROSNodeRobot.start_timer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ROSNodeRobot.CROSNodeRobot.start_timer" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ROSNodeRobot.CROSNodeRobot.stop_timer">
+<span class="sig-name descname"><span class="pre">stop_timer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ROSNodeRobot.html#CROSNodeRobot.stop_timer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ROSNodeRobot.CROSNodeRobot.stop_timer" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ROSNodeRobot.CROSNodeRobot.timer_callback">
+<span class="sig-name descname"><span class="pre">timer_callback</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ROSNodeRobot.html#CROSNodeRobot.timer_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ROSNodeRobot.CROSNodeRobot.timer_callback" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ROSNodeRobot.CROSNodeRobot.update_odom_and_tf">
+<span class="sig-name descname"><span class="pre">update_odom_and_tf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fPos_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fPos_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fPos_theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fVel_c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fOmega_c</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ROSNodeRobot.html#CROSNodeRobot.update_odom_and_tf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ROSNodeRobot.CROSNodeRobot.update_odom_and_tf" title="Permalink to this definition"></a></dt>
+<dd><p>Odom, tf update 함수</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fPos_x</strong> (<em>float</em>) – X 위치</p></li>
+<li><p><strong>fPos_y</strong> (<em>float</em>) – Y 위치</p></li>
+<li><p><strong>fPos_theta</strong> (<em>float</em>) – 회전각</p></li>
+<li><p><strong>fVel_c</strong> (<em>float</em>) – 선속도</p></li>
+<li><p><strong>fOmega_c</strong> (<em>float</em>) – 각속도</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ROSNodeBase.html" class="btn btn-neutral float-left" title="ROSNodeBase module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ROSNodeTfPub.html" class="btn btn-neutral float-right" title="ROSNodeTfPub module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

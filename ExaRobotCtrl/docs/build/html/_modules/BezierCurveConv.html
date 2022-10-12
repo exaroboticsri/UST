@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BezierCurveConv &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>BezierCurveConv</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for BezierCurveConv</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="c1"># File Name    : BezierCurveConf.py</span>
+<span class="c1"># Project Name : ExaRobotCtrl</span>
+<span class="c1"># Author       : Raim.Delgado</span>
+<span class="c1"># Organization : SeoulTech</span>
+<span class="c1"># Description  :</span>
+<span class="c1"># [Revision History]</span>
+<span class="c1"># &gt;&gt; 2021.02.10 - First Commit</span>
+<span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">IntEnum</span><span class="p">,</span> <span class="n">unique</span><span class="p">,</span> <span class="n">auto</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">arctan2</span><span class="p">,</span> <span class="n">deg2rad</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">sign</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="nb">round</span><span class="p">,</span> <span class="n">cumsum</span><span class="p">,</span> <span class="n">diff</span>
+
+
+<div class="viewcode-block" id="CBezierCurveTraj"><a class="viewcode-back" href="../Inc/TrajectoryGenerator/BezierCurveConv.html#BezierCurveConv.CBezierCurveTraj">[docs]</a><span class="k">class</span> <span class="nc">CBezierCurveTraj</span><span class="p">:</span>
+    <span class="n">fMaxVel</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">fMaxAcc</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">fMaxJerk</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">fXStart</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">fYStart</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">fThetaStart</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">nSampling</span><span class="p">:</span> <span class="nb">int</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">afMaxV</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">afMaxA</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">afMaxJ</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fMaxVel</span> <span class="o">=</span> <span class="n">afMaxV</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fMaxAcc</span> <span class="o">=</span> <span class="n">afMaxA</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fMaxJerk</span> <span class="o">=</span> <span class="n">afMaxJ</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nSampling</span> <span class="o">=</span> <span class="mi">1000</span>
+
+    <span class="k">def</span> <span class="nf">_calc_conv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">listX1</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">listX2</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">dT</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="n">f_x</span> <span class="o">=</span> <span class="n">listX1</span>
+        <span class="n">f_h</span> <span class="o">=</span> <span class="n">listX2</span>
+        <span class="n">m_x</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">f_x</span><span class="p">)</span>
+        <span class="n">n_h</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">f_h</span><span class="p">)</span>
+
+        <span class="n">listConv</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="o">*</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m_x</span> <span class="o">+</span> <span class="n">n_h</span><span class="p">)]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m_x</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_h</span><span class="p">):</span>
+                <span class="n">listConv</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">f_x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">f_h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">dT</span>
+
+        <span class="k">return</span> <span class="n">listConv</span>
+
+    <span class="c1"># Convolution velocity profile -&gt; Geon Lee (Convolution-Based Trajectory Generation Methods Using Physical System</span>
+    <span class="c1"># Limits)</span>
+<div class="viewcode-block" id="CBezierCurveTraj.calc_conv_vel"><a class="viewcode-back" href="../Inc/TrajectoryGenerator/BezierCurveConv.html#BezierCurveConv.CBezierCurveTraj.calc_conv_vel">[docs]</a>    <span class="k">def</span> <span class="nf">calc_conv_vel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">afPathLen</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">afVstart</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">afVtarget</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">dT</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="n">v_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fMaxVel</span>
+        <span class="n">v_max_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fMaxAcc</span>
+        <span class="n">v_max_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fMaxJerk</span>
+        <span class="n">v_i</span><span class="p">,</span> <span class="n">v_f</span> <span class="o">=</span> <span class="n">afVstart</span><span class="p">,</span> <span class="n">afVtarget</span>
+        <span class="n">S_n</span> <span class="o">=</span> <span class="n">afPathLen</span>
+
+        <span class="k">if</span> <span class="n">v_max</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">v_max_1</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">v_max_2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Max Vel, Acc, or Jerk should not be zero!&quot;</span><span class="p">)</span>
+
+        <span class="n">t2</span> <span class="o">=</span> <span class="n">v_max_1</span> <span class="o">/</span> <span class="n">v_max_2</span>
+        <span class="n">v0</span> <span class="o">=</span> <span class="n">sign</span><span class="p">(</span><span class="n">S_n</span><span class="p">)</span> <span class="o">*</span> <span class="n">v_max</span> <span class="o">-</span> <span class="n">v_i</span>
+        <span class="n">t1_plus</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_max</span> <span class="o">-</span> <span class="n">sign</span><span class="p">(</span><span class="n">v0</span><span class="p">)</span> <span class="o">*</span> <span class="n">v_i</span><span class="p">)</span> <span class="o">/</span> <span class="n">v_max_1</span>
+        <span class="n">t1</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_max</span> <span class="o">-</span> <span class="n">sign</span><span class="p">(</span><span class="n">v0</span><span class="p">)</span> <span class="o">*</span> <span class="n">v_f</span><span class="p">)</span> <span class="o">/</span> <span class="n">v_max_1</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="p">(</span><span class="n">sign</span><span class="p">(</span><span class="n">S_n</span><span class="p">)</span> <span class="o">/</span> <span class="n">v_max</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">S_n</span> <span class="o">-</span> <span class="p">(((</span><span class="n">v_f</span> <span class="o">+</span> <span class="n">v_i</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">t1</span> <span class="o">+</span> <span class="n">t2</span><span class="p">))</span> <span class="o">+</span> <span class="p">((</span><span class="n">v_i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">t1</span> <span class="o">-</span> <span class="n">t1_plus</span><span class="p">)))</span> <span class="o">-</span> <span class="p">(</span>
+                <span class="n">t1</span> <span class="o">-</span> <span class="n">t1_plus</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+
+        <span class="c1"># first convolution</span>
+        <span class="n">m_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">t0</span> <span class="o">/</span> <span class="n">dT</span><span class="p">))</span>
+        <span class="n">n_h</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">t1</span> <span class="o">/</span> <span class="n">dT</span><span class="p">))</span>
+        <span class="n">tmpX1</span> <span class="o">=</span> <span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">m_x</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">tmpH1</span> <span class="o">=</span> <span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_h</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">X_1</span> <span class="o">=</span> <span class="p">[</span><span class="n">v0</span> <span class="o">*</span> <span class="n">x1</span> <span class="k">for</span> <span class="n">x1</span> <span class="ow">in</span> <span class="n">tmpX1</span><span class="p">]</span>
+        <span class="n">H_1</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">t1</span><span class="p">)</span> <span class="o">*</span> <span class="n">h1</span> <span class="k">for</span> <span class="n">h1</span> <span class="ow">in</span> <span class="n">tmpH1</span><span class="p">]</span>
+        <span class="n">conv1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_conv</span><span class="p">(</span><span class="n">X_1</span><span class="p">,</span> <span class="n">H_1</span><span class="p">,</span> <span class="n">dT</span><span class="p">)</span>
+
+        <span class="c1"># second convolution</span>
+        <span class="n">X_2</span> <span class="o">=</span> <span class="n">conv1</span>
+        <span class="n">n_h2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">t2</span> <span class="o">/</span> <span class="n">dT</span><span class="p">))</span>
+        <span class="n">tmpH2</span> <span class="o">=</span> <span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_h2</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">H_2</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">t2</span><span class="p">)</span> <span class="o">*</span> <span class="n">h2</span> <span class="k">for</span> <span class="n">h2</span> <span class="ow">in</span> <span class="n">tmpH2</span><span class="p">]</span>
+        <span class="n">conv2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_conv</span><span class="p">(</span><span class="n">X_2</span><span class="p">,</span> <span class="n">H_2</span><span class="p">,</span> <span class="n">dT</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">conv2</span></div>
+
+<div class="viewcode-block" id="CBezierCurveTraj.calc_bezier_curve"><a class="viewcode-back" href="../Inc/TrajectoryGenerator/BezierCurveConv.html#BezierCurveConv.CBezierCurveTraj.calc_bezier_curve">[docs]</a>    <span class="k">def</span> <span class="nf">calc_bezier_curve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aInit</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">aTarg</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">d1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                          <span class="n">d2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">au_param</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="n">x_start</span><span class="p">,</span> <span class="n">y_start</span><span class="p">,</span> <span class="n">theta_start</span> <span class="o">=</span> <span class="n">aInit</span>
+        <span class="n">x_targ</span><span class="p">,</span> <span class="n">y_targ</span><span class="p">,</span> <span class="n">theta_targ</span> <span class="o">=</span> <span class="n">aTarg</span>
+
+        <span class="n">x_1</span> <span class="o">=</span> <span class="n">x_start</span> <span class="o">+</span> <span class="n">d1</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">theta_start</span><span class="p">))</span>
+        <span class="n">y_1</span> <span class="o">=</span> <span class="n">y_start</span> <span class="o">+</span> <span class="n">d1</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">theta_start</span><span class="p">))</span>
+        <span class="n">x_2</span> <span class="o">=</span> <span class="n">x_targ</span> <span class="o">+</span> <span class="n">d2</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">deg2rad</span><span class="p">(</span><span class="mi">180</span> <span class="o">+</span> <span class="n">theta_targ</span><span class="p">))</span>
+        <span class="n">y_2</span> <span class="o">=</span> <span class="n">y_targ</span> <span class="o">+</span> <span class="n">d2</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">deg2rad</span><span class="p">(</span><span class="mi">180</span> <span class="o">+</span> <span class="n">theta_targ</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">au_param</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">u_param</span> <span class="o">=</span> <span class="mf">0.</span>
+            <span class="n">list_u</span> <span class="o">=</span> <span class="p">[</span><span class="n">u_param</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nSampling</span><span class="p">):</span>
+                <span class="n">u_param</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nSampling</span>
+                <span class="n">list_u</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u_param</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">list_u</span> <span class="o">=</span> <span class="n">au_param</span>
+
+        <span class="n">listXYTheta</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">theta_u</span> <span class="o">=</span> <span class="n">theta_start</span>
+        <span class="n">prev_x</span> <span class="o">=</span> <span class="n">x_start</span>
+        <span class="n">prev_y</span> <span class="o">=</span> <span class="n">y_start</span>
+        <span class="n">fPathLength</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">list_u</span><span class="p">:</span>
+            <span class="n">x_u</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_start</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">u</span><span class="p">)</span> <span class="o">**</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">x_1</span> <span class="o">*</span> <span class="n">u</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">u</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">x_2</span> <span class="o">*</span> <span class="p">(</span><span class="n">u</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">u</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span>
+                    <span class="n">x_targ</span> <span class="o">*</span> <span class="p">(</span><span class="n">u</span> <span class="o">**</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">y_u</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_start</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">u</span><span class="p">)</span> <span class="o">**</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">y_1</span> <span class="o">*</span> <span class="n">u</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">u</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">y_2</span> <span class="o">*</span> <span class="p">(</span><span class="n">u</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">u</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span>
+                    <span class="n">y_targ</span> <span class="o">*</span> <span class="p">(</span><span class="n">u</span> <span class="o">**</span> <span class="mi">3</span><span class="p">))</span>
+
+            <span class="n">listXYTheta</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x_u</span><span class="p">,</span> <span class="n">y_u</span><span class="p">,</span> <span class="n">theta_u</span><span class="p">))</span>
+            <span class="n">dX</span> <span class="o">=</span> <span class="n">x_u</span> <span class="o">-</span> <span class="n">prev_x</span>
+            <span class="n">dY</span> <span class="o">=</span> <span class="n">y_u</span> <span class="o">-</span> <span class="n">prev_y</span>
+            <span class="n">theta_u</span> <span class="o">=</span> <span class="n">arctan2</span><span class="p">(</span><span class="n">dY</span><span class="p">,</span> <span class="n">dX</span><span class="p">)</span>
+            <span class="n">fPathLength</span> <span class="o">+=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">dX</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">dY</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+            <span class="n">prev_x</span> <span class="o">=</span> <span class="n">x_u</span>
+            <span class="n">prev_y</span> <span class="o">=</span> <span class="n">y_u</span>
+
+        <span class="k">return</span> <span class="n">listXYTheta</span><span class="p">,</span> <span class="n">fPathLength</span></div>
+
+<div class="viewcode-block" id="CBezierCurveTraj.generate_bezier_trajectory"><a class="viewcode-back" href="../Inc/TrajectoryGenerator/BezierCurveConv.html#BezierCurveConv.CBezierCurveTraj.generate_bezier_trajectory">[docs]</a>    <span class="k">def</span> <span class="nf">generate_bezier_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aInit</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">aTarg</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+                                   <span class="n">afVstart</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">afVend</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">dT</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>  <span class="c1"># -&gt; Tuple[List[float], List[float]]:</span>
+        <span class="n">MAXA</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fMaxAcc</span>
+        <span class="n">MAXV</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fMaxVel</span>
+        <span class="n">X_i</span><span class="p">,</span> <span class="n">Y_i</span><span class="p">,</span> <span class="n">Theta_i</span> <span class="o">=</span> <span class="n">aInit</span>
+        <span class="n">X_f</span><span class="p">,</span> <span class="n">Y_f</span><span class="p">,</span> <span class="n">Theta_f</span> <span class="o">=</span> <span class="n">aTarg</span>
+        <span class="n">V_i</span> <span class="o">=</span> <span class="n">afVstart</span>
+        <span class="n">V_f</span> <span class="o">=</span> <span class="n">afVend</span>
+
+        <span class="k">if</span> <span class="n">X_i</span> <span class="o">==</span> <span class="n">X_f</span> <span class="ow">and</span> <span class="n">Y_i</span> <span class="o">==</span> <span class="n">Y_f</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Init and Target Pose are the same&#39;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">d1</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">MAXA</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">V_i</span> <span class="o">/</span> <span class="n">MAXV</span><span class="p">))))</span> <span class="o">*</span> <span class="p">(</span><span class="n">sqrt</span><span class="p">((</span><span class="n">X_f</span> <span class="o">-</span> <span class="n">X_i</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">X_f</span> <span class="o">-</span> <span class="n">X_i</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">Y_f</span> <span class="o">-</span> <span class="n">Y_i</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Y_f</span> <span class="o">-</span> <span class="n">Y_i</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">d2</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">MAXA</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">V_f</span> <span class="o">/</span> <span class="n">MAXV</span><span class="p">))))</span> <span class="o">*</span> <span class="p">(</span><span class="n">sqrt</span><span class="p">((</span><span class="n">X_f</span> <span class="o">-</span> <span class="n">X_i</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">X_f</span> <span class="o">-</span> <span class="n">X_i</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">Y_f</span> <span class="o">-</span> <span class="n">Y_i</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Y_f</span> <span class="o">-</span> <span class="n">Y_i</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Max Vel, Acc, or Jerk should not be zero!&quot;</span><span class="p">)</span>
+
+        <span class="c1"># generate Bezier curve in the u-domain</span>
+        <span class="n">BezierXYTheta</span><span class="p">,</span> <span class="n">s_n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_bezier_curve</span><span class="p">(</span><span class="n">aInit</span><span class="p">,</span> <span class="n">aTarg</span><span class="p">,</span> <span class="mf">0.005</span><span class="p">,</span> <span class="mf">0.005</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">V_c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_conv_vel</span><span class="p">(</span><span class="n">s_n</span><span class="p">,</span> <span class="n">V_i</span><span class="p">,</span> <span class="n">V_f</span><span class="p">,</span> <span class="n">dT</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+
+        <span class="c1"># generate Bezier curve in the time domain</span>
+        <span class="n">V_dis</span> <span class="o">=</span> <span class="n">cumsum</span><span class="p">(</span><span class="n">V_c</span><span class="p">)</span>
+        <span class="n">Bd</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">V_c</span><span class="p">)</span> <span class="o">*</span> <span class="n">dT</span>
+        <span class="n">u_param</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="n">list_uc</span> <span class="o">=</span> <span class="p">[</span><span class="n">u_param</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">v_dis</span> <span class="ow">in</span> <span class="n">V_dis</span><span class="p">:</span>
+            <span class="n">u_param</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_dis</span> <span class="o">*</span> <span class="n">dT</span><span class="p">)</span> <span class="o">/</span> <span class="n">Bd</span>
+            <span class="k">if</span> <span class="n">u_param</span> <span class="o">&gt;=</span> <span class="mf">1.</span><span class="p">:</span>
+                <span class="n">u_param</span> <span class="o">=</span> <span class="mf">1.</span>
+
+            <span class="n">list_uc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u_param</span><span class="p">)</span>
+
+        <span class="n">BezierXYThetaC</span><span class="p">,</span> <span class="n">s_nc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_bezier_curve</span><span class="p">(</span><span class="n">aInit</span><span class="p">,</span> <span class="n">aTarg</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">,</span> <span class="n">list_uc</span><span class="p">)</span>
+
+        <span class="c1"># calculate yaw rate (rads)</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="p">[</span><span class="n">angles</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">angles</span> <span class="ow">in</span> <span class="n">BezierXYThetaC</span><span class="p">]</span>
+        <span class="n">tmpYawRate</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+        <span class="n">ThetaDot_c</span> <span class="o">=</span> <span class="p">[</span><span class="n">yaw</span> <span class="o">/</span> <span class="n">dT</span> <span class="k">for</span> <span class="n">yaw</span> <span class="ow">in</span> <span class="n">tmpYawRate</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">V_c</span><span class="p">,</span> <span class="n">ThetaDot_c</span><span class="p">,</span> <span class="n">BezierXYThetaC</span></div>
+
+<div class="viewcode-block" id="CBezierCurveTraj.set_phy_limits"><a class="viewcode-back" href="../Inc/TrajectoryGenerator/BezierCurveConv.html#BezierCurveConv.CBezierCurveTraj.set_phy_limits">[docs]</a>    <span class="k">def</span> <span class="nf">set_phy_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">afMaxVel</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">afMaxAcc</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">afMaxJerk</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fMaxVel</span> <span class="o">=</span> <span class="n">afMaxVel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fMaxAcc</span> <span class="o">=</span> <span class="n">afMaxAcc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fMaxJerk</span> <span class="o">=</span> <span class="n">afMaxJerk</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">CBezierCurveTraj</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+    <span class="n">targ</span> <span class="o">=</span> <span class="p">(</span><span class="mf">4.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+    <span class="n">BezierXY</span><span class="p">,</span> <span class="n">pathLength</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">calc_bezier_curve</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">targ</span><span class="p">,</span> <span class="mf">2.2627</span><span class="p">,</span> <span class="mf">2.2627</span><span class="p">)</span>
+    <span class="n">vel</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">calc_conv_vel</span><span class="p">(</span><span class="n">pathLength</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">generate_bezier_trajectory</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">targ</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+
+<span class="c1"># x_all = [xy[0] for xy in BezierXY]</span>
+<span class="c1"># y_all = [xy[1] for xy in BezierXY]</span>
+<span class="c1"># dx = numpy.diff(x_all)</span>
+<span class="c1"># dy = numpy.diff(y_all)</span>
+<span class="c1"># #</span>
+<span class="c1"># for x in dx:</span>
+<span class="c1"># 	print(x)</span>
+<span class="c1">#</span>
+<span class="c1"># print(&quot;HHHHHHHH&quot;)</span>
+<span class="c1"># for x in dy:</span>
+<span class="c1"># 	print(x)</span>
+
+<span class="c1"># u_param = 0.</span>
+<span class="c1"># list_u = [u_param]</span>
+<span class="c1"># for i in range(1000):</span>
+<span class="c1"># 	u_param += 1 / (1000-1)</span>
+<span class="c1"># 	list_u.append(u_param)</span>
+<span class="c1"># 	print(u_param)</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># for u in list_u:</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

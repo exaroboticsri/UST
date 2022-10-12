@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DockExaRobotCtrl &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>DockExaRobotCtrl</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for DockExaRobotCtrl</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="c1"># File Name    : DockExaRobotCtrl.py</span>
+<span class="c1"># Project Name : ExaRobotCtrl</span>
+<span class="c1"># Author       : Raim.Delgado</span>
+<span class="c1"># Organization : SeoulTech</span>
+<span class="c1"># Description  :</span>
+<span class="c1"># [Revision History]</span>
+<span class="c1"># &gt;&gt; 2022.04.18 - First Commit</span>
+<span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">rad2deg</span><span class="p">,</span> <span class="n">deg2rad</span>
+
+<span class="n">FILE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>  <span class="c1"># %PROJECT_ROOT%/Include/DOckWidgets</span>
+<span class="n">ROOT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">FILE_PATH</span><span class="p">))</span>
+<span class="n">INCLUDE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Include&quot;</span><span class="p">)</span>
+<span class="n">MOBILE_ROBOT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;MobileRobot&quot;</span><span class="p">)</span>
+<span class="n">LIBRARY_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Library&quot;</span><span class="p">)</span>
+<span class="n">SERIAL_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">LIBRARY_PATH</span><span class="p">,</span> <span class="s2">&quot;Serial&quot;</span><span class="p">)</span>
+<span class="n">MDI_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;MdiBackground&quot;</span><span class="p">)</span>
+<span class="n">MISC_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;Misc&quot;</span><span class="p">)</span>
+<span class="n">RESOURCES_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Resources&quot;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">SERIAL_PATH</span><span class="p">,</span> <span class="n">MOBILE_ROBOT_PATH</span><span class="p">,</span> <span class="n">MISC_PATH</span><span class="p">])</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+<span class="k">del</span> <span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">LIBRARY_PATH</span><span class="p">,</span> <span class="n">SERIAL_PATH</span><span class="p">,</span> <span class="n">MOBILE_ROBOT_PATH</span>
+
+<span class="kn">from</span> <span class="nn">EmbdLed</span> <span class="k">import</span> <span class="n">EmbdLed</span>
+<span class="kn">from</span> <span class="nn">UiCommon</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">Commons</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">SerialPort</span> <span class="k">import</span> <span class="n">get_serial_port_name_list</span>
+<span class="kn">from</span> <span class="nn">TMRExaRobot</span> <span class="k">import</span> <span class="n">CTMRExaRobot</span>
+
+
+<div class="viewcode-block" id="QTableWidgetFeedback"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.QTableWidgetFeedback">[docs]</a><span class="k">class</span> <span class="nc">QTableWidgetFeedback</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTableWidget</span><span class="p">):</span>
+    <span class="n">listTableHHeader</span><span class="p">:</span> <span class="nb">list</span>
+    <span class="n">listTableVHeader</span><span class="p">:</span> <span class="nb">list</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">QTableWidgetFeedback</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">listTableHHeader</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Right Wheel&quot;</span><span class="p">,</span> <span class="s2">&quot;Left Wheel&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">listTableVHeader</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Velocity&quot;</span><span class="p">,</span> <span class="s2">&quot;Encoder&quot;</span><span class="p">,</span> <span class="s2">&quot;State&quot;</span><span class="p">,</span> <span class="s2">&quot;FW Version&quot;</span><span class="p">,</span> <span class="s2">&quot;HW Version&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initUi</span><span class="p">()</span>
+
+<div class="viewcode-block" id="QTableWidgetFeedback.initUi"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.QTableWidgetFeedback.initUi">[docs]</a>    <span class="k">def</span> <span class="nf">initUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setColumnCount</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">listTableHHeader</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setHorizontalHeaderLabels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">listTableHHeader</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setRowCount</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">listTableVHeader</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setVerticalHeaderLabels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">listTableVHeader</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">horizontalHeader</span><span class="p">()</span><span class="o">.</span><span class="n">setSectionResizeMode</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHeaderView</span><span class="o">.</span><span class="n">Stretch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">horizontalHeader</span><span class="p">()</span><span class="o">.</span><span class="n">setSectionResizeMode</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHeaderView</span><span class="o">.</span><span class="n">Stretch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setSpan</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setSpan</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setSpan</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_table_items</span><span class="p">((</span><span class="mf">0.00</span><span class="p">,</span> <span class="mf">0.00</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Unknown&quot;</span><span class="p">,</span> <span class="s2">&quot;Unknown&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QTableWidgetFeedback.set_table_items"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.QTableWidgetFeedback.set_table_items">[docs]</a>    <span class="k">def</span> <span class="nf">set_table_items</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atupleVel</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">atupleEnc</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">anState</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">astrFWVer</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">astrHWVer</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">rightVel</span><span class="p">,</span> <span class="n">leftVel</span> <span class="o">=</span> <span class="n">atupleVel</span>
+        <span class="n">rightEnc</span><span class="p">,</span> <span class="n">leftEnc</span> <span class="o">=</span> <span class="n">atupleEnc</span>
+        <span class="n">rightVel</span> <span class="o">=</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">rightVel</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">leftVel</span> <span class="o">=</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">leftVel</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">rightEnc</span> <span class="o">=</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">rightEnc</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">leftEnc</span> <span class="o">=</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">leftEnc</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">anState</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">fw_version</span> <span class="o">=</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">astrFWVer</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">hw_version</span> <span class="o">=</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">astrHWVer</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rightVel</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">leftVel</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rightEnc</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">leftEnc</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fw_version</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">hw_version</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resizeRowsToContents</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">viewport</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>  <span class="c1"># refresh table</span></div>
+
+<div class="viewcode-block" id="QTableWidgetFeedback.set_encoder_value"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.QTableWidgetFeedback.set_encoder_value">[docs]</a>    <span class="k">def</span> <span class="nf">set_encoder_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anRightEnc</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">anLeftEnc</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">rightEnc</span> <span class="o">=</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">anRightEnc</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">leftEnc</span> <span class="o">=</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">anLeftEnc</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rightEnc</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">leftEnc</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resizeRowsToContents</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">viewport</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>  <span class="c1"># refresh table</span></div>
+
+<div class="viewcode-block" id="QTableWidgetFeedback.set_velocity_value"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.QTableWidgetFeedback.set_velocity_value">[docs]</a>    <span class="k">def</span> <span class="nf">set_velocity_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">afRightVel</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">afLeftVel</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="n">rightVel</span> <span class="o">=</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">afRightVel</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">leftVel</span> <span class="o">=</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">afLeftVel</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rightVel</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">leftVel</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resizeRowsToContents</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">viewport</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>  <span class="c1"># refresh table</span></div>
+
+<div class="viewcode-block" id="QTableWidgetFeedback.set_state"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.QTableWidgetFeedback.set_state">[docs]</a>    <span class="k">def</span> <span class="nf">set_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anState</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">anState</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resizeRowsToContents</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">viewport</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>  <span class="c1"># refresh table</span></div>
+
+<div class="viewcode-block" id="QTableWidgetFeedback.set_fw_version"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.QTableWidgetFeedback.set_fw_version">[docs]</a>    <span class="k">def</span> <span class="nf">set_fw_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">astrVer</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">astrVer</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">version</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resizeRowsToContents</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">viewport</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>  <span class="c1"># refresh table</span></div>
+
+<div class="viewcode-block" id="QTableWidgetFeedback.set_hw_version"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.QTableWidgetFeedback.set_hw_version">[docs]</a>    <span class="k">def</span> <span class="nf">set_hw_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">astrVer</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">astrVer</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">version</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resizeRowsToContents</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">viewport</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>  <span class="c1"># refresh table</span></div></div>
+
+
+<div class="viewcode-block" id="DockExaRobotCtrl"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl">[docs]</a><span class="k">class</span> <span class="nc">DockExaRobotCtrl</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDockWidget</span><span class="p">):</span>
+    <span class="n">_widgetMenuBar</span><span class="p">:</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_widgetCtrl</span><span class="p">:</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_widgetCtrlFb</span><span class="p">:</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_widgetFeedback</span><span class="p">:</span> <span class="n">QTableWidgetFeedback</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">sig_close</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.closeEvent"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.closeEvent">[docs]</a>    <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">closeEvent</span><span class="p">:</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QCloseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_close</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DockExaRobotCtrl</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_serial_connect</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_serial_disconnect</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_move_robot</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_init</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_reset</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;ExaRobot Control Panel&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initUi</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">on_serial_disconnect</span><span class="p">()</span>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.initUi"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.initUi">[docs]</a>    <span class="k">def</span> <span class="nf">initUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initMenuBar</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initCtrlWidget</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initFeedbackTable</span><span class="p">()</span>
+        <span class="n">centralWidget</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWidget</span><span class="p">(</span><span class="n">centralWidget</span><span class="p">)</span>
+        <span class="n">MainLayout</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">centralWidget</span><span class="p">)</span>
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_widgetMenuBar</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetCtrlFb</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">HLayoutCtrlFb</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_widgetCtrlFb</span><span class="p">)</span>
+        <span class="n">HLayoutCtrlFb</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_widgetCtrl</span><span class="p">)</span>
+        <span class="n">gbFeedback</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Feedback&#39;</span><span class="p">)</span>
+        <span class="n">VLayoutFeedback</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">gbFeedback</span><span class="p">)</span>
+        <span class="n">VLayoutFeedback</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_widgetFeedback</span><span class="p">)</span>
+        <span class="n">HLayoutCtrlFb</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gbFeedback</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_widgetCtrlFb</span><span class="p">)</span>
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">addStretch</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.initCtrlWidget"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.initCtrlWidget">[docs]</a>    <span class="k">def</span> <span class="nf">initCtrlWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetCtrl</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">VLayoutCtrl</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_widgetCtrl</span><span class="p">)</span>
+
+        <span class="n">HLayoutInitReset</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnInit</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;ON&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnInit</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_init</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnReset</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;OFF&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnReset</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_reset</span><span class="p">)</span>
+        <span class="n">HLayoutInitReset</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnInit</span><span class="p">)</span>
+        <span class="n">HLayoutInitReset</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnReset</span><span class="p">)</span>
+
+        <span class="n">gbJointSpace</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Joint Space Control (deg/s)&#39;</span><span class="p">)</span>
+        <span class="n">VLayoutJointSpace</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">gbJointSpace</span><span class="p">)</span>
+        <span class="n">lblRightWheel</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;RIGHT WHEEL&#39;</span><span class="p">)</span>
+        <span class="n">lblRightWheel</span><span class="o">.</span><span class="n">setFixedWidth</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinRightWheel</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinRightWheel</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="o">-</span><span class="mi">1507</span><span class="p">)</span>  <span class="c1"># todo: do not hardcode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinRightWheel</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="mi">1507</span><span class="p">)</span>  <span class="c1"># todo: do not hardcode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderRightWheel</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QSlider</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderRightWheel</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="o">-</span><span class="mi">1507</span><span class="p">)</span>  <span class="c1"># todo: do not hardcode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderRightWheel</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="mi">1507</span><span class="p">)</span>  <span class="c1"># todo: do not hardcode</span>
+        <span class="n">HLayoutRightWheel</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">HLayoutRightWheel</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lblRightWheel</span><span class="p">)</span>
+        <span class="n">HLayoutRightWheel</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spinRightWheel</span><span class="p">)</span>
+        <span class="n">HLayoutRightWheel</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sliderRightWheel</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lblLeftWheel</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;LEFT WHEEL&#39;</span><span class="p">)</span>
+        <span class="n">lblLeftWheel</span><span class="o">.</span><span class="n">setFixedWidth</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinLeftWheel</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinLeftWheel</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="o">-</span><span class="mi">1507</span><span class="p">)</span>  <span class="c1"># todo: do not hardcode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinLeftWheel</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="mi">1507</span><span class="p">)</span>  <span class="c1"># todo: do not hardcode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderLeftWheel</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QSlider</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderLeftWheel</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="o">-</span><span class="mi">1507</span><span class="p">)</span>  <span class="c1"># todo: do not hardcode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderLeftWheel</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="mi">1507</span><span class="p">)</span>  <span class="c1"># todo: do not hardcode</span>
+        <span class="n">HLayoutLeftWheel</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">HLayoutLeftWheel</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lblLeftWheel</span><span class="p">)</span>
+        <span class="n">HLayoutLeftWheel</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spinLeftWheel</span><span class="p">)</span>
+        <span class="n">HLayoutLeftWheel</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sliderLeftWheel</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">VLayoutJointSpace</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">HLayoutRightWheel</span><span class="p">)</span>
+        <span class="n">VLayoutJointSpace</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">HLayoutLeftWheel</span><span class="p">)</span>
+
+        <span class="n">gbCenterCtrl</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Center Control&#39;</span><span class="p">)</span>
+        <span class="n">VLayoutCenterCtrl</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">gbCenterCtrl</span><span class="p">)</span>
+        <span class="n">lblCenterVel</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;VEL (mm/s)&#39;</span><span class="p">)</span>
+        <span class="n">lblCenterVel</span><span class="o">.</span><span class="n">setFixedWidth</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinCenterVel</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinCenterVel</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="o">-</span><span class="mi">700</span><span class="p">)</span>  <span class="c1"># todo: do not hardcode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinCenterVel</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="mi">700</span><span class="p">)</span>  <span class="c1"># todo: do not hardcode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderCenterVel</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QSlider</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderCenterVel</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="o">-</span><span class="mi">700</span><span class="p">)</span>  <span class="c1"># todo: do not hardcode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderCenterVel</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="mi">700</span><span class="p">)</span>  <span class="c1"># todo: do not hardcode</span>
+        <span class="n">HLayoutCenterVel</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">HLayoutCenterVel</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lblCenterVel</span><span class="p">)</span>
+        <span class="n">HLayoutCenterVel</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spinCenterVel</span><span class="p">)</span>
+        <span class="n">HLayoutCenterVel</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sliderCenterVel</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lblYawRate</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;YAW (deg/s)&#39;</span><span class="p">)</span>
+        <span class="n">lblYawRate</span><span class="o">.</span><span class="n">setFixedWidth</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinYawRate</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinYawRate</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="o">-</span><span class="mi">110</span><span class="p">)</span>  <span class="c1"># todo: do not hardcode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinYawRate</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="mi">110</span><span class="p">)</span>  <span class="c1"># todo: do not hardcode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderYawRate</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QSlider</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderYawRate</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="o">-</span><span class="mi">110</span><span class="p">)</span>  <span class="c1"># todo: do not hardcode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderYawRate</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="mi">110</span><span class="p">)</span>  <span class="c1"># todo: do not hardcode</span>
+        <span class="n">HLayoutYawRate</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">HLayoutYawRate</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lblYawRate</span><span class="p">)</span>
+        <span class="n">HLayoutYawRate</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spinYawRate</span><span class="p">)</span>
+        <span class="n">HLayoutYawRate</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sliderYawRate</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># self.btnMoveJointSpace = QtWidgets.QPushButton(&#39;MOVE JOINT SPACE&#39;)</span>
+        <span class="c1"># self.btnMoveJointSpace.clicked.connect(self.on_click_btn_move_joint_space)</span>
+        <span class="n">VLayoutCenterCtrl</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">HLayoutCenterVel</span><span class="p">)</span>
+        <span class="n">VLayoutCenterCtrl</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">HLayoutYawRate</span><span class="p">)</span>
+        <span class="c1"># VLayoutCenterCtrl.addWidget(self.btnMoveJointSpace)</span>
+
+        <span class="n">gbMove</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;MOVE&#39;</span><span class="p">)</span>
+        <span class="n">HLayoutStopType</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">(</span><span class="n">gbMove</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnMove</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;MOVE ROBOT&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnMove</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_move</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnStop</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;STOP ROBOT&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnStop</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_stop</span><span class="p">)</span>
+        <span class="n">HLayoutStopType</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnMove</span><span class="p">)</span>
+        <span class="n">HLayoutStopType</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnStop</span><span class="p">)</span>
+        <span class="n">VLayoutCtrl</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">HLayoutInitReset</span><span class="p">)</span>
+        <span class="n">VLayoutCtrl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gbJointSpace</span><span class="p">)</span>
+        <span class="n">VLayoutCtrl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gbCenterCtrl</span><span class="p">)</span>
+        <span class="n">VLayoutCtrl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gbMove</span><span class="p">)</span>
+
+        <span class="c1"># slots</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinYawRate</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sliderYawRate</span><span class="o">.</span><span class="n">setValue</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderYawRate</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_value_changed_yaw_rate</span><span class="p">)</span>
+        <span class="c1"># self.sliderYawRate.valueChanged.connect(self.spinYawRate.setValue)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinCenterVel</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sliderCenterVel</span><span class="o">.</span><span class="n">setValue</span><span class="p">)</span>
+        <span class="c1"># self.sliderCenterVel.valueChanged.connect(self.spinCenterVel.setValue)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderCenterVel</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_value_changed_center_vel</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinRightWheel</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sliderRightWheel</span><span class="o">.</span><span class="n">setValue</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderRightWheel</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_value_changed_right_wheel</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderLeftWheel</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_value_changed_left_wheel</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinLeftWheel</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sliderLeftWheel</span><span class="o">.</span><span class="n">setValue</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.initFeedbackTable"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.initFeedbackTable">[docs]</a>    <span class="k">def</span> <span class="nf">initFeedbackTable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetFeedback</span> <span class="o">=</span> <span class="n">QTableWidgetFeedback</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.initMenuBar"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.initMenuBar">[docs]</a>    <span class="k">def</span> <span class="nf">initMenuBar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">mb_icon_size</span> <span class="o">=</span> <span class="mi">20</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetMenuBar</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">HLayoutMenuBar</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_widgetMenuBar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ledConnect</span> <span class="o">=</span> <span class="n">EmbdLed</span><span class="p">(</span><span class="s1">&#39;Connection&#39;</span><span class="p">)</span>
+        <span class="n">HLayoutMenuBar</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">HLayoutMenuBar</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ledConnect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnConnect</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnConnect</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s2">&quot;connect.png&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnConnect</span><span class="o">.</span><span class="n">setIconSize</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QSize</span><span class="p">(</span><span class="n">mb_icon_size</span><span class="p">,</span> <span class="n">mb_icon_size</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnConnect</span><span class="o">.</span><span class="n">setFixedSize</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QSize</span><span class="p">(</span><span class="n">mb_icon_size</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">mb_icon_size</span> <span class="o">+</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnConnect</span><span class="o">.</span><span class="n">setFlat</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnConnect</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_serial_connect</span><span class="p">)</span>
+        <span class="n">HLayoutMenuBar</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnConnect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnDisconnect</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnDisconnect</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s2">&quot;disconnect.png&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnDisconnect</span><span class="o">.</span><span class="n">setIconSize</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QSize</span><span class="p">(</span><span class="n">mb_icon_size</span><span class="p">,</span> <span class="n">mb_icon_size</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnDisconnect</span><span class="o">.</span><span class="n">setFixedSize</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QSize</span><span class="p">(</span><span class="n">mb_icon_size</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">mb_icon_size</span> <span class="o">+</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnDisconnect</span><span class="o">.</span><span class="n">setFlat</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnDisconnect</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_serial_disconnect</span><span class="p">)</span>
+        <span class="n">HLayoutMenuBar</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnDisconnect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmbSerialPort</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QComboBox</span><span class="p">()</span>
+        <span class="n">HLayoutMenuBar</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cmbSerialPort</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnResetSerialPort</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnResetSerialPort</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s2">&quot;reset.png&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnResetSerialPort</span><span class="o">.</span><span class="n">setFlat</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnResetSerialPort</span><span class="o">.</span><span class="n">setIconSize</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QSize</span><span class="p">(</span><span class="n">mb_icon_size</span><span class="p">,</span> <span class="n">mb_icon_size</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnResetSerialPort</span><span class="o">.</span><span class="n">setFixedSize</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QSize</span><span class="p">(</span><span class="n">mb_icon_size</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">mb_icon_size</span> <span class="o">+</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnResetSerialPort</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_refresh</span><span class="p">)</span>
+        <span class="n">HLayoutMenuBar</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnResetSerialPort</span><span class="p">)</span>
+        <span class="n">HLayoutMenuBar</span><span class="o">.</span><span class="n">addStretch</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_refresh</span><span class="p">()</span>  <span class="c1"># reset serial port combo-box</span></div>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.on_click_btn_move"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.on_click_btn_move">[docs]</a>    <span class="k">def</span> <span class="nf">on_click_btn_move</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">center_vel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinCenterVel</span><span class="o">.</span><span class="n">value</span><span class="p">()</span> <span class="o">/</span> <span class="mf">1000.</span>
+        <span class="n">yaw_rate</span> <span class="o">=</span> <span class="n">deg2rad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spinYawRate</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_move_robot</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">center_vel</span><span class="p">,</span> <span class="n">yaw_rate</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.on_click_btn_init"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.on_click_btn_init">[docs]</a>    <span class="k">def</span> <span class="nf">on_click_btn_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_init</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.on_click_btn_reset"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.on_click_btn_reset">[docs]</a>    <span class="k">def</span> <span class="nf">on_click_btn_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_reset</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.on_click_btn_stop"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.on_click_btn_stop">[docs]</a>    <span class="k">def</span> <span class="nf">on_click_btn_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_move_robot</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.on_click_btn_refresh"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.on_click_btn_refresh">[docs]</a>    <span class="k">def</span> <span class="nf">on_click_btn_refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmbSerialPort</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmbSerialPort</span><span class="o">.</span><span class="n">addItems</span><span class="p">(</span><span class="n">com_port</span> <span class="k">for</span> <span class="n">com_port</span> <span class="ow">in</span> <span class="n">get_serial_port_name_list</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.on_click_btn_serial_connect"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.on_click_btn_serial_connect">[docs]</a>    <span class="k">def</span> <span class="nf">on_click_btn_serial_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">port</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cmbSerialPort</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_serial_connect</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">port</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.on_click_btn_serial_disconnect"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.on_click_btn_serial_disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">on_click_btn_serial_disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_serial_disconnect</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.on_serial_connect"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.on_serial_connect">[docs]</a>    <span class="k">def</span> <span class="nf">on_serial_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ledConnect</span><span class="o">.</span><span class="n">TurnOnG</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnConnect</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnResetSerialPort</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmbSerialPort</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnDisconnect</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetCtrl</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.on_serial_error"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.on_serial_error">[docs]</a>    <span class="k">def</span> <span class="nf">on_serial_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ledConnect</span><span class="o">.</span><span class="n">TurnOnR</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.on_serial_disconnect"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.on_serial_disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">on_serial_disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ledConnect</span><span class="o">.</span><span class="n">TurnOff</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnConnect</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnResetSerialPort</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmbSerialPort</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnDisconnect</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetCtrl</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.on_value_changed_right_wheel"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.on_value_changed_right_wheel">[docs]</a>    <span class="k">def</span> <span class="nf">on_value_changed_right_wheel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinRightWheel</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="n">omega_r</span> <span class="o">=</span> <span class="n">deg2rad</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="n">omega_l</span> <span class="o">=</span> <span class="n">deg2rad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spinLeftWheel</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+        <span class="n">vel_c</span><span class="p">,</span> <span class="n">omega_c</span> <span class="o">=</span> <span class="n">CTMRExaRobot</span><span class="p">()</span><span class="o">.</span><span class="n">calculate_center_vel</span><span class="p">((</span><span class="n">omega_r</span><span class="p">,</span> <span class="n">omega_l</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderCenterVel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinCenterVel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderYawRate</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinYawRate</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderCenterVel</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">vel_c</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinCenterVel</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">vel_c</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderYawRate</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">omega_c</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinYawRate</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">omega_c</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderCenterVel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinCenterVel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderYawRate</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinYawRate</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.on_value_changed_left_wheel"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.on_value_changed_left_wheel">[docs]</a>    <span class="k">def</span> <span class="nf">on_value_changed_left_wheel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinLeftWheel</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="n">omega_r</span> <span class="o">=</span> <span class="n">deg2rad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spinRightWheel</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+        <span class="n">omega_l</span> <span class="o">=</span> <span class="n">deg2rad</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="n">vel_c</span><span class="p">,</span> <span class="n">omega_c</span> <span class="o">=</span> <span class="n">CTMRExaRobot</span><span class="p">()</span><span class="o">.</span><span class="n">calculate_center_vel</span><span class="p">((</span><span class="n">omega_r</span><span class="p">,</span> <span class="n">omega_l</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderCenterVel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinCenterVel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderYawRate</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinYawRate</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderCenterVel</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">vel_c</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinCenterVel</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">vel_c</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderYawRate</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">omega_c</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinYawRate</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">omega_c</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderCenterVel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinCenterVel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderYawRate</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinYawRate</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.on_value_changed_center_vel"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.on_value_changed_center_vel">[docs]</a>    <span class="k">def</span> <span class="nf">on_value_changed_center_vel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinCenterVel</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="n">omega_c</span> <span class="o">=</span> <span class="n">deg2rad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spinYawRate</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+        <span class="n">omega_r</span><span class="p">,</span> <span class="n">omega_l</span> <span class="o">=</span> <span class="n">CTMRExaRobot</span><span class="p">()</span><span class="o">.</span><span class="n">calculate_joint_space_vel</span><span class="p">(</span><span class="n">val</span> <span class="o">/</span> <span class="mf">1000.</span><span class="p">,</span> <span class="n">omega_c</span><span class="p">)</span>
+
+        <span class="n">omega_r</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">omega_r</span><span class="p">))</span>
+        <span class="n">omega_l</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">omega_l</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinRightWheel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderRightWheel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinLeftWheel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderLeftWheel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinRightWheel</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">omega_r</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderRightWheel</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">omega_r</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinLeftWheel</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">omega_l</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderLeftWheel</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">omega_l</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinRightWheel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderRightWheel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinLeftWheel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderLeftWheel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.on_value_changed_yaw_rate"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.on_value_changed_yaw_rate">[docs]</a>    <span class="k">def</span> <span class="nf">on_value_changed_yaw_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinYawRate</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="n">vel_c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinCenterVel</span><span class="o">.</span><span class="n">value</span><span class="p">()</span> <span class="o">/</span> <span class="mf">1000.</span>
+        <span class="n">omega_r</span><span class="p">,</span> <span class="n">omega_l</span> <span class="o">=</span> <span class="n">CTMRExaRobot</span><span class="p">()</span><span class="o">.</span><span class="n">calculate_joint_space_vel</span><span class="p">(</span><span class="n">vel_c</span><span class="p">,</span> <span class="n">deg2rad</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
+
+        <span class="n">omega_r</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">omega_r</span><span class="p">))</span>
+        <span class="n">omega_l</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">omega_l</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinRightWheel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderRightWheel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinLeftWheel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderLeftWheel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinRightWheel</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">omega_r</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderRightWheel</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">omega_r</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinLeftWheel</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">omega_l</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderLeftWheel</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">omega_l</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinRightWheel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderRightWheel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinLeftWheel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliderLeftWheel</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.on_changed_monitoring_state"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.on_changed_monitoring_state">[docs]</a>    <span class="k">def</span> <span class="nf">on_changed_monitoring_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.set_fb_velocity"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.set_fb_velocity">[docs]</a>    <span class="k">def</span> <span class="nf">set_fb_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">afRightVel</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">afLeftVel</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetFeedback</span><span class="o">.</span><span class="n">set_velocity_value</span><span class="p">(</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">afRightVel</span><span class="p">),</span> <span class="n">rad2deg</span><span class="p">(</span><span class="n">afLeftVel</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.set_fb_encoder"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.set_fb_encoder">[docs]</a>    <span class="k">def</span> <span class="nf">set_fb_encoder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anRightEnc</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">anLeftEnc</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetFeedback</span><span class="o">.</span><span class="n">set_encoder_value</span><span class="p">(</span><span class="n">anRightEnc</span><span class="p">,</span> <span class="n">anLeftEnc</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.set_fb_state"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.set_fb_state">[docs]</a>    <span class="k">def</span> <span class="nf">set_fb_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anState</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetFeedback</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">anState</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.set_fb_fw_version"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.set_fb_fw_version">[docs]</a>    <span class="k">def</span> <span class="nf">set_fb_fw_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">astrVer</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetFeedback</span><span class="o">.</span><span class="n">set_fw_version</span><span class="p">(</span><span class="n">astrVer</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockExaRobotCtrl.set_fb_hw_version"><a class="viewcode-back" href="../Inc/DockWidgets/DockExaRobotCtrl.html#DockExaRobotCtrl.DockExaRobotCtrl.set_fb_hw_version">[docs]</a>    <span class="k">def</span> <span class="nf">set_fb_hw_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">astrVer</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetFeedback</span><span class="o">.</span><span class="n">set_hw_version</span><span class="p">(</span><span class="n">astrVer</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

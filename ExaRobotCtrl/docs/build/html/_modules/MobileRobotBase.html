@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MobileRobotBase &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>MobileRobotBase</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for MobileRobotBase</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="c1"># File Name    : MobileRobotBase.py</span>
+<span class="c1"># Project Name : ExaRobotCtrl</span>
+<span class="c1"># Author       : Raim.Delgado</span>
+<span class="c1"># Organization : SeoulTech</span>
+<span class="c1"># Description  :</span>
+<span class="c1"># [Revision History]</span>
+<span class="c1"># &gt;&gt; 2021.01.21 - First Commit</span>
+<span class="c1"># &gt;&gt; 2021.01.22 - Add properties</span>
+<span class="c1"># &gt;&gt; 2021.01.22 - Add methods for forward kinematics</span>
+<span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">IntEnum</span><span class="p">,</span> <span class="n">auto</span><span class="p">,</span> <span class="n">unique</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="k">import</span> <span class="n">dataclass</span>  <span class="c1"># for python &lt; 3.7, dataclasses should be installed : python -m pip install dataclasses</span>
+
+<span class="n">FILE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>  <span class="c1"># %PROJECT_ROOT%/Library/Socket</span>
+<span class="n">ROOT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">FILE_PATH</span><span class="p">))</span>
+<span class="n">INCLUDE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Include&quot;</span><span class="p">)</span>
+<span class="n">MDI_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;MdiBackground&quot;</span><span class="p">)</span>
+<span class="n">DOCK_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;DockWidgets&quot;</span><span class="p">)</span>
+<span class="n">MISC_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Misc&quot;</span><span class="p">)</span>
+<span class="n">RESOURCES_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Resources&quot;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">DOCK_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">])</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+<span class="k">del</span> <span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">DOCK_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span>
+
+<span class="kn">from</span> <span class="nn">Commons</span> <span class="k">import</span> <span class="n">PySignal</span>
+
+
+<div class="viewcode-block" id="EnumDriveType"><a class="viewcode-back" href="../Inc/MobileRobot/MobileRobotBase.html#MobileRobotBase.EnumDriveType">[docs]</a><span class="nd">@unique</span>
+<span class="k">class</span> <span class="nc">EnumDriveType</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="n">NOT_A_ROBOT</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">DIFFERENTIAL</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">CAR_TYPE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">OMNIDIRECTIONAL</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">SYNCRHO</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">MECANUM</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">toInt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EnumJogDirection"><a class="viewcode-back" href="../Inc/MobileRobot/MobileRobotBase.html#MobileRobotBase.EnumJogDirection">[docs]</a><span class="nd">@unique</span>
+<span class="k">class</span> <span class="nc">EnumJogDirection</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="n">JOG_FW</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">JOG_BW</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">JOG_LEFT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">JOG_RIGHT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">JOG_FW_LEFT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">JOG_FW_RIGHT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">JOG_BW_LEFT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">JOG_BW_RIGHT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">toInt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EnumFKMethod"><a class="viewcode-back" href="../Inc/MobileRobot/MobileRobotBase.html#MobileRobotBase.EnumFKMethod">[docs]</a><span class="nd">@unique</span>
+<span class="k">class</span> <span class="nc">EnumFKMethod</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="n">EULER</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">RUNGE_KUTTA</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">EXACT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">toInt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RobotPose"><a class="viewcode-back" href="../Inc/MobileRobot/MobileRobotBase.html#MobileRobotBase.RobotPose">[docs]</a><span class="nd">@dataclass</span>  <span class="c1"># for python &lt; 3.7, dataclasses should be installed : python -m pip install dataclasses</span>
+<span class="k">class</span> <span class="nc">RobotPose</span><span class="p">:</span>
+    <span class="n">X_POS</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span>
+    <span class="n">Y_POS</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span>
+    <span class="n">Z_POS</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span>  <span class="c1"># not used in 2D Navigation</span>
+    <span class="n">THETA</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span>  <span class="c1"># heading angle in radians</span></div>
+
+
+<div class="viewcode-block" id="PhyLimits"><a class="viewcode-back" href="../Inc/MobileRobot/MobileRobotBase.html#MobileRobotBase.PhyLimits">[docs]</a><span class="nd">@dataclass</span>  <span class="c1"># for python &lt; 3.7, dataclasses should be installed : python -m pip install dataclasses</span>
+<span class="k">class</span> <span class="nc">PhyLimits</span><span class="p">:</span>
+    <span class="n">MAX_VEL</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span>     <span class="c1"># maximum velocity in m/s</span>
+    <span class="n">MAX_ACC</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span>     <span class="c1"># maximum acceleration in m/s^2</span>
+    <span class="n">MAX_JERK</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span>    <span class="c1"># maximum jerk in m/s^3</span>
+    <span class="n">MAX_YAW</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span>     <span class="c1"># maximum yaw rate in rad/s</span></div>
+
+
+<div class="viewcode-block" id="CMobileRobot"><a class="viewcode-back" href="../Inc/MobileRobot/MobileRobotBase.html#MobileRobotBase.CMobileRobot">[docs]</a><span class="k">class</span> <span class="nc">CMobileRobot</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; CMobileRobot은 모바일 로봇에 대한 클래스이다.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            anDriveType (Union[int, EnumDriveType]): 모바일 로봇의 구동타입</span>
+<span class="sd">            anWheelNo (int): 바퀴 갯수</span>
+<span class="sd">            afWheelRad (float): 바퀴 반지름</span>
+<span class="sd">            afWheelBase (float): 바퀴 사이 거리</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Serial Robot</span>
+    <span class="n">bIsSerial</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="c1"># Basics</span>
+    <span class="n">nWheelNo</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    휠 개수</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fWheelRad</span><span class="p">:</span> <span class="nb">float</span>  <span class="c1"># in meters</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    휠 반지름</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fWheelBase</span><span class="p">:</span> <span class="nb">float</span>  <span class="c1"># in meters</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    휠간 거리</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Robot dimensions</span>
+    <span class="n">fLength</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    로봇 길이</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fWidth</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    로봇 너비</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Payload and actual weight (in kg)</span>
+    <span class="n">fWeight</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    로봇 무계</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fPayLoad</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    로봇 Payload</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># drive type and physical limits</span>
+    <span class="n">enumDriveType</span><span class="p">:</span> <span class="n">EnumDriveType</span>  <span class="c1"># Default is DIFFERENTIAL</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    구동계 타입</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">stPhyLimits</span><span class="p">:</span> <span class="n">PhyLimits</span>  <span class="c1"># Default are zero-values</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    로봇의 PhyLimits</span>
+<span class="sd">    가속도, 선속도, 각속도, 저크</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+   
+
+    <span class="c1"># Position</span>
+    <span class="n">stCurrPos</span><span class="p">:</span> <span class="n">RobotPose</span>
+    
+
+    <span class="c1"># Actual robot specs</span>
+    <span class="n">nEncRes</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    모터 엔코더 레졸루션</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fGearRatio</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    모터 기어비</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anDriveType</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">EnumDriveType</span><span class="p">],</span> <span class="n">anWheelNo</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">afWheelRad</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">afWheelBase</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot; Constructor of the Mobile Robot base class.</span>
+<span class="sd">        User should specify the drive type, no of wheels, radius of wheel, and the distance between the wheels</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">CMobileRobot</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="c1"># Basics</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">WheelNo</span> <span class="o">=</span> <span class="n">anWheelNo</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">WheelRad</span> <span class="o">=</span> <span class="n">afWheelRad</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">WheelBase</span> <span class="o">=</span> <span class="n">afWheelBase</span>
+
+        <span class="sd">&#39;&#39;&#39; Initiate Variables &#39;&#39;&#39;</span>
+        <span class="c1"># Robot dimensions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Length</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Width</span> <span class="o">=</span> <span class="mf">0.</span>
+
+        <span class="c1"># Payload and actual weight (in kg)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Weight</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">PayLoad</span> <span class="o">=</span> <span class="mf">0.</span>
+
+        <span class="c1"># Physical Limits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">PhyLimits</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DriveType</span> <span class="o">=</span> <span class="n">anDriveType</span>
+
+        <span class="c1"># Position Related</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stCurrPos</span> <span class="o">=</span> <span class="n">RobotPose</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+
+        <span class="c1"># Actual robot specs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">EncoderRes</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GearRatio</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="sd">&#39;&#39;&#39; Common Signals &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_connected</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_disconnected</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_comm_error</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_get_enc</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_get_vel</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_get_wheel_pos</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_get_pos</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_get_state</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_get_ver</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CMobileRobot.set_serial_robot"><a class="viewcode-back" href="../Inc/MobileRobot/MobileRobotBase.html#MobileRobotBase.CMobileRobot.set_serial_robot">[docs]</a>    <span class="k">def</span> <span class="nf">set_serial_robot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abIsSerial</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bIsSerial</span> <span class="o">=</span> <span class="n">abIsSerial</span></div>
+
+<div class="viewcode-block" id="CMobileRobot.is_serial_robot"><a class="viewcode-back" href="../Inc/MobileRobot/MobileRobotBase.html#MobileRobotBase.CMobileRobot.is_serial_robot">[docs]</a>    <span class="k">def</span> <span class="nf">is_serial_robot</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bIsSerial</span></div>
+
+<div class="viewcode-block" id="CMobileRobot.reset_curr_pos"><a class="viewcode-back" href="../Inc/MobileRobot/MobileRobotBase.html#MobileRobotBase.CMobileRobot.reset_curr_pos">[docs]</a>    <span class="k">def</span> <span class="nf">reset_curr_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stCurrPos</span> <span class="o">=</span> <span class="n">RobotPose</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CMobileRobot.get_curr_pos"><a class="viewcode-back" href="../Inc/MobileRobot/MobileRobotBase.html#MobileRobotBase.CMobileRobot.get_curr_pos">[docs]</a>    <span class="k">def</span> <span class="nf">get_curr_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RobotPose</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Returns the current position in the cartesian plane using the class XYPos</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stCurrPos</span></div>
+
+<div class="viewcode-block" id="CMobileRobot.get_curr_pos_t"><a class="viewcode-back" href="../Inc/MobileRobot/MobileRobotBase.html#MobileRobotBase.CMobileRobot.get_curr_pos_t">[docs]</a>    <span class="k">def</span> <span class="nf">get_curr_pos_t</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot; Returns a tuple of the current position in the cartesian plane (x, y, z, theta)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stCurrPos</span><span class="o">.</span><span class="n">X_POS</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stCurrPos</span><span class="o">.</span><span class="n">Y_POS</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stCurrPos</span><span class="o">.</span><span class="n">Z_POS</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stCurrPos</span><span class="o">.</span><span class="n">THETA</span></div>
+
+<div class="viewcode-block" id="CMobileRobot.calculate_joint_space_vel"><a class="viewcode-back" href="../Inc/MobileRobot/MobileRobotBase.html#MobileRobotBase.CMobileRobot.calculate_joint_space_vel">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_joint_space_vel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">afVelCenter</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">afAngVelCenter</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; calculates the joint space velocities of the mobile robot.</span>
+<span class="sd">        Returns a tuple of the calculated joint space velocities</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="CMobileRobot.calculate_center_vel"><a class="viewcode-back" href="../Inc/MobileRobot/MobileRobotBase.html#MobileRobotBase.CMobileRobot.calculate_center_vel">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_center_vel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atupleAngVels</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; calculates the center velocities of the mobile robot.</span>
+<span class="sd">        Returns a tuple of central linear vel and yaw rate</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="CMobileRobot.calculate_pose_actual"><a class="viewcode-back" href="../Inc/MobileRobot/MobileRobotBase.html#MobileRobotBase.CMobileRobot.calculate_pose_actual">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_pose_actual</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atupleAngVels</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">afDeltaT</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                              <span class="n">aenumFKMethod</span><span class="p">:</span> <span class="n">EnumFKMethod</span> <span class="o">=</span> <span class="n">EnumFKMethod</span><span class="o">.</span><span class="n">EULER</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RobotPose</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; calculates the forward kinematics of the mobile robot considering gear ration and encoder resolution.</span>
+<span class="sd">        fJointsVel should be a tuple of the joint space velocities</span>
+<span class="sd">        Returns the calculated position in the cartesian plane using the class XYPos.</span>
+<span class="sd">        This should be called everytime the robot changes position.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stCurrPos</span></div>
+
+<div class="viewcode-block" id="CMobileRobot.calculate_pose"><a class="viewcode-back" href="../Inc/MobileRobot/MobileRobotBase.html#MobileRobotBase.CMobileRobot.calculate_pose">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_pose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atupleAngVels</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">afDeltaT</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                       <span class="n">aenumFKMethod</span><span class="p">:</span> <span class="n">EnumFKMethod</span> <span class="o">=</span> <span class="n">EnumFKMethod</span><span class="o">.</span><span class="n">EULER</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RobotPose</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; calculates the forward kinematics of the mobile robot.</span>
+<span class="sd">        fJointsVel should be a tuple of the joint space velocities</span>
+<span class="sd">        Returns the calculated position in the cartesian plane using the class XYPos.</span>
+<span class="sd">        This should be called everytime the robot changes position.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stCurrPos</span></div>
+
+<div class="viewcode-block" id="CMobileRobot.move_jog"><a class="viewcode-back" href="../Inc/MobileRobot/MobileRobotBase.html#MobileRobotBase.CMobileRobot.move_jog">[docs]</a>    <span class="k">def</span> <span class="nf">move_jog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anDirection</span><span class="p">:</span> <span class="n">EnumJogDirection</span><span class="p">,</span> <span class="n">nJogDistance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">500</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; moves the mobile robot on the speicifed direction (anDirection) with the configured</span>
+<span class="sd">        jog distance (nJogDistance) in millimeters (mm). The default jog is 500 mm.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="CMobileRobot.set_phy_limits"><a class="viewcode-back" href="../Inc/MobileRobot/MobileRobotBase.html#MobileRobotBase.CMobileRobot.set_phy_limits">[docs]</a>    <span class="k">def</span> <span class="nf">set_phy_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">afMaxVel</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">afMaxAcc</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">afMaxJerk</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">afMaxYaw</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; sets the physical limits of the robots (max velocity, max acceleration, max jerk, and max yaw)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stPhyLimits</span> <span class="o">=</span> <span class="n">PhyLimits</span><span class="p">(</span><span class="n">afMaxVel</span><span class="p">,</span> <span class="n">afMaxAcc</span><span class="p">,</span> <span class="n">afMaxJerk</span><span class="p">,</span> <span class="n">afMaxYaw</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CMobileRobot.get_phy_limits"><a class="viewcode-back" href="../Inc/MobileRobot/MobileRobotBase.html#MobileRobotBase.CMobileRobot.get_phy_limits">[docs]</a>    <span class="k">def</span> <span class="nf">get_phy_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PhyLimits</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; returns the physical limits of the robots (max velocity, max acceleration, max jerk, and max yaw)</span>
+<span class="sd">        using the PhyLimit dataclass</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stPhyLimits</span></div>
+
+<div class="viewcode-block" id="CMobileRobot.get_phy_limits_t"><a class="viewcode-back" href="../Inc/MobileRobot/MobileRobotBase.html#MobileRobotBase.CMobileRobot.get_phy_limits_t">[docs]</a>    <span class="k">def</span> <span class="nf">get_phy_limits_t</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot; returns a tuple of the physical limits of the robots (max velocity, max acceleration, and max jerk)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stPhyLimits</span><span class="o">.</span><span class="n">MAX_VEL</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stPhyLimits</span><span class="o">.</span><span class="n">MAX_ACC</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stPhyLimits</span><span class="o">.</span><span class="n">MAX_JERK</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stPhyLimits</span><span class="o">.</span><span class="n">MAX_YAW</span></div>
+
+<div class="viewcode-block" id="CMobileRobot.set_wheel_spec"><a class="viewcode-back" href="../Inc/MobileRobot/MobileRobotBase.html#MobileRobotBase.CMobileRobot.set_wheel_spec">[docs]</a>    <span class="k">def</span> <span class="nf">set_wheel_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anEncoderRes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">afGearRatio</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; sets the wheel spec of the robot (Encoder resolution, Gear ratio)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">EncoderRes</span> <span class="o">=</span> <span class="n">anEncoderRes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GearRatio</span> <span class="o">=</span> <span class="n">afGearRatio</span></div>
+
+<div class="viewcode-block" id="CMobileRobot.get_wheel_spec"><a class="viewcode-back" href="../Inc/MobileRobot/MobileRobotBase.html#MobileRobotBase.CMobileRobot.get_wheel_spec">[docs]</a>    <span class="k">def</span> <span class="nf">get_wheel_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot; returns a tuple of the wheel specs (Encoder resolution, Gear ratio)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">EncoderRes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">GearRatio</span></div>
+
+    <span class="sd">&#39;&#39;&#39; Properties &#39;&#39;&#39;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">WheelNo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nWheelNo</span>
+
+    <span class="nd">@WheelNo</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">WheelNo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anWheelNo</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nWheelNo</span> <span class="o">=</span> <span class="n">anWheelNo</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">WheelRad</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fWheelRad</span>
+
+    <span class="nd">@WheelRad</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">WheelRad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">afWheelRad</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fWheelRad</span> <span class="o">=</span> <span class="n">afWheelRad</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">WheelBase</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fWheelBase</span>
+
+    <span class="nd">@WheelBase</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">WheelBase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">afWheelBase</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fWheelBase</span> <span class="o">=</span> <span class="n">afWheelBase</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">Length</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fLength</span>
+
+    <span class="nd">@Length</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">Length</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">afLength</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fLength</span> <span class="o">=</span> <span class="n">afLength</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">Width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fWidth</span>
+
+    <span class="nd">@Width</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">Width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">afWidth</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fWidth</span> <span class="o">=</span> <span class="n">afWidth</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">Weight</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fWeight</span>
+
+    <span class="nd">@Weight</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">Weight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">afWeight</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fWeight</span> <span class="o">=</span> <span class="n">afWeight</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">PayLoad</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fPayLoad</span>
+
+    <span class="nd">@PayLoad</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">PayLoad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">afPayLoad</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fPayLoad</span> <span class="o">=</span> <span class="n">afPayLoad</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">PhyLimits</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PhyLimits</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_phy_limits</span><span class="p">()</span>
+
+    <span class="nd">@PhyLimits</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">PhyLimits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">afMaxVelAccJerk</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_phy_limits</span><span class="p">(</span><span class="n">afMaxVelAccJerk</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">afMaxVelAccJerk</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">afMaxVelAccJerk</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">afMaxVelAccJerk</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">PhyLimitsT</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_phy_limits_t</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">DriveType</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnumDriveType</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; returns the drive type of the mobile robot</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">enumDriveType</span>
+
+    <span class="nd">@DriveType</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">DriveType</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anDriveType</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">EnumDriveType</span><span class="p">]):</span>
+        <span class="c1"># Ensure that the robot type is specified with EnumDriveType class. Default value is DIFFERENTIAL.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">anDriveType</span><span class="p">,</span> <span class="n">EnumDriveType</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">enumDriveType</span> <span class="o">=</span> <span class="n">EnumDriveType</span><span class="p">(</span><span class="n">anDriveType</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">enumDriveType</span> <span class="o">=</span> <span class="n">EnumDriveType</span><span class="o">.</span><span class="n">DIFFERENTIAL</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">EncoderRes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nEncRes</span>
+
+    <span class="nd">@EncoderRes</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">EncoderRes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anEncoderRes</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nEncRes</span> <span class="o">=</span> <span class="n">anEncoderRes</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">GearRatio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGearRatio</span>
+
+    <span class="nd">@GearRatio</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">GearRatio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">afGearRatio</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fGearRatio</span> <span class="o">=</span> <span class="n">afGearRatio</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">IsSerial</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bIsSerial</span>
+
+    <span class="nd">@IsSerial</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">IsSerial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abIsSerial</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bIsSerial</span> <span class="o">=</span> <span class="n">abIsSerial</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

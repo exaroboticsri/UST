@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dijkstra &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>Dijkstra</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for Dijkstra</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="c1"># File Name    : AStar.py</span>
+<span class="c1"># Project Name : MobileRobotTest</span>
+<span class="c1"># Author       : Raim.Delgado</span>
+<span class="c1"># Organization : SeoulTech</span>
+<span class="c1"># Description  :</span>
+<span class="c1"># [Revision History]</span>
+<span class="c1"># &gt;&gt; 2021.08.24 - First Commit</span>
+<span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">heapq</span>
+
+<span class="kn">import</span> <span class="nn">plotting</span>
+<span class="kn">import</span> <span class="nn">env</span>
+<span class="kn">import</span> <span class="nn">AStar</span>
+
+
+<div class="viewcode-block" id="Dijkstra"><a class="viewcode-back" href="../Inc/PathPlanning/Dijkstra.html#Dijkstra.Dijkstra">[docs]</a><span class="k">class</span> <span class="nc">Dijkstra</span><span class="p">(</span><span class="n">AStar</span><span class="o">.</span><span class="n">AStar</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Dijkstra set the cost as the priority</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Dijkstra.searching"><a class="viewcode-back" href="../Inc/PathPlanning/Dijkstra.html#Dijkstra.Dijkstra.searching">[docs]</a>    <span class="k">def</span> <span class="nf">searching</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Breadth-first Searching.</span>
+<span class="sd">        :return: path, visited order</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">PARENT</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">s_start</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_start</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">s_start</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">s_goal</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span>
+        <span class="n">heapq</span><span class="o">.</span><span class="n">heappush</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">OPEN</span><span class="p">,</span>
+                       <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_start</span><span class="p">))</span>
+
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">OPEN</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">heapq</span><span class="o">.</span><span class="n">heappop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">OPEN</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">CLOSED</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_goal</span><span class="p">:</span>
+                <span class="k">break</span>
+
+            <span class="k">for</span> <span class="n">s_n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_neighbor</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+                <span class="n">new_cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cost</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">s_n</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">s_n</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">[</span><span class="n">s_n</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span>
+
+                <span class="k">if</span> <span class="n">new_cost</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">[</span><span class="n">s_n</span><span class="p">]:</span>  <span class="c1"># conditions for updating Cost</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">[</span><span class="n">s_n</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_cost</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">PARENT</span><span class="p">[</span><span class="n">s_n</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
+
+                    <span class="c1"># best first set the heuristics as the priority</span>
+                    <span class="n">heapq</span><span class="o">.</span><span class="n">heappush</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">OPEN</span><span class="p">,</span> <span class="p">(</span><span class="n">new_cost</span><span class="p">,</span> <span class="n">s_n</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PARENT</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">CLOSED</span></div></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../Inc/PathPlanning/Dijkstra.html#Dijkstra.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">s_start</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="n">s_goal</span> <span class="o">=</span> <span class="p">(</span><span class="mi">45</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>
+
+    <span class="n">dijkstra</span> <span class="o">=</span> <span class="n">Dijkstra</span><span class="p">(</span><span class="n">s_start</span><span class="p">,</span> <span class="n">s_goal</span><span class="p">,</span> <span class="s1">&#39;None&#39;</span><span class="p">)</span>
+    <span class="n">plot</span> <span class="o">=</span> <span class="n">plotting</span><span class="o">.</span><span class="n">Plotting</span><span class="p">(</span><span class="n">s_start</span><span class="p">,</span> <span class="n">s_goal</span><span class="p">)</span>
+
+    <span class="n">path</span><span class="p">,</span> <span class="n">visited</span> <span class="o">=</span> <span class="n">dijkstra</span><span class="o">.</span><span class="n">searching</span><span class="p">()</span>
+    <span class="n">plot</span><span class="o">.</span><span class="n">animation</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">visited</span><span class="p">,</span> <span class="s2">&quot;Dijkstra&#39;s&quot;</span><span class="p">)</span>  <span class="c1"># animation generate</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

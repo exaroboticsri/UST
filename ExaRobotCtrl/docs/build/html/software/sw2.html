@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ROS2 패키지 &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Modules" href="../apis.html" />
+    <link rel="prev" title="설계" href="sw1.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sw1.html">설계</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ROS2 패키지</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#exa-ros">EXA 로봇에 적용 및 구현된 ROS 패키지</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>ROS2 패키지</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/software/sw2.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="ros2">
+<h1>ROS2 패키지<a class="headerlink" href="#ros2" title="Permalink to this heading"></a></h1>
+<p>Navagation, SLAM 등 복잡한 응용 기술을 사용한 서비스 기능을 구현하기위해서
+ROS2 패키지를 integration 하여 로봇 소프트웨어를 구현한다.</p>
+<div class="section" id="exa-ros">
+<h2>EXA 로봇에 적용 및 구현된 ROS 패키지<a class="headerlink" href="#exa-ros" title="Permalink to this heading"></a></h2>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>패키지</p></th>
+<th class="head"><p>설명</p></th>
+<th class="head"><p>기타</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>navigation2</p></td>
+<td><p>장애물 회피 및 목적지 이동 기능 구현을 위한 패키지</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>realsense-ros</p></td>
+<td><p>장애물 감지 및 카메라 활용을 위한 패키지</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>exa_robot</p></td>
+<td><p>사용되는 ROS패키지의 parameter 및 Lauch 파일로 구성</p></td>
+<td><p>직접 구현</p></td>
+</tr>
+<tr class="row-odd"><td><p>BehaviorTree.CPP</p></td>
+<td><p>navigation2 의존성 패키지</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>urg_node</p></td>
+<td><p>Hokuyo Lidar 통신 제어 패키지</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>yldiar_ros2_driver</p></td>
+<td><p>Ydlidar G6 Lidar 통신 제어 패키지</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>veocity_smoother</p></td>
+<td><p>부드러운 주행 구현을 위한 패키지</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sw1.html" class="btn btn-neutral float-left" title="설계" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../apis.html" class="btn btn-neutral float-right" title="Modules" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

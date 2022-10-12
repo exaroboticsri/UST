@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jetson 시스템 설치 (Jetpack 5.0.2) &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="개요" href="../software/abstract.html" />
+    <link rel="prev" title="Jetson 시스템 설치 (Jetpack 4.6)" href="jetson_install1.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Jetson 시스템 설치 (Jetpack 5.0.2)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#bsp">BSP 다운로드 및 구성</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rootfs-sd-card">Rootfs를 SD Card로 복사</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#jetson-flash">Jetson Flash</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Jetson 시스템 설치 (Jetpack 5.0.2)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/develop_env/jetson_install2.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="jetson-jetpack-5-0-2">
+<h1>Jetson 시스템 설치 (Jetpack 5.0.2)<a class="headerlink" href="#jetson-jetpack-5-0-2" title="Permalink to this heading"></a></h1>
+<ul class="simple">
+<li><p>현재 사용하는 Xavier NX 모듈의 경우 내부 EMMC 16GB 이외의 스토리지가 없어 시스템 개발시 용량이 부족한 상황이 발생할 수 있다.
+따라서 외부 스토리지(SD Card)에 Rootfs 을 구성 및 사용할 수 있도록 작업한다.</p></li>
+<li><p>캐리어 보드는 FlexWatch 의 FWR100-BB 를 사용하였다.</p>
+<ul>
+<li><p>NVIDIA에서 제공하는 SDKManager를 사용하여 BSP 다운 및  Jetpack 5.0.2 설치를 진행한다.</p></li>
+<li><p>Jetpack 의 자세한 스펙은 아래 링크에서 확인 가능하다.</p>
+<ul>
+<li><p><a class="reference external" href="https://developer.nvidia.com/embedded/jetpack">https://developer.nvidia.com/embedded/jetpack</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr class="docutils" />
+<div class="section" id="bsp">
+<h2>BSP 다운로드 및 구성<a class="headerlink" href="#bsp" title="Permalink to this heading"></a></h2>
+<ul>
+<li><p>SDKmanager 를 통해서 jetpack 5.0.2 을 사용하여 xavier nx 에 설치한다.</p>
+<ul>
+<li><p>아래 링크에서 NVIDIA SDK Manager 를 다운받는다. (로그인 필요)</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://developer.nvidia.com/nvidia-sdk-manager">https://developer.nvidia.com/nvidia-sdk-manager</a>
+<img alt="sdkmanager1" src="../_images/sdkmanager1.png" /></p></li>
+</ul>
+</li>
+<li><p>다운 받은 패키지 파일을 아래 명령어를 통해서 실행 시켜 설치를 진행 후 실행한다.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo apt install ./sdkmanager_1.7.0-8846_amd64.deb
+
+$ sdkmanager
+</pre></div>
+</div>
+</li>
+<li><p>Xavier NX 보드를 Recovery mode 로 부팅 후 OTG USB 포트를 사용하여 PC 와 연결 한다.</p>
+<!-- <img src="../image/board_bt.png" width="800px" height="800px" title="board_bt" alt="board_bt"></img> -->
+<p><img alt="board_bt" src="../_images/board_bt.png" /></p>
+</li>
+<li><p>Target Hardware 및 Target OS 를 선택한다.</p>
+<ul>
+<li><p>PC 와 Jetson 보드가 연결되어 있다면 해당 보드가 감지된다.</p></li>
+<li><p>Target OS 의 경우 최신 버전인 Jetpack5.0.1를 사용하여 설치를 진행한다.</p></li>
+<li><p>Jetson Component 는 따로 설치를 진행하지 않는다 (체크해제)
+<img alt="sdkmanager2" src="../_images/sdkmanager2.png" /></p>
+<p><img alt="sdkmanager3" src="../_images/sdkmanager3.png" /></p>
+</li>
+</ul>
+</li>
+<li><p>설치 완료 후 아래 위치에 설치를 위한 BSP 가 생성됨을 확인할 수 있다.</p>
+<ul class="simple">
+<li><p>$HOME/nvidia/nvidia_sdk/JetPack_5.0.2_Linux_JETSON_XAVIER_NX_TARGETS/Linux_for_Tegra
+<img alt="bsp1" src="../_images/bsp1.png" /></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<hr class="docutils" />
+<div class="section" id="rootfs-sd-card">
+<h2>Rootfs를 SD Card로 복사<a class="headerlink" href="#rootfs-sd-card" title="Permalink to this heading"></a></h2>
+<p>생성된 BSP를 사용하여 외부 스토리지(SD Card)에 Rootfs 을 구성하여 사용할수 있도록 설치를 진행한다.</p>
+<ul>
+<li><p>SD Card를 PC에 연결 후 파티션을 초기화 해준다.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo gdisk /dev/mmcblk0 
+  <span class="c1">#sd card 장치 이름: (/dev/mmcblk0), “fdisk -l” 을 사용하여 확인가능 </span>
+  <span class="s2">&quot;o&quot;</span> -&gt; clear all current partition data
+  <span class="s2">&quot;n&quot;</span> -&gt; create new partition
+  <span class="s2">&quot;1&quot;</span> -&gt; partition number /dev/mmcblk0p1
+  <span class="s2">&quot;40M&quot;</span>first sectors -&gt; Press enter or last sectors
+  <span class="s2">&quot;Linux filsystem&quot;</span> -&gt; using default <span class="nb">type</span>
+  <span class="s2">&quot;w&quot;</span> -&gt; write to disk and <span class="nb">exit</span>
+
+$ sudo mkfs.ext4 /dev/mmcblk0p1
+<span class="c1">#생성한 파티션을 ext4 으로 포맷</span>
+</pre></div>
+</div>
+</li>
+<li><p>Rootfs 설정 및 복사</p>
+<ul>
+<li><p>초기부팅시 사용자 등록과정을 생략하기위해서 사용자 생성하며 sd 카드로 rootfs을 복사한다.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo mount /dev/mmcblk0p1 /mnt 
+$ <span class="nb">cd</span> HOME/nvidia/nvidia_sdk/JetPack_5.0.2_Linux_JETSON_XAVIER_NX_TARGETS/Linux_for_Tegra
+$ sudo ./l4t_create_default_user.sh -u nvidia -p root -n nvidia -a --accept-license
+  <span class="c1"># 사용자 등록: -u {username} -p {password} -n {hostname} -a --accept-license </span>
+
+$ <span class="nb">cd</span> rootfs
+$ sudo tar -cpf - * <span class="p">|</span> <span class="o">(</span> <span class="nb">cd</span> /mnt/ <span class="p">;</span> sudo tar -xpf - <span class="o">)</span>
+$ sync
+$ sudo umount /mnt
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<hr class="docutils" />
+<div class="section" id="jetson-flash">
+<h2>Jetson Flash<a class="headerlink" href="#jetson-flash" title="Permalink to this heading"></a></h2>
+<p>본 문서에서 사용된 캐리어 보드 FlexWatch의 FWR100-BB의 SD Card 슬롯 사용을 위해서 수정된 Device tree를 사용한다.
+수정된 Device tree적용 및 Xavier로 kernel, bootloader 설치를 진행해준다.</p>
+<ul>
+<li><p>수정된 Device tree 적용</p>
+<ul>
+<li><p>제공된 Device tree 파일을 복사 후 사용 할 수있도록 flash config를 수정한다.</p>
+<ul class="simple">
+<li><p>dtb 복사</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  $ <span class="nb">cd</span> <span class="nv">$HOME</span>/nvidia/nvidia_sdk/JetPack_5.0.2_Linux_JETSON_XAVIER_NX_TARGETS/Linux_for_Tegra/kernel/dtb
+  $ sudo cp ./tegra194-p3668-seyeon.dtb  ./
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>jetson-xavier-nx-devkit-emmc.conf 파일을 수정</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>    $ <span class="nb">cd</span> <span class="nv">$HOME</span>/nvidia/nvidia_sdk/JetPack_5.0.2_Linux_JETSON_XAVIER_NX_TARGETS/Linux_for_Tegra
+    $ sudo vi jetson-xavier-nx-devkit-emmc.conf
+</pre></div>
+</div>
+<p><img alt="dtb1" src="../_images/dtb1.png" /></p>
+</li>
+</ul>
+</li>
+<li><p>Xavier Flash</p>
+<ul>
+<li><p>Xavier NX 를 리커버리 모드로 PC 와 연결한다.</p></li>
+<li><p>아래 명령을 사용하여 flash 수행</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>    $ <span class="nb">cd</span> <span class="nv">$HOME</span>/nvidia/nvidia_sdk/JetPack_5.0.2_Linux_JETSON_XAVIER_NX_TARGETS/Linux_for_Tegra
+    $ sudo ./flash.sh jetson-xavier-nx-devkit-emmc mmcblk1p1
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p>설치 완료 후 Rootfs을 구성한 SD카드를 케리어 보드에 연결 후 부팅한다.</p></li>
+<li><p>부팅 수행 및 설치를 확인
+![install_check]](../image/install_check.png)</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="jetson_install1.html" class="btn btn-neutral float-left" title="Jetson 시스템 설치 (Jetpack 4.6)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../software/abstract.html" class="btn btn-neutral float-right" title="개요" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

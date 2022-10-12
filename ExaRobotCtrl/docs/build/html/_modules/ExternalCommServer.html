@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ExternalCommServer &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>ExternalCommServer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ExternalCommServer</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="c1"># File Name    : ExternalComm.py</span>
+<span class="c1"># Project Name : ExaRobotCtrl</span>
+<span class="c1"># Author       : Raim.Delgado</span>
+<span class="c1"># Organization : SeoulTech</span>
+<span class="c1"># Description  :</span>
+<span class="c1"># [Revision History]</span>
+<span class="c1"># &gt;&gt; 2022.05.04 - First Commit</span>
+<span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">IntEnum</span><span class="p">,</span> <span class="n">auto</span><span class="p">,</span> <span class="n">unique</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="k">import</span> <span class="n">dataclass</span>  <span class="c1"># for python &lt; 3.7, dataclasses should be installed : python -m pip install dataclasses</span>
+
+<span class="n">FILE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>  <span class="c1"># %PROJECT_ROOT%/Library/Socket</span>
+<span class="n">ROOT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">FILE_PATH</span><span class="p">))</span>
+<span class="n">INCLUDE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Include&quot;</span><span class="p">)</span>
+<span class="n">LIBRARY_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Library&quot;</span><span class="p">)</span>
+<span class="n">SOCKET_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">LIBRARY_PATH</span><span class="p">,</span> <span class="s2">&quot;Socket&quot;</span><span class="p">)</span>
+<span class="n">STT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;AudioRecognition&quot;</span><span class="p">)</span>
+<span class="n">MDI_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;MdiBackground&quot;</span><span class="p">)</span>
+<span class="n">DOCK_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;DockWidgets&quot;</span><span class="p">)</span>
+<span class="n">MISC_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;Misc&quot;</span><span class="p">)</span>
+<span class="n">RESOURCES_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Resources&quot;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">DOCK_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">SOCKET_PATH</span><span class="p">])</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+<span class="k">del</span> <span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">DOCK_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">SOCKET_PATH</span>
+
+<span class="kn">from</span> <span class="nn">Commons</span> <span class="k">import</span> <span class="n">PySignal</span><span class="p">,</span> <span class="n">MAX_SERIAL_BUFFER</span><span class="p">,</span> <span class="n">search_pattern</span>
+<span class="kn">from</span> <span class="nn">Commons</span> <span class="k">import</span> <span class="n">convert_bytearray_to_int_be</span>
+<span class="kn">from</span> <span class="nn">SocketCommon</span> <span class="k">import</span> <span class="n">EmbdTcpServer</span>
+<span class="kn">from</span> <span class="nn">CRC16</span> <span class="k">import</span> <span class="n">CRC16</span>
+
+
+<div class="viewcode-block" id="EnumExternalCommCmd"><a class="viewcode-back" href="../Inc/ExternalComm/ExternalCommServer.html#ExternalCommServer.EnumExternalCommCmd">[docs]</a><span class="nd">@unique</span>
+<span class="k">class</span> <span class="nc">EnumExternalCommCmd</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="n">NO_CMD</span> <span class="o">=</span> <span class="mh">0x00</span>
+    <span class="n">MOVE_POSE</span> <span class="o">=</span> <span class="mh">0x01</span>
+    <span class="n">EMG_STOP</span> <span class="o">=</span> <span class="mh">0x02</span>
+    <span class="n">MOVE_MOTOR_CENTER_VEL</span> <span class="o">=</span> <span class="mh">0x03</span>
+    <span class="n">MOVE_MOTOR_JOINT_VEL</span> <span class="o">=</span> <span class="mh">0x04</span>
+    <span class="n">GET_CURR_POS</span> <span class="o">=</span> <span class="mh">0x05</span>
+    <span class="n">GET_TTS_CMD</span> <span class="o">=</span> <span class="mh">0x06</span></div>
+
+
+<div class="viewcode-block" id="CExternalComm"><a class="viewcode-back" href="../Inc/ExternalComm/ExternalCommServer.html#ExternalCommServer.CExternalComm">[docs]</a><span class="k">class</span> <span class="nc">CExternalComm</span><span class="p">:</span>
+    <span class="n">_server</span><span class="p">:</span> <span class="n">EmbdTcpServer</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CExternalComm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_server</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_start</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_stop</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_error</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_accept_client</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">tuple</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_disconnect_client</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">tuple</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_recv_raw</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">bytes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btaRecvBuff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_emg_stop</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_move_pose</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_crc</span> <span class="o">=</span> <span class="n">CRC16</span><span class="p">(</span><span class="mh">0x8005</span><span class="p">,</span> <span class="mh">0xFFFF</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mh">0x0000</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CExternalComm.start_server"><a class="viewcode-back" href="../Inc/ExternalComm/ExternalCommServer.html#ExternalCommServer.CExternalComm.start_server">[docs]</a>    <span class="k">def</span> <span class="nf">start_server</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anPort</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">7506</span><span class="p">,</span> <span class="n">strAddr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="c1"># self.stop_server()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_server</span> <span class="o">=</span> <span class="n">EmbdTcpServer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">sig_start</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_server_start</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">sig_send_data</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_server_send_data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">sig_recv_data</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_server_recv_data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">sig_accept_client</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_server_accept_client</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">sig_disconnect_client</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_server_disconnect_client</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">sig_stop</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_server_stop</span><span class="p">)</span>
+
+        <span class="n">bRet</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">start_server</span><span class="p">(</span><span class="n">anPort</span><span class="p">,</span> <span class="n">strAddr</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">bRet</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sig_error</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stop_server</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">bRet</span></div>
+
+<div class="viewcode-block" id="CExternalComm.stop_server"><a class="viewcode-back" href="../Inc/ExternalComm/ExternalCommServer.html#ExternalCommServer.CExternalComm.stop_server">[docs]</a>    <span class="k">def</span> <span class="nf">stop_server</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CExternalComm.disconnect_client"><a class="viewcode-back" href="../Inc/ExternalComm/ExternalCommServer.html#ExternalCommServer.CExternalComm.disconnect_client">[docs]</a>    <span class="k">def</span> <span class="nf">disconnect_client</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tplAddrPort</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">remove_client_by_address</span><span class="p">(</span><span class="n">tplAddrPort</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CExternalComm.on_server_start"><a class="viewcode-back" href="../Inc/ExternalComm/ExternalCommServer.html#ExternalCommServer.CExternalComm.on_server_start">[docs]</a>    <span class="k">def</span> <span class="nf">on_server_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_start</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CExternalComm.on_server_stop"><a class="viewcode-back" href="../Inc/ExternalComm/ExternalCommServer.html#ExternalCommServer.CExternalComm.on_server_stop">[docs]</a>    <span class="k">def</span> <span class="nf">on_server_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_server</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_stop</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CExternalComm.on_server_accept_client"><a class="viewcode-back" href="../Inc/ExternalComm/ExternalCommServer.html#ExternalCommServer.CExternalComm.on_server_accept_client">[docs]</a>    <span class="k">def</span> <span class="nf">on_server_accept_client</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tplAddrPort</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_accept_client</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">tplAddrPort</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CExternalComm.on_server_disconnect_client"><a class="viewcode-back" href="../Inc/ExternalComm/ExternalCommServer.html#ExternalCommServer.CExternalComm.on_server_disconnect_client">[docs]</a>    <span class="k">def</span> <span class="nf">on_server_disconnect_client</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tplAddrPort</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_disconnect_client</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">tplAddrPort</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CExternalComm.on_server_send_data"><a class="viewcode-back" href="../Inc/ExternalComm/ExternalCommServer.html#ExternalCommServer.CExternalComm.on_server_send_data">[docs]</a>    <span class="k">def</span> <span class="nf">on_server_send_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abData</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="CExternalComm.on_server_recv_data"><a class="viewcode-back" href="../Inc/ExternalComm/ExternalCommServer.html#ExternalCommServer.CExternalComm.on_server_recv_data">[docs]</a>    <span class="k">def</span> <span class="nf">on_server_recv_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abData</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_recv_raw</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">abData</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btaRecvBuff</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">MAX_SERIAL_BUFFER</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">btaRecvBuff</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">btaRecvBuff</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">(</span><span class="n">abData</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">deserialize_packet</span><span class="p">()</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">btaRecvBuff</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CExternalComm.deserialize_packet"><a class="viewcode-back" href="../Inc/ExternalComm/ExternalCommServer.html#ExternalCommServer.CExternalComm.deserialize_packet">[docs]</a>    <span class="k">def</span> <span class="nf">deserialize_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">bta_stx</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([</span><span class="mh">0x02</span><span class="p">,</span> <span class="mh">0x5B</span><span class="p">])</span>  <span class="c1"># STX</span>
+        <span class="n">n_next_packet_idx</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># print(&#39;deserialize_packet 1 &#39;,self.btaRecvBuff)</span>
+        <span class="n">n_idx</span> <span class="o">=</span> <span class="n">search_pattern</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btaRecvBuff</span><span class="p">,</span> <span class="n">bta_stx</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># minimum length of the whole packet</span>
+            <span class="c1"># todo: add CRC</span>
+            <span class="c1"># STX: 2 bytes, Packet Len: 1 byte, CMD: 1 byte, CRC16: 2bytes,  ETX: 2 bytes</span>
+            <span class="c1"># print(&#39;deserialize_packet 2 &#39;,self.btaRecvBuff)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btaRecvBuff</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">n_idx</span> <span class="o">+</span> <span class="mi">5</span><span class="p">:</span>
+                <span class="c1"># print(&#39;deserialize_packet 3 &#39;,self.btaRecvBuff)</span>
+                <span class="n">n_packet_len</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">btaRecvBuff</span><span class="p">[</span><span class="n">n_idx</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">4</span>  <span class="c1"># only data and CMD are counted in packet length</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btaRecvBuff</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">n_idx</span> <span class="o">+</span> <span class="n">n_packet_len</span><span class="p">:</span>
+                    <span class="c1"># print(&#39;deserialize_packet 4 &#39;,self.btaRecvBuff)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">btaRecvBuff</span><span class="p">[</span><span class="n">n_idx</span> <span class="o">+</span> <span class="n">n_packet_len</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x5D</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">btaRecvBuff</span><span class="p">[</span>
+                        <span class="n">n_idx</span> <span class="o">+</span> <span class="n">n_packet_len</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x03</span><span class="p">:</span>
+                        <span class="c1"># print(&#39;deserialize_packet 5 &#39;,self.btaRecvBuff)</span>
+                        <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">btaRecvBuff</span><span class="p">[</span><span class="n">n_idx</span><span class="p">:</span> <span class="n">n_idx</span> <span class="o">+</span> <span class="n">n_packet_len</span><span class="p">]</span>  <span class="c1"># start of payload</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">parse_packet_values</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+                        <span class="n">n_next_packet_idx</span> <span class="o">=</span> <span class="n">n_idx</span> <span class="o">+</span> <span class="n">n_packet_len</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btaRecvBuff</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">n_next_packet_idx</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">btaRecvBuff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">btaRecvBuff</span><span class="p">[</span><span class="n">n_next_packet_idx</span><span class="p">:]</span></div>
+
+<div class="viewcode-block" id="CExternalComm.parse_packet_values"><a class="viewcode-back" href="../Inc/ExternalComm/ExternalCommServer.html#ExternalCommServer.CExternalComm.parse_packet_values">[docs]</a>    <span class="k">def</span> <span class="nf">parse_packet_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abtData</span><span class="p">):</span>
+        <span class="n">b_cmd</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">abtData</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="n">n_recv_crc</span> <span class="o">=</span> <span class="n">convert_bytearray_to_int_be</span><span class="p">(</span><span class="n">abtData</span><span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+        <span class="c1"># print(&#39;parse_packet_values: &#39;,abtData, b_cmd)</span>
+        
+        <span class="k">if</span> <span class="n">b_cmd</span> <span class="o">==</span> <span class="n">EnumExternalCommCmd</span><span class="o">.</span><span class="n">EMG_STOP</span><span class="p">:</span>
+            <span class="c1"># print(&#39;Get EMG_STOP&#39;)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sig_emg_stop</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">b_cmd</span> <span class="o">==</span> <span class="n">EnumExternalCommCmd</span><span class="o">.</span><span class="n">MOVE_POSE</span><span class="p">:</span>
+            <span class="c1"># print(&#39;Get MOVE_POSE&#39;)</span>
+            <span class="n">x_pos</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">convert_bytearray_to_int_be</span><span class="p">(</span><span class="n">abtData</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="n">abIsSigned</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1000.</span><span class="p">)</span>
+            <span class="n">y_pos</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">convert_bytearray_to_int_be</span><span class="p">(</span><span class="n">abtData</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">8</span><span class="p">],</span> <span class="n">abIsSigned</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1000.</span><span class="p">)</span>
+            <span class="n">aAngle</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">convert_bytearray_to_int_be</span><span class="p">(</span><span class="n">abtData</span><span class="p">[</span><span class="mi">8</span><span class="p">:</span><span class="mi">10</span><span class="p">],</span> <span class="n">abIsSigned</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1000.</span><span class="p">)</span>
+            <span class="c1"># print(&#39;data: &#39;,x_pos, y_pos, aAngle)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sig_move_pose</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">x_pos</span><span class="p">,</span> <span class="n">y_pos</span><span class="p">,</span> <span class="n">aAngle</span><span class="p">)</span>
+            <span class="c1"># print(abtData, &#39;get MOVE_POSE data !!&#39;,</span>
+            <span class="c1">#       abtData[4:6], abtData[6:8], x_pos, y_pos)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Get ??&#39;</span><span class="p">)</span>
+            <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="CExternalComm.send_raw"><a class="viewcode-back" href="../Inc/ExternalComm/ExternalCommServer.html#ExternalCommServer.CExternalComm.send_raw">[docs]</a>    <span class="k">def</span> <span class="nf">send_raw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abtaData</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">send_to_clients</span><span class="p">(</span><span class="n">abtaData</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CExternalComm.make_packet"><a class="viewcode-back" href="../Inc/ExternalComm/ExternalCommServer.html#ExternalCommServer.CExternalComm.make_packet">[docs]</a>    <span class="k">def</span> <span class="nf">make_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anCmd</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">abtaData</span><span class="p">:</span> <span class="nb">bytearray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytearray</span><span class="p">:</span>
+        <span class="n">nPacketLen</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">abtaData</span><span class="p">)</span> <span class="k">if</span> <span class="n">abtaData</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="n">buff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([</span><span class="mh">0x02</span><span class="p">,</span> <span class="mh">0x5B</span><span class="p">])</span>  <span class="c1"># STX</span>
+        <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nPacketLen</span><span class="p">)</span>
+        <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">anCmd</span><span class="p">))</span>
+        
+        <span class="k">if</span> <span class="n">abtaData</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">buff</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">abtaData</span><span class="p">)</span>
+
+        <span class="n">buff</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="mh">0x5D</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">])</span> <span class="c1">#ETX</span>
+
+        <span class="k">return</span> <span class="n">buff</span></div>
+
+<div class="viewcode-block" id="CExternalComm.send_packet"><a class="viewcode-back" href="../Inc/ExternalComm/ExternalCommServer.html#ExternalCommServer.CExternalComm.send_packet">[docs]</a>    <span class="k">def</span> <span class="nf">send_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anCmd</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">abtaPayLoad</span><span class="p">:</span> <span class="nb">bytearray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">bta_packet</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_packet</span><span class="p">(</span><span class="n">anCmd</span><span class="p">,</span> <span class="n">abtaPayLoad</span><span class="p">)</span>
+        <span class="c1"># print(bta_packet)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">is_connected</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">send_to_clients</span><span class="p">(</span><span class="n">bta_packet</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+    <span class="c1">####</span>
+<div class="viewcode-block" id="CExternalComm.send_tts_msg"><a class="viewcode-back" href="../Inc/ExternalComm/ExternalCommServer.html#ExternalCommServer.CExternalComm.send_tts_msg">[docs]</a>    <span class="k">def</span> <span class="nf">send_tts_msg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">byte</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">byte</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_packet</span><span class="p">(</span><span class="n">EnumExternalCommCmd</span><span class="o">.</span><span class="n">GET_TTS_CMD</span><span class="p">,</span> <span class="n">payload</span><span class="p">)</span></div>
+        
+        
+    <span class="c1">####</span>
+<div class="viewcode-block" id="CExternalComm.release"><a class="viewcode-back" href="../Inc/ExternalComm/ExternalCommServer.html#ExternalCommServer.CExternalComm.release">[docs]</a>    <span class="k">def</span> <span class="nf">release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_server</span><span class="p">()</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">sample</span> <span class="o">=</span> <span class="n">CExternalComm</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

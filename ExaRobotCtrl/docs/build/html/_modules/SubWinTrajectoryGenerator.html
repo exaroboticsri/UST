@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SubWinTrajectoryGenerator &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>SubWinTrajectoryGenerator</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for SubWinTrajectoryGenerator</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="c1"># File Name    : SubWinTrajecotryGenerator.py</span>
+<span class="c1"># Project Name : ExaRobotCtrl</span>
+<span class="c1"># Author       : Raim.Delgado</span>
+<span class="c1"># Organization : SeoulTech</span>
+<span class="c1"># Description  :</span>
+<span class="c1"># [Revision History]</span>
+<span class="c1"># &gt;&gt; 2022.02.09 - First Commit</span>
+<span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">rad2deg</span><span class="p">,</span> <span class="n">deg2rad</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;font.size&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">})</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;Qt5Agg&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">matplotlib.backends.backend_qt5agg</span> <span class="k">import</span> <span class="n">FigureCanvasQTAgg</span> <span class="k">as</span> <span class="n">FigureCanvas</span>
+<span class="kn">from</span> <span class="nn">matplotlib.figure</span> <span class="k">import</span> <span class="n">Figure</span>
+
+<span class="n">FILE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>  <span class="c1"># %PROJECT_ROOT%/Include/DOckWidgets</span>
+<span class="n">ROOT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">FILE_PATH</span><span class="p">))</span>
+<span class="n">INCLUDE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Include&quot;</span><span class="p">)</span>
+<span class="n">MOBILE_ROBOT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;MobileRobot&quot;</span><span class="p">)</span>
+<span class="n">LIBRARY_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Library&quot;</span><span class="p">)</span>
+<span class="n">SERIAL_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">LIBRARY_PATH</span><span class="p">,</span> <span class="s2">&quot;Serial&quot;</span><span class="p">)</span>
+<span class="n">MDI_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;MdiBackground&quot;</span><span class="p">)</span>
+<span class="n">MISC_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Misc&quot;</span><span class="p">)</span>
+<span class="n">RESOURCES_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Resources&quot;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">SERIAL_PATH</span><span class="p">,</span> <span class="n">MOBILE_ROBOT_PATH</span><span class="p">,</span> <span class="p">])</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+<span class="k">del</span> <span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">LIBRARY_PATH</span><span class="p">,</span> <span class="n">SERIAL_PATH</span><span class="p">,</span> <span class="n">MOBILE_ROBOT_PATH</span>
+
+<span class="kn">from</span> <span class="nn">UiCommon</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">Commons</span> <span class="k">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">TMRKobuki2</span> <span class="k">import</span> <span class="n">CTMRKobuki2</span>
+<span class="kn">from</span> <span class="nn">TMRStellaB2</span> <span class="k">import</span> <span class="n">CTMRStellaB2</span>
+<span class="kn">from</span> <span class="nn">BezierCurveConv</span> <span class="k">import</span> <span class="n">CBezierCurveTraj</span>
+
+
+<div class="viewcode-block" id="MplCanvas"><a class="viewcode-back" href="../Inc/SubWindow/SubWinTrajectoryGenerator.html#SubWinTrajectoryGenerator.MplCanvas">[docs]</a><span class="k">class</span> <span class="nc">MplCanvas</span><span class="p">(</span><span class="n">FigureCanvas</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span> <span class="o">=</span> <span class="n">Figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MplCanvas</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">wspace</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+    <span class="c1"># self.fig.tight_layout()</span>
+
+
+<div class="viewcode-block" id="SubWindowTrajGen"><a class="viewcode-back" href="../Inc/SubWindow/SubWinTrajectoryGenerator.html#SubWinTrajectoryGenerator.SubWindowTrajGen">[docs]</a><span class="k">class</span> <span class="nc">SubWindowTrajGen</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QMdiSubWindow</span><span class="p">):</span>
+    <span class="n">_widgetPhyLimits</span><span class="p">:</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_widgetPosCtrl</span><span class="p">:</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_widgetROSCtrl</span><span class="p">:</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">listRobots</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">sig_close</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
+
+<div class="viewcode-block" id="SubWindowTrajGen.closeEvent"><a class="viewcode-back" href="../Inc/SubWindow/SubWinTrajectoryGenerator.html#SubWinTrajectoryGenerator.SubWindowTrajGen.closeEvent">[docs]</a>    <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">closeEvent</span><span class="p">:</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QCloseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_close</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SubWindowTrajGen</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">listRobots</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Kobuki2&quot;</span><span class="p">,</span> <span class="s2">&quot;StellaB2&quot;</span><span class="p">,</span> <span class="s2">&quot;Custom&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowIcon</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s2">&quot;path.png&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;Bezier Curve and Convolution Trajectory Generator&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setMinimumWidth</span><span class="p">(</span><span class="mi">850</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setMinimumHeight</span><span class="p">(</span><span class="mi">600</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">850</span><span class="p">,</span> <span class="mi">600</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_ros_start_timer</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_ros_stop_timer</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_ros_add_vel_cmd</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">tuple</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_ros_reg_vel_cmd</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">tuple</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_ros_clear_vel_cmd</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">initUi</span><span class="p">()</span>
+        <span class="c1"># self.show()</span>
+
+<div class="viewcode-block" id="SubWindowTrajGen.initUi"><a class="viewcode-back" href="../Inc/SubWindow/SubWinTrajectoryGenerator.html#SubWinTrajectoryGenerator.SubWindowTrajGen.initUi">[docs]</a>    <span class="k">def</span> <span class="nf">initUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initPhyLimits</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initPosCtrl</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initROSCtrl</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initFigureCanvas</span><span class="p">()</span>
+
+        <span class="n">centralWidget</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWidget</span><span class="p">(</span><span class="n">centralWidget</span><span class="p">)</span>
+        <span class="n">HLayoutMain</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">(</span><span class="n">centralWidget</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmbRobot</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QComboBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmbRobot</span><span class="o">.</span><span class="n">addItems</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">listRobots</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmbRobot</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">on_text_change_cmb_robot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cmbRobot</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmbRobot</span><span class="o">.</span><span class="n">currentTextChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_text_change_cmb_robot</span><span class="p">)</span>
+        <span class="n">lblRobots</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">()</span>
+        <span class="n">lblRobots</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;Robots&#39;</span><span class="p">)</span>
+        <span class="n">FLayoutRobot</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QFormLayout</span><span class="p">()</span>
+        <span class="n">FLayoutRobot</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">lblRobots</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmbRobot</span><span class="p">)</span>
+
+        <span class="n">VLayoutLeft</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="n">VLayoutLeft</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">FLayoutRobot</span><span class="p">)</span>
+        <span class="n">VLayoutLeft</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_widgetPhyLimits</span><span class="p">)</span>
+        <span class="n">VLayoutLeft</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_widgetPosCtrl</span><span class="p">)</span>
+        <span class="n">VLayoutLeft</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_widgetROSCtrl</span><span class="p">)</span>
+        <span class="n">VLayoutLeft</span><span class="o">.</span><span class="n">addStretch</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">HLayoutMain</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">VLayoutLeft</span><span class="p">)</span>
+        <span class="n">HLayoutMain</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_widgetFigs</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">listVelC</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">listOmegaC</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">listThetaC</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="SubWindowTrajGen.initPhyLimits"><a class="viewcode-back" href="../Inc/SubWindow/SubWinTrajectoryGenerator.html#SubWinTrajectoryGenerator.SubWindowTrajGen.initPhyLimits">[docs]</a>    <span class="k">def</span> <span class="nf">initPhyLimits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetPhyLimits</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">VPhyLimits</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_widgetPhyLimits</span><span class="p">)</span>
+        <span class="n">gbLimits</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGroupBox</span><span class="p">(</span><span class="s2">&quot;Physical Limits&quot;</span><span class="p">)</span>
+        <span class="n">VLayoutLimits</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">gbLimits</span><span class="p">)</span>
+        <span class="n">FLayoutLimits</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QFormLayout</span><span class="p">()</span>
+        <span class="n">lblMaxVel</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Max Vel (m/s)&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinMaxVel</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDoubleSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinMaxVel</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinMaxVel</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="n">lblMaxAcc</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Max Acc (m/s²)&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinMaxAcc</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDoubleSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinMaxAcc</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinMaxAcc</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="n">lblMaxJerk</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Max Jerk (m/s³)&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinMaxJerk</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDoubleSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinMaxJerk</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinMaxJerk</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="n">lblSamplingTime</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Sampling Time (ms)&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinSamplingTime</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinSamplingTime</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5000</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinSamplingTime</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">FLayoutLimits</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">lblMaxVel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinMaxVel</span><span class="p">)</span>
+        <span class="n">FLayoutLimits</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">lblMaxAcc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinMaxAcc</span><span class="p">)</span>
+        <span class="n">FLayoutLimits</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">lblMaxJerk</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinMaxJerk</span><span class="p">)</span>
+        <span class="n">FLayoutLimits</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">lblSamplingTime</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinSamplingTime</span><span class="p">)</span>
+        <span class="n">VLayoutLimits</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">FLayoutLimits</span><span class="p">)</span>
+        <span class="n">VPhyLimits</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gbLimits</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SubWindowTrajGen.initPosCtrl"><a class="viewcode-back" href="../Inc/SubWindow/SubWinTrajectoryGenerator.html#SubWinTrajectoryGenerator.SubWindowTrajGen.initPosCtrl">[docs]</a>    <span class="k">def</span> <span class="nf">initPosCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetPosCtrl</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">VPosCtrl</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_widgetPosCtrl</span><span class="p">)</span>
+        <span class="n">gbPos</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGroupBox</span><span class="p">(</span><span class="s2">&quot;Position Control&quot;</span><span class="p">)</span>
+        <span class="n">HPos</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">(</span><span class="n">gbPos</span><span class="p">)</span>
+
+        <span class="n">FLayoutInit</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QFormLayout</span><span class="p">()</span>
+        <span class="n">lblInitX</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">()</span>
+        <span class="n">lblInitX</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;X_init (m)&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitX</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDoubleSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitX</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="o">-</span><span class="mf">10.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitX</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="n">lblInitY</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">()</span>
+        <span class="n">lblInitY</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;Y_init (m)&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitY</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDoubleSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitY</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="o">-</span><span class="mf">10.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitY</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="n">lblInitTheta</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">()</span>
+        <span class="n">lblInitTheta</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;θ_init (deg)&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitTheta</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDoubleSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitTheta</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="o">-</span><span class="mf">10.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitTheta</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="n">lblInitVel</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">()</span>
+        <span class="n">lblInitVel</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;Vel_init (m/s)&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitVel</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDoubleSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitVel</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="o">-</span><span class="mf">10.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitVel</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="n">FLayoutInit</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">lblInitX</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitX</span><span class="p">)</span>
+        <span class="n">FLayoutInit</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">lblInitY</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitY</span><span class="p">)</span>
+        <span class="n">FLayoutInit</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">lblInitTheta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitTheta</span><span class="p">)</span>
+        <span class="n">FLayoutInit</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">lblInitVel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitVel</span><span class="p">)</span>
+
+        <span class="n">FLayoutTarg</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QFormLayout</span><span class="p">()</span>
+        <span class="n">lblTargX</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">()</span>
+        <span class="n">lblTargX</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;X_targ (m)&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinTargX</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDoubleSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinTargX</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="o">-</span><span class="mf">10.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinTargX</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="n">lblTargY</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">()</span>
+        <span class="n">lblTargY</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;Y_targ (m)&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinTargY</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDoubleSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinTargY</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="o">-</span><span class="mf">10.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinTargY</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="n">lblTargTheta</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">()</span>
+        <span class="n">lblTargTheta</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;Θ_targ (deg)&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinTargTheta</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDoubleSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinTargTheta</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="o">-</span><span class="mf">10.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinTargTheta</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="n">lblTargVel</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">()</span>
+        <span class="n">lblTargVel</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;Vel_targ (m/s)&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinTargVel</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDoubleSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinTargVel</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="o">-</span><span class="mf">10.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinTargVel</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="n">FLayoutTarg</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">lblTargX</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinTargX</span><span class="p">)</span>
+        <span class="n">FLayoutTarg</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">lblTargY</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinTargY</span><span class="p">)</span>
+        <span class="n">FLayoutTarg</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">lblTargTheta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinTargTheta</span><span class="p">)</span>
+        <span class="n">FLayoutTarg</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">lblTargVel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinTargVel</span><span class="p">)</span>
+        <span class="n">HPos</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">FLayoutInit</span><span class="p">)</span>
+        <span class="n">HPos</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">FLayoutTarg</span><span class="p">)</span>
+
+        <span class="n">HLayoutBtn</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnCalculate</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;CALCULATE&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnCalculate</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_btn_clicked_calculate</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnSimulate</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;SIMULATE&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnSimulate</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_btn_clicked_simulate</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnClear</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;CLEAR&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnClear</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_btn_clicked_clear</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinTargVel</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinTargVel</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitVel</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitVel</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">HLayoutBtn</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnCalculate</span><span class="p">)</span>
+        <span class="n">HLayoutBtn</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnSimulate</span><span class="p">)</span>
+        <span class="n">HLayoutBtn</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnClear</span><span class="p">)</span>
+
+        <span class="n">VPosCtrl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gbPos</span><span class="p">)</span>
+        <span class="n">VPosCtrl</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">HLayoutBtn</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SubWindowTrajGen.initFigureCanvas"><a class="viewcode-back" href="../Inc/SubWindow/SubWinTrajectoryGenerator.html#SubWinTrajectoryGenerator.SubWindowTrajGen.initFigureCanvas">[docs]</a>    <span class="k">def</span> <span class="nf">initFigureCanvas</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetFigs</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">HLayoutFigs</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_widgetFigs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figCartesian</span> <span class="o">=</span> <span class="n">MplCanvas</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figCartesian</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Cartesian Plane&#39;</span><span class="p">)</span>
+        <span class="n">HLayoutFigs</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">figCartesian</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figVel</span> <span class="o">=</span> <span class="n">MplCanvas</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figVel</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Linear Velocity (m/s)&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figOmega</span> <span class="o">=</span> <span class="n">MplCanvas</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figOmega</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Angular Velocity (rad/s)&#39;</span><span class="p">)</span>
+        <span class="n">VLayoutRightFigs</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="n">VLayoutRightFigs</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">figVel</span><span class="p">)</span>
+        <span class="n">VLayoutRightFigs</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">figOmega</span><span class="p">)</span>
+        <span class="n">HLayoutFigs</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">VLayoutRightFigs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SubWindowTrajGen.initROSCtrl"><a class="viewcode-back" href="../Inc/SubWindow/SubWinTrajectoryGenerator.html#SubWinTrajectoryGenerator.SubWindowTrajGen.initROSCtrl">[docs]</a>    <span class="k">def</span> <span class="nf">initROSCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetROSCtrl</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">VLayoutROS</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_widgetROSCtrl</span><span class="p">)</span>
+
+        <span class="n">gBoxROS</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;ROS Control&#39;</span><span class="p">)</span>
+        <span class="n">VLayoutGBoxRos</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">gBoxROS</span><span class="p">)</span>
+
+        <span class="n">HlayoutTimer</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRosStartTimer</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;START TIMER&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRosStartTimer</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sig_ros_start_timer</span><span class="o">.</span><span class="n">emit</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRosStopTimer</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;STOP TIMER&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRosStopTimer</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sig_ros_stop_timer</span><span class="o">.</span><span class="n">emit</span><span class="p">())</span>
+        <span class="n">HlayoutTimer</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnRosStartTimer</span><span class="p">)</span>
+        <span class="n">HlayoutTimer</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnRosStopTimer</span><span class="p">)</span>
+
+        <span class="n">HlayoutCmdVel</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRosClearVelCmd</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;CLEAR CMD_VEL&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRosClearVelCmd</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sig_ros_clear_vel_cmd</span><span class="o">.</span><span class="n">emit</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRosAddVelCmd</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;ADD CMD_VEL&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRosAddVelCmd</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_btn_clicked_ros_add_vel_cmd</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRosRegVelCmd</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;REG CMD_VEL&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRosRegVelCmd</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_btn_clicked_ros_reg_vel_cmd</span><span class="p">)</span>
+        <span class="n">HlayoutCmdVel</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnRosRegVelCmd</span><span class="p">)</span>
+        <span class="n">HlayoutCmdVel</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnRosAddVelCmd</span><span class="p">)</span>
+        <span class="n">HlayoutCmdVel</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnRosClearVelCmd</span><span class="p">)</span>
+        <span class="n">VLayoutGBoxRos</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">HlayoutCmdVel</span><span class="p">)</span>
+        <span class="n">VLayoutGBoxRos</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">HlayoutTimer</span><span class="p">)</span>
+        <span class="n">VLayoutROS</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gBoxROS</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SubWindowTrajGen.on_btn_clicked_ros_add_vel_cmd"><a class="viewcode-back" href="../Inc/SubWindow/SubWinTrajectoryGenerator.html#SubWinTrajectoryGenerator.SubWindowTrajGen.on_btn_clicked_ros_add_vel_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">on_btn_clicked_ros_add_vel_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">listVelC</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">listOmegaC</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sig_ros_add_vel_cmd</span><span class="o">.</span><span class="n">emit</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">listVelC</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">listOmegaC</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SubWindowTrajGen.on_btn_clicked_ros_reg_vel_cmd"><a class="viewcode-back" href="../Inc/SubWindow/SubWinTrajectoryGenerator.html#SubWinTrajectoryGenerator.SubWindowTrajGen.on_btn_clicked_ros_reg_vel_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">on_btn_clicked_ros_reg_vel_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">listVelC</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">listOmegaC</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sig_ros_reg_vel_cmd</span><span class="o">.</span><span class="n">emit</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">listVelC</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">listOmegaC</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SubWindowTrajGen.on_btn_clicked_simulate"><a class="viewcode-back" href="../Inc/SubWindow/SubWinTrajectoryGenerator.html#SubWinTrajectoryGenerator.SubWindowTrajGen.on_btn_clicked_simulate">[docs]</a>    <span class="k">def</span> <span class="nf">on_btn_clicked_simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">x_i</span><span class="p">,</span> <span class="n">y_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitX</span><span class="o">.</span><span class="n">value</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitY</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="n">dT</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinSamplingTime</span><span class="o">.</span><span class="n">value</span><span class="p">()</span> <span class="o">/</span> <span class="mf">1000.</span>
+
+        <span class="c1"># note that the method simulate_robot_drive is inherited from CTMRDiff</span>
+        <span class="c1"># any children of CTMRDiff will produce the same results</span>
+        <span class="n">x_c</span><span class="p">,</span> <span class="n">y_c</span> <span class="o">=</span> <span class="n">CTMRKobuki2</span><span class="p">()</span><span class="o">.</span><span class="n">simulate_robot_drive</span><span class="p">(</span><span class="n">x_i</span><span class="p">,</span> <span class="n">y_i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">listVelC</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">listThetaC</span><span class="p">,</span> <span class="n">dT</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">figCartesian</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">lines</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figCartesian</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">figCartesian</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">lines</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figCartesian</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_c</span><span class="p">,</span> <span class="n">y_c</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;simulated&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figCartesian</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper left&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figCartesian</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SubWindowTrajGen.on_btn_clicked_clear"><a class="viewcode-back" href="../Inc/SubWindow/SubWinTrajectoryGenerator.html#SubWinTrajectoryGenerator.SubWindowTrajGen.on_btn_clicked_clear">[docs]</a>    <span class="k">def</span> <span class="nf">on_btn_clicked_clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figCartesian</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">cla</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figCartesian</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figVel</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">cla</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figVel</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figOmega</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">cla</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figOmega</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SubWindowTrajGen.on_btn_clicked_calculate"><a class="viewcode-back" href="../Inc/SubWindow/SubWinTrajectoryGenerator.html#SubWinTrajectoryGenerator.SubWindowTrajGen.on_btn_clicked_calculate">[docs]</a>    <span class="k">def</span> <span class="nf">on_btn_clicked_calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">max_vel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinMaxVel</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="n">max_acc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinMaxAcc</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="n">max_jerk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinMaxJerk</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="n">dT</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinSamplingTime</span><span class="o">.</span><span class="n">value</span><span class="p">()</span> <span class="o">/</span> <span class="mf">1000.</span>
+        <span class="n">initPos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitX</span><span class="o">.</span><span class="n">value</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitY</span><span class="o">.</span><span class="n">value</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitTheta</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="n">targPos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinTargX</span><span class="o">.</span><span class="n">value</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinTargY</span><span class="o">.</span><span class="n">value</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinTargTheta</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="n">v_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinInitVel</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="n">v_f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dspinTargVel</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+
+        <span class="n">c_bezier</span> <span class="o">=</span> <span class="n">CBezierCurveTraj</span><span class="p">(</span><span class="n">max_vel</span><span class="p">,</span> <span class="n">max_acc</span><span class="p">,</span> <span class="n">max_jerk</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">vel_c</span><span class="p">,</span> <span class="n">omega_c</span><span class="p">,</span> <span class="n">XYTheta</span> <span class="o">=</span> <span class="n">c_bezier</span><span class="o">.</span><span class="n">generate_bezier_trajectory</span><span class="p">(</span><span class="n">initPos</span><span class="p">,</span> <span class="n">targPos</span><span class="p">,</span> <span class="n">v_i</span><span class="p">,</span> <span class="n">v_f</span><span class="p">,</span> <span class="n">dT</span><span class="p">)</span>
+            <span class="n">x_c</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">angles</span> <span class="ow">in</span> <span class="n">XYTheta</span><span class="p">]</span>
+            <span class="n">y_c</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">angles</span> <span class="ow">in</span> <span class="n">XYTheta</span><span class="p">]</span>
+            <span class="n">theta_c</span> <span class="o">=</span> <span class="p">[</span><span class="n">angles</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">angles</span> <span class="ow">in</span> <span class="n">XYTheta</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">listVelC</span> <span class="o">=</span> <span class="n">vel_c</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">listOmegaC</span> <span class="o">=</span> <span class="n">omega_c</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">listThetaC</span> <span class="o">=</span> <span class="n">theta_c</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+            <span class="n">timestamp</span> <span class="o">=</span> <span class="mf">0.</span>
+            <span class="n">listTime</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vel_c</span><span class="p">)):</span>
+                <span class="n">timestamp</span> <span class="o">+=</span> <span class="n">dT</span>
+                <span class="n">listTime</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">timestamp</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">on_btn_clicked_clear</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figCartesian</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_c</span><span class="p">,</span> <span class="n">y_c</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;reference&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figCartesian</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper left&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figCartesian</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figVel</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">listTime</span><span class="p">,</span> <span class="n">vel_c</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figVel</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figOmega</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">listTime</span><span class="p">,</span> <span class="n">omega_c</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>
+            <span class="c1"># ax2 = self.figOmega.axes.twinx()</span>
+            <span class="c1"># ax2.clear()</span>
+            <span class="c1"># ax2.plot(listTime, self.listThetaC, &#39;cyan&#39;)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figOmega</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">msgbox</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QMessageBox</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">msgbox</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">windowTitle</span><span class="p">())</span>
+            <span class="n">msgbox</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Critical</span><span class="p">)</span>
+            <span class="n">msgbox</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+            <span class="n">msgbox</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SubWindowTrajGen.on_text_change_cmb_robot"><a class="viewcode-back" href="../Inc/SubWindow/SubWinTrajectoryGenerator.html#SubWinTrajectoryGenerator.SubWindowTrajGen.on_text_change_cmb_robot">[docs]</a>    <span class="k">def</span> <span class="nf">on_text_change_cmb_robot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strText</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">strText</span> <span class="o">==</span> <span class="s2">&quot;Custom&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dspinMaxAcc</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dspinMaxVel</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dspinMaxJerk</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dspinMaxJerk</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spinSamplingTime</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spinSamplingTime</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">vel</span><span class="p">,</span> <span class="n">acc</span><span class="p">,</span> <span class="n">jerk</span><span class="p">,</span> <span class="n">yaw</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span>
+            <span class="n">sampling_time</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">strText</span> <span class="o">==</span> <span class="s2">&quot;StellaB2&quot;</span><span class="p">:</span>
+                <span class="n">sampling_time</span> <span class="o">=</span> <span class="mi">20</span>
+                <span class="n">vel</span><span class="p">,</span> <span class="n">acc</span><span class="p">,</span> <span class="n">jerk</span><span class="p">,</span> <span class="n">yaw</span> <span class="o">=</span> <span class="n">CTMRStellaB2</span><span class="p">()</span><span class="o">.</span><span class="n">get_phy_limits_t</span><span class="p">()</span>
+
+            <span class="k">elif</span> <span class="n">strText</span> <span class="o">==</span> <span class="s2">&quot;Kobuki2&quot;</span><span class="p">:</span>
+                <span class="n">sampling_time</span> <span class="o">=</span> <span class="mi">50</span>
+                <span class="n">vel</span><span class="p">,</span> <span class="n">acc</span><span class="p">,</span> <span class="n">jerk</span><span class="p">,</span> <span class="n">yaw</span> <span class="o">=</span> <span class="n">CTMRKobuki2</span><span class="p">()</span><span class="o">.</span><span class="n">get_phy_limits_t</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">spinSamplingTime</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="n">sampling_time</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spinSamplingTime</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">sampling_time</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dspinMaxVel</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">vel</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dspinMaxAcc</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">acc</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dspinMaxJerk</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">jerk</span><span class="p">)</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">app</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">app</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+
+    <span class="n">MainUI</span> <span class="o">=</span> <span class="n">SubWindowTrajGen</span><span class="p">()</span>
+    <span class="c1"># MainUI.show()</span>
+
+    <span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+<span class="c1"># MainUI.release()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

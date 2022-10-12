@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SerialSendWidget &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>SerialSendWidget</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for SerialSendWidget</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="c1"># File Name    : SerialSendWidget.py</span>
+<span class="c1"># Project Name : PySerialTerm</span>
+<span class="c1"># Author       : Raim.Delgado</span>
+<span class="c1"># Organization : SeoulTech</span>
+<span class="c1"># Description  :</span>
+<span class="c1"># [Revision History]</span>
+<span class="c1"># &gt;&gt; 2022.02.19 - First Commit</span>
+<span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span>
+
+<span class="n">FILE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>  <span class="c1"># %PROJECT_ROOT%/Scripts</span>
+<span class="n">ROOT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">FILE_PATH</span><span class="p">))</span>
+<span class="n">RESOURCES_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Resources&quot;</span><span class="p">)</span>
+<span class="n">SCRIPTS_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Scripts&quot;</span><span class="p">)</span>
+<span class="n">WIDGETS_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">SCRIPTS_PATH</span><span class="p">,</span> <span class="s2">&quot;Widgets&quot;</span><span class="p">)</span>
+<span class="n">LIBRARY_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Library&quot;</span><span class="p">)</span>
+<span class="n">SERIAL_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">LIBRARY_PATH</span><span class="p">,</span> <span class="s2">&quot;Serial&quot;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">SCRIPTS_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">WIDGETS_PATH</span><span class="p">,</span> <span class="n">LIBRARY_PATH</span><span class="p">,</span> <span class="n">SERIAL_PATH</span><span class="p">])</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+<span class="k">del</span> <span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">SCRIPTS_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">WIDGETS_PATH</span><span class="p">,</span> <span class="n">LIBRARY_PATH</span><span class="p">,</span> <span class="n">SERIAL_PATH</span>
+
+<span class="kn">from</span> <span class="nn">UiCommon</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">Commons</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="NumericDelegate"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.NumericDelegate">[docs]</a><span class="k">class</span> <span class="nc">NumericDelegate</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QStyledItemDelegate</span><span class="p">):</span>
+<div class="viewcode-block" id="NumericDelegate.createEditor"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.NumericDelegate.createEditor">[docs]</a>    <span class="k">def</span> <span class="nf">createEditor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="n">editor</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">NumericDelegate</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">createEditor</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">editor</span><span class="p">,</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLineEdit</span><span class="p">):</span>
+            <span class="n">reg_ex</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QRegExp</span><span class="p">(</span><span class="s2">&quot;[0-9A-Fa-f]{1,2}&quot;</span><span class="p">)</span>
+            <span class="n">validator</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QRegExpValidator</span><span class="p">(</span><span class="n">reg_ex</span><span class="p">,</span> <span class="n">editor</span><span class="p">)</span>
+            <span class="n">editor</span><span class="o">.</span><span class="n">setValidator</span><span class="p">(</span><span class="n">validator</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">editor</span></div></div>
+
+
+<div class="viewcode-block" id="CharacterDelegate"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.CharacterDelegate">[docs]</a><span class="k">class</span> <span class="nc">CharacterDelegate</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QStyledItemDelegate</span><span class="p">):</span>
+<div class="viewcode-block" id="CharacterDelegate.createEditor"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.CharacterDelegate.createEditor">[docs]</a>    <span class="k">def</span> <span class="nf">createEditor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="n">editor</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">CharacterDelegate</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">createEditor</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">editor</span><span class="p">,</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLineEdit</span><span class="p">):</span>
+            <span class="n">editor</span><span class="o">.</span><span class="n">setMaxLength</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">editor</span></div></div>
+
+
+<div class="viewcode-block" id="PacketTable"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.PacketTable">[docs]</a><span class="k">class</span> <span class="nc">PacketTable</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTableWidget</span><span class="p">):</span>
+    <span class="n">listHorHeader</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PacketTable</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">listHorHeader</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;No.&quot;</span><span class="p">,</span> <span class="s2">&quot;RAW(Hex)&quot;</span><span class="p">,</span> <span class="s2">&quot;ASCII(Char)&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setColumnCount</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">listHorHeader</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setHorizontalHeaderLabels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">listHorHeader</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">horizontalHeader</span><span class="p">()</span><span class="o">.</span><span class="n">setSectionResizeMode</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHeaderView</span><span class="o">.</span><span class="n">Stretch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">horizontalHeader</span><span class="p">()</span><span class="o">.</span><span class="n">setSectionResizeMode</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHeaderView</span><span class="o">.</span><span class="n">ResizeToContents</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">horizontalHeader</span><span class="p">()</span><span class="o">.</span><span class="n">setSectionResizeMode</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHeaderView</span><span class="o">.</span><span class="n">Stretch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">horizontalHeader</span><span class="p">()</span><span class="o">.</span><span class="n">setSectionResizeMode</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHeaderView</span><span class="o">.</span><span class="n">Stretch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setSelectionBehavior</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTableView</span><span class="o">.</span><span class="n">SelectRows</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verticalHeader</span><span class="p">()</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+        <span class="n">num_delegate</span> <span class="o">=</span> <span class="n">NumericDelegate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setItemDelegateForColumn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_delegate</span><span class="p">)</span>
+        <span class="n">char_delegate</span> <span class="o">=</span> <span class="n">CharacterDelegate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setItemDelegateForColumn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">char_delegate</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cellChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_cell_changed</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="PacketTable.on_cell_changed"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.PacketTable.on_cell_changed">[docs]</a>    <span class="k">def</span> <span class="nf">on_cell_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">col</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">str_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">col</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">str_item</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">str_item</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span> <span class="o">+</span> <span class="n">str_item</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">QtTableItem</span><span class="p">(</span><span class="n">str_item</span><span class="o">.</span><span class="n">upper</span><span class="p">()))</span>  <span class="c1"># align center</span>
+            <span class="n">str_ascii</span> <span class="o">=</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">str_item</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;ISO-8859-1&quot;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">QtTableItem</span><span class="p">(</span><span class="n">str_ascii</span><span class="p">))</span>
+
+        <span class="k">elif</span> <span class="n">col</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">QtTableItem</span><span class="p">(</span><span class="n">str_item</span><span class="p">))</span>
+            <span class="n">str_raw</span> <span class="o">=</span> <span class="nb">format</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">str_item</span><span class="p">),</span> <span class="s2">&quot;x&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">QtTableItem</span><span class="p">(</span><span class="n">str_raw</span><span class="o">.</span><span class="n">upper</span><span class="p">()))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PacketTable.clearTable"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.PacketTable.clearTable">[docs]</a>    <span class="k">def</span> <span class="nf">clearTable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setRowCount</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PacketTable.adjustRowNo"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.PacketTable.adjustRowNo">[docs]</a>    <span class="k">def</span> <span class="nf">adjustRowNo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">QtTableItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="PacketTable.addRow"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.PacketTable.addRow">[docs]</a>    <span class="k">def</span> <span class="nf">addRow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selectedIndexes</span><span class="p">()</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">index</span><span class="o">.</span><span class="n">row</span><span class="p">()</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">indices</span><span class="p">:</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+                <span class="n">row_no</span> <span class="o">=</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">row_no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">row_no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">insertRow</span><span class="p">(</span><span class="n">row_no</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setRowHeight</span><span class="p">(</span><span class="n">row_no</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">row_no</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">QtTableItem</span><span class="p">(</span><span class="s2">&quot;00&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adjustRowNo</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">viewport</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>  <span class="c1"># refresh table contents</span></div>
+
+<div class="viewcode-block" id="PacketTable.delRow"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.PacketTable.delRow">[docs]</a>    <span class="k">def</span> <span class="nf">delRow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selectionModel</span><span class="p">()</span><span class="o">.</span><span class="n">selectedRows</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">indices</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">removeRow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">indices</span><span class="p">)):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">removeRow</span><span class="p">(</span><span class="n">index</span><span class="o">.</span><span class="n">row</span><span class="p">())</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">adjustRowNo</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">viewport</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>  <span class="c1"># refresh table contents</span></div>
+
+<div class="viewcode-block" id="PacketTable.shiftDown"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.PacketTable.shiftDown">[docs]</a>    <span class="k">def</span> <span class="nf">shiftDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">curr_row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">currentRow</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">curr_row</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+                <span class="n">itemStore</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">takeItem</span><span class="p">(</span><span class="n">curr_row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">curr_row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">takeItem</span><span class="p">(</span><span class="n">curr_row</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">curr_row</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">itemStore</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setCurrentCell</span><span class="p">(</span><span class="n">curr_row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PacketTable.shiftUp"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.PacketTable.shiftUp">[docs]</a>    <span class="k">def</span> <span class="nf">shiftUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">curr_row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">currentRow</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">curr_row</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+                <span class="n">itemStore</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">takeItem</span><span class="p">(</span><span class="n">curr_row</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">curr_row</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">takeItem</span><span class="p">(</span><span class="n">curr_row</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">curr_row</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">itemStore</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setCurrentCell</span><span class="p">(</span><span class="n">curr_row</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CWidgetSerialSend"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.CWidgetSerialSend">[docs]</a><span class="k">class</span> <span class="nc">CWidgetSerialSend</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CWidgetSerialSend</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_send_serial_packet</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initUi</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initSlots</span><span class="p">()</span>
+
+<div class="viewcode-block" id="CWidgetSerialSend.initUi"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.CWidgetSerialSend.initUi">[docs]</a>    <span class="k">def</span> <span class="nf">initUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initPacketCtrl</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initStringCtrl</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initPacketStorage</span><span class="p">()</span>
+        <span class="n">MainLayout</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">widgetPacket</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">widgetCtrlStr</span><span class="p">)</span>
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">widgetCtrlStorage</span><span class="p">)</span>
+
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CWidgetSerialSend.initTableWidget"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.CWidgetSerialSend.initTableWidget">[docs]</a>    <span class="k">def</span> <span class="nf">initTableWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tablePacket</span> <span class="o">=</span> <span class="n">PacketTable</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CWidgetSerialSend.initSlots"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.CWidgetSerialSend.initSlots">[docs]</a>    <span class="k">def</span> <span class="nf">initSlots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnClear</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_clear</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnAdd</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_add</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnSub</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_del</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnShiftUp</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_shift_up</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnShiftDwn</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_shift_down</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnSend</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_send</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnSendString</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_send_str</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnStore</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_store</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnSendStorage</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_send_storage</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnClearStorage</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_clear_storage</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnDelStorage</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_del_storage</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CWidgetSerialSend.initPacketCtrl"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.CWidgetSerialSend.initPacketCtrl">[docs]</a>    <span class="k">def</span> <span class="nf">initPacketCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initTableWidget</span><span class="p">()</span>
+        <span class="n">btnHeight</span> <span class="o">=</span> <span class="mi">25</span>
+        <span class="n">btnFontSz</span> <span class="o">=</span> <span class="mi">16</span>
+        <span class="n">btnFont</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QFont</span><span class="p">()</span>
+        <span class="n">btnFont</span><span class="o">.</span><span class="n">setPointSize</span><span class="p">(</span><span class="n">btnFontSz</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">widgetCtrlPacket</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">VLayoutCtrl</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">widgetCtrlPacket</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnClear</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;CLEAR&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnClear</span><span class="o">.</span><span class="n">setFixedHeight</span><span class="p">(</span><span class="n">btnHeight</span><span class="p">)</span>
+        <span class="n">HLayoutAddSub</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnAdd</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;+&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnAdd</span><span class="o">.</span><span class="n">setFixedHeight</span><span class="p">(</span><span class="n">btnHeight</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnAdd</span><span class="o">.</span><span class="n">setFont</span><span class="p">(</span><span class="n">btnFont</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnSub</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnSub</span><span class="o">.</span><span class="n">setFixedHeight</span><span class="p">(</span><span class="n">btnHeight</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnSub</span><span class="o">.</span><span class="n">setFont</span><span class="p">(</span><span class="n">btnFont</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnShiftUp</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;▲&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnShiftUp</span><span class="o">.</span><span class="n">setFixedHeight</span><span class="p">(</span><span class="n">btnHeight</span><span class="p">)</span>
+        <span class="c1"># self.btnShiftUp.setFont(btnFont)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnShiftDwn</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;▼&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnShiftDwn</span><span class="o">.</span><span class="n">setFixedHeight</span><span class="p">(</span><span class="n">btnHeight</span><span class="p">)</span>
+        <span class="c1"># self.btnShiftDwn.setFont(btnFont)</span>
+        <span class="n">GLayoutPos</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="n">GLayoutPos</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnAdd</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">GLayoutPos</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnSub</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">GLayoutPos</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnShiftUp</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">GLayoutPos</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnShiftDwn</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnSend</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;SEND&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnSend</span><span class="o">.</span><span class="n">setFixedHeight</span><span class="p">(</span><span class="n">btnHeight</span><span class="p">)</span>
+
+        <span class="n">HLayoutFmt</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rbtnForward</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QRadioButton</span><span class="p">(</span><span class="s1">&#39;Forward&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rbtnForward</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rbtnReverse</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QRadioButton</span><span class="p">(</span><span class="s1">&#39;Reverse&#39;</span><span class="p">)</span>
+        <span class="n">HLayoutFmt</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rbtnForward</span><span class="p">)</span>
+        <span class="n">HLayoutFmt</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rbtnReverse</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnStore</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;STORE&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnStore</span><span class="o">.</span><span class="n">setFixedHeight</span><span class="p">(</span><span class="n">btnHeight</span><span class="p">)</span>
+        <span class="n">VLayoutCtrl</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">VLayoutCtrl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnClear</span><span class="p">)</span>
+        <span class="n">VLayoutCtrl</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">HLayoutAddSub</span><span class="p">)</span>
+        <span class="n">VLayoutCtrl</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">GLayoutPos</span><span class="p">)</span>
+        <span class="n">VLayoutCtrl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnSend</span><span class="p">)</span>
+        <span class="n">VLayoutCtrl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rbtnForward</span><span class="p">)</span>
+        <span class="n">VLayoutCtrl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rbtnReverse</span><span class="p">)</span>
+        <span class="c1"># VLayoutCtrl.addLayout(HLayoutFmt)</span>
+        <span class="n">VLayoutCtrl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnStore</span><span class="p">)</span>
+        <span class="n">VLayoutCtrl</span><span class="o">.</span><span class="n">addStretch</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">widgetCtrlPacket</span><span class="o">.</span><span class="n">setMaximumWidth</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span>
+
+        <span class="c1"># Send Packet</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">widgetPacket</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">VLayoutPacket</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">widgetPacket</span><span class="p">)</span>
+        <span class="n">lblPacket</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">()</span>
+        <span class="n">lblPacket</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;[Send Packet]&#39;</span><span class="p">)</span>
+        <span class="n">HLayoutPacketCtrl</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">HLayoutPacketCtrl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tablePacket</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">HLayoutPacketCtrl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">widgetCtrlPacket</span><span class="p">)</span>
+        <span class="n">VLayoutPacket</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lblPacket</span><span class="p">)</span>
+        <span class="n">VLayoutPacket</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">HLayoutPacketCtrl</span><span class="p">)</span>
+        <span class="n">VLayoutPacket</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CWidgetSerialSend.initStringCtrl"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.CWidgetSerialSend.initStringCtrl">[docs]</a>    <span class="k">def</span> <span class="nf">initStringCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">btnHeight</span> <span class="o">=</span> <span class="mi">25</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">widgetCtrlStr</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">VLayoutCtrlStr</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">widgetCtrlStr</span><span class="p">)</span>
+        <span class="n">lblCtrlStr</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">()</span>
+        <span class="n">lblCtrlStr</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;[Send String]&#39;</span><span class="p">)</span>
+        <span class="n">HLayoutCtrlStr</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txtStringInput</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLineEdit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txtStringInput</span><span class="o">.</span><span class="n">setFixedHeight</span><span class="p">(</span><span class="n">btnHeight</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnSendString</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;SEND&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnSendString</span><span class="o">.</span><span class="n">setFixedHeight</span><span class="p">(</span><span class="n">btnHeight</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnSendString</span><span class="o">.</span><span class="n">setFixedWidth</span><span class="p">(</span><span class="mi">70</span><span class="p">)</span>
+        <span class="n">HLayoutCtrlStr</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">txtStringInput</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">HLayoutCtrlStr</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnSendString</span><span class="p">)</span>
+        <span class="n">HLayoutCtrlStr</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">HLayoutCtrlStr</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">VLayoutCtrlStr</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lblCtrlStr</span><span class="p">)</span>
+        <span class="n">VLayoutCtrlStr</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">HLayoutCtrlStr</span><span class="p">)</span>
+        <span class="n">VLayoutCtrlStr</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CWidgetSerialSend.initPacketStorage"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.CWidgetSerialSend.initPacketStorage">[docs]</a>    <span class="k">def</span> <span class="nf">initPacketStorage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">btnHeight</span> <span class="o">=</span> <span class="mi">25</span>
+        <span class="n">btnWidth</span> <span class="o">=</span> <span class="mi">70</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">widgetCtrlStorage</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">VLayoutCtrlStorage</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">widgetCtrlStorage</span><span class="p">)</span>
+        <span class="n">lblCtrlStr</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">()</span>
+        <span class="n">lblCtrlStr</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;[Send Stored Packet]&#39;</span><span class="p">)</span>
+        <span class="n">HLayoutCtrlStorage</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lstPacketHistory</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QListWidget</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lstPacketHistory</span><span class="o">.</span><span class="n">setSortingEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">VLayoutBtn</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnClearStorage</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;CLEAR&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnClearStorage</span><span class="o">.</span><span class="n">setFixedHeight</span><span class="p">(</span><span class="n">btnHeight</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnClearStorage</span><span class="o">.</span><span class="n">setFixedWidth</span><span class="p">(</span><span class="mi">70</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnDelStorage</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;DELETE&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnDelStorage</span><span class="o">.</span><span class="n">setFixedHeight</span><span class="p">(</span><span class="n">btnHeight</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnDelStorage</span><span class="o">.</span><span class="n">setFixedWidth</span><span class="p">(</span><span class="mi">70</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnSendStorage</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;SEND&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnSendStorage</span><span class="o">.</span><span class="n">setFixedHeight</span><span class="p">(</span><span class="n">btnHeight</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnSendStorage</span><span class="o">.</span><span class="n">setFixedWidth</span><span class="p">(</span><span class="mi">70</span><span class="p">)</span>
+        <span class="n">VLayoutBtn</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnClearStorage</span><span class="p">)</span>
+        <span class="n">VLayoutBtn</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnDelStorage</span><span class="p">)</span>
+        <span class="n">VLayoutBtn</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnSendStorage</span><span class="p">)</span>
+        <span class="n">VLayoutBtn</span><span class="o">.</span><span class="n">addStretch</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">HLayoutCtrlStorage</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lstPacketHistory</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">HLayoutCtrlStorage</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">VLayoutBtn</span><span class="p">)</span>
+        <span class="n">HLayoutCtrlStorage</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">HLayoutCtrlStorage</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+        <span class="n">VLayoutCtrlStorage</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lblCtrlStr</span><span class="p">)</span>
+        <span class="n">VLayoutCtrlStorage</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">HLayoutCtrlStorage</span><span class="p">)</span>
+        <span class="n">VLayoutCtrlStorage</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CWidgetSerialSend.on_click_btn_store"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.CWidgetSerialSend.on_click_btn_store">[docs]</a>    <span class="k">def</span> <span class="nf">on_click_btn_store</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">bt_temp</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tablePacket</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()):</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tablePacket</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">(),</span> <span class="mi">16</span><span class="p">)</span>
+            <span class="n">bt_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rbtnReverse</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span>
+            <span class="n">bt_temp</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bt_temp</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">strStore</span> <span class="o">=</span> <span class="s2">&quot;(&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bt_temp</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;)-&quot;</span> <span class="o">+</span> <span class="s2">&quot;0x&quot;</span>
+            <span class="n">strStore</span> <span class="o">+=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:02x}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">byte</span><span class="p">)</span> <span class="k">for</span> <span class="n">byte</span> <span class="ow">in</span> <span class="n">bt_temp</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lstPacketHistory</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QListWidgetItem</span><span class="p">(</span><span class="n">strStore</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="CWidgetSerialSend.on_click_btn_clear_storage"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.CWidgetSerialSend.on_click_btn_clear_storage">[docs]</a>    <span class="k">def</span> <span class="nf">on_click_btn_clear_storage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lstPacketHistory</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CWidgetSerialSend.on_click_btn_del_storage"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.CWidgetSerialSend.on_click_btn_del_storage">[docs]</a>    <span class="k">def</span> <span class="nf">on_click_btn_del_storage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lstPacketHistory</span><span class="o">.</span><span class="n">takeItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lstPacketHistory</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lstPacketHistory</span><span class="o">.</span><span class="n">currentItem</span><span class="p">()))</span></div>
+
+<div class="viewcode-block" id="CWidgetSerialSend.on_click_btn_send_storage"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.CWidgetSerialSend.on_click_btn_send_storage">[docs]</a>    <span class="k">def</span> <span class="nf">on_click_btn_send_storage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lstPacketHistory</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">lstPacketHistory</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">strSelected</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lstPacketHistory</span><span class="o">.</span><span class="n">currentItem</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-0x&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">bta_temp</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">strSelected</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rbtnReverse</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span>
+                <span class="n">bta_temp</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">sig_send_serial_packet</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">bta_temp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CWidgetSerialSend.on_click_btn_clear"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.CWidgetSerialSend.on_click_btn_clear">[docs]</a>    <span class="k">def</span> <span class="nf">on_click_btn_clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tablePacket</span><span class="o">.</span><span class="n">clearTable</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CWidgetSerialSend.on_click_btn_add"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.CWidgetSerialSend.on_click_btn_add">[docs]</a>    <span class="k">def</span> <span class="nf">on_click_btn_add</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tablePacket</span><span class="o">.</span><span class="n">addRow</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CWidgetSerialSend.on_click_btn_del"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.CWidgetSerialSend.on_click_btn_del">[docs]</a>    <span class="k">def</span> <span class="nf">on_click_btn_del</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tablePacket</span><span class="o">.</span><span class="n">delRow</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CWidgetSerialSend.on_click_btn_shift_up"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.CWidgetSerialSend.on_click_btn_shift_up">[docs]</a>    <span class="k">def</span> <span class="nf">on_click_btn_shift_up</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tablePacket</span><span class="o">.</span><span class="n">shiftUp</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CWidgetSerialSend.on_click_btn_shift_down"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.CWidgetSerialSend.on_click_btn_shift_down">[docs]</a>    <span class="k">def</span> <span class="nf">on_click_btn_shift_down</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tablePacket</span><span class="o">.</span><span class="n">shiftDown</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CWidgetSerialSend.on_click_btn_send_str"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.CWidgetSerialSend.on_click_btn_send_str">[docs]</a>    <span class="k">def</span> <span class="nf">on_click_btn_send_str</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">str_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">txtStringInput</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="n">bt_temp</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([])</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">str_item</span><span class="p">:</span>
+            <span class="n">bt_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rbtnReverse</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span>
+            <span class="n">bt_temp</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_send_serial_packet</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">bt_temp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CWidgetSerialSend.on_click_btn_send"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.CWidgetSerialSend.on_click_btn_send">[docs]</a>    <span class="k">def</span> <span class="nf">on_click_btn_send</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">bt_temp</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tablePacket</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()):</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tablePacket</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">(),</span> <span class="mi">16</span><span class="p">)</span>
+            <span class="n">bt_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rbtnReverse</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span>
+            <span class="n">bt_temp</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bt_temp</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sig_send_serial_packet</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">bt_temp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CWidgetSerialSend.release"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialSendWidget.html#SerialSendWidget.CWidgetSerialSend.release">[docs]</a>    <span class="k">def</span> <span class="nf">release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">app</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">app</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+
+    <span class="n">app</span><span class="o">.</span><span class="n">setStyle</span><span class="p">(</span><span class="s1">&#39;fusion&#39;</span><span class="p">)</span>
+    <span class="n">MainUI</span> <span class="o">=</span> <span class="n">CWidgetSerialSend</span><span class="p">()</span>
+    <span class="n">MainUI</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+    <span class="n">MainUI</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

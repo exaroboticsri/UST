@@ -1,0 +1,64 @@
+[0.841s] Invoking command in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/exa_robot': PYTHONPATH=/home/jw/robot/ros_ws/install/exa_robot/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../../build/exa_robot build --build-base /home/jw/robot/ros_ws/build/exa_robot/build install --prefix /home/jw/robot/ros_ws/install/exa_robot --record /home/jw/robot/ros_ws/build/exa_robot/install.log --single-version-externally-managed
+[1.145s] running egg_info
+[1.146s] creating ../../../build/exa_robot/exa_robot.egg-info
+[1.146s] writing ../../../build/exa_robot/exa_robot.egg-info/PKG-INFO
+[1.146s] writing dependency_links to ../../../build/exa_robot/exa_robot.egg-info/dependency_links.txt
+[1.147s] writing entry points to ../../../build/exa_robot/exa_robot.egg-info/entry_points.txt
+[1.147s] writing requirements to ../../../build/exa_robot/exa_robot.egg-info/requires.txt
+[1.147s] writing top-level names to ../../../build/exa_robot/exa_robot.egg-info/top_level.txt
+[1.148s] writing manifest file '../../../build/exa_robot/exa_robot.egg-info/SOURCES.txt'
+[1.180s] reading manifest file '../../../build/exa_robot/exa_robot.egg-info/SOURCES.txt'
+[1.180s] writing manifest file '../../../build/exa_robot/exa_robot.egg-info/SOURCES.txt'
+[1.181s] running build
+[1.181s] running build_py
+[1.181s] creating /home/jw/robot/ros_ws/build/exa_robot/build
+[1.181s] creating /home/jw/robot/ros_ws/build/exa_robot/build/lib
+[1.181s] creating /home/jw/robot/ros_ws/build/exa_robot/build/lib/exa_robot
+[1.181s] copying exa_robot/exa_node.py -> /home/jw/robot/ros_ws/build/exa_robot/build/lib/exa_robot
+[1.182s] copying exa_robot/__init__.py -> /home/jw/robot/ros_ws/build/exa_robot/build/lib/exa_robot
+[1.182s] copying exa_robot/exa_driver.py -> /home/jw/robot/ros_ws/build/exa_robot/build/lib/exa_robot
+[1.182s] running install
+[1.182s] running install_lib
+[1.184s] creating /home/jw/robot/ros_ws/install/exa_robot/lib/python3.8/site-packages/exa_robot
+[1.184s] copying /home/jw/robot/ros_ws/build/exa_robot/build/lib/exa_robot/exa_node.py -> /home/jw/robot/ros_ws/install/exa_robot/lib/python3.8/site-packages/exa_robot
+[1.184s] copying /home/jw/robot/ros_ws/build/exa_robot/build/lib/exa_robot/__init__.py -> /home/jw/robot/ros_ws/install/exa_robot/lib/python3.8/site-packages/exa_robot
+[1.184s] copying /home/jw/robot/ros_ws/build/exa_robot/build/lib/exa_robot/exa_driver.py -> /home/jw/robot/ros_ws/install/exa_robot/lib/python3.8/site-packages/exa_robot
+[1.185s] byte-compiling /home/jw/robot/ros_ws/install/exa_robot/lib/python3.8/site-packages/exa_robot/exa_node.py to exa_node.cpython-38.pyc
+[1.187s] byte-compiling /home/jw/robot/ros_ws/install/exa_robot/lib/python3.8/site-packages/exa_robot/__init__.py to __init__.cpython-38.pyc
+[1.187s] byte-compiling /home/jw/robot/ros_ws/install/exa_robot/lib/python3.8/site-packages/exa_robot/exa_driver.py to exa_driver.cpython-38.pyc
+[1.188s] running install_data
+[1.189s] creating /home/jw/robot/ros_ws/install/exa_robot/share/ament_index
+[1.189s] creating /home/jw/robot/ros_ws/install/exa_robot/share/ament_index/resource_index
+[1.189s] creating /home/jw/robot/ros_ws/install/exa_robot/share/ament_index/resource_index/packages
+[1.190s] copying resource/exa_robot -> /home/jw/robot/ros_ws/install/exa_robot/share/ament_index/resource_index/packages
+[1.190s] copying package.xml -> /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot
+[1.190s] creating /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/launch
+[1.190s] copying launch/rs_launch_down.py -> /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/launch
+[1.190s] copying launch/bringup_launch.py -> /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/launch
+[1.190s] copying launch/velocity_smoother_launch.py -> /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/launch
+[1.190s] copying launch/occupancy_grid_launch.py -> /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/launch
+[1.190s] copying launch/localization_launch.py -> /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/launch
+[1.191s] copying launch/rs_multi_camera_launch.py -> /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/launch
+[1.191s] copying launch/navigation_launch.py -> /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/launch
+[1.191s] copying launch/rs_launch_up.py -> /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/launch
+[1.191s] copying launch/rs_launch.py -> /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/launch
+[1.191s] copying launch/cartographer_launch.py -> /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/launch
+[1.191s] creating /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/config
+[1.191s] copying config/navigate_to_pose_w_replanning_and_recovery.xml -> /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/config
+[1.191s] copying config/slam.lua -> /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/config
+[1.192s] copying config/velocity_smoother_params.yaml -> /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/config
+[1.192s] copying config/slam_local.lua -> /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/config
+[1.192s] copying config/nav2_params copy.yaml -> /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/config
+[1.192s] copying config/nav2_params.yaml -> /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/config
+[1.192s] copying config/navigate_through_poses_w_replanning_and_recovery.xml -> /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/config
+[1.192s] copying config/navigate_follow_point.xml -> /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/config
+[1.192s] creating /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/map
+[1.192s] copying map/map.pbstream -> /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/map
+[1.193s] copying map/map.yaml -> /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/map
+[1.193s] copying map/map.pgm -> /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/map
+[1.193s] running install_egg_info
+[1.193s] Copying ../../../build/exa_robot/exa_robot.egg-info to /home/jw/robot/ros_ws/install/exa_robot/lib/python3.8/site-packages/exa_robot-0.0.0-py3.8.egg-info
+[1.194s] running install_scripts
+[1.210s] Installing robot_node script to /home/jw/robot/ros_ws/install/exa_robot/lib/exa_robot
+[1.210s] writing list of installed files to '/home/jw/robot/ros_ws/build/exa_robot/install.log'
+[1.230s] Invoked command in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/exa_robot' returned '0': PYTHONPATH=/home/jw/robot/ros_ws/install/exa_robot/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../../build/exa_robot build --build-base /home/jw/robot/ros_ws/build/exa_robot/build install --prefix /home/jw/robot/ros_ws/install/exa_robot --record /home/jw/robot/ros_ws/build/exa_robot/install.log --single-version-externally-managed

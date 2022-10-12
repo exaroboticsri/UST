@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MobileRobotBase module &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="TMRDiff module" href="TMRDiff.html" />
+    <link rel="prev" title="MobileRobot" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../apis.html">Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Include.html">Overview</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../apis.html#include">Include</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../modules.html">Include</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../AudioRecognition/modules.html">AudioRecognition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../SpeechSynthesis/modules.html">SpeechSynthesis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Dialog/modules.html">Dialog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../DockWidgets/modules.html">DockWidgets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ExternalComm/modules.html">ExternalComm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../MdiBackground/modules.html">MdiBackground</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Misc/modules.html">Misc</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="modules.html">MobileRobot</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">MobileRobotBase module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TMRDiff.html">TMRDiff module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TMRExaRobot.html">TMRExaRobot module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TMRKobuki2.html">TMRKobuki2 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TMRStellaB2.html">TMRStellaB2 module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../MultiProcessing/modules.html">MultiProcessing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../PathPlanning/modules.html">PathPlanning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ROSIntegration/modules.html">ROSIntegration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../SubWindow/modules.html">SubWindow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../SubWindow/SerialTerm/modules.html">SerialTerm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../TrajectoryGenerator/modules.html">TrajectoryGenerator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../apis.html#library">Library</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../apis.html">Modules</a> &raquo;</li>
+          <li><a href="modules.html">MobileRobot</a> &raquo;</li>
+      <li>MobileRobotBase module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/Inc/MobileRobot/MobileRobotBase.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-MobileRobotBase">
+<span id="mobilerobotbase-module"></span><h1>MobileRobotBase module<a class="headerlink" href="#module-MobileRobotBase" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">MobileRobotBase.</span></span><span class="sig-name descname"><span class="pre">CMobileRobot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anDriveType</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#MobileRobotBase.EnumDriveType" title="MobileRobotBase.EnumDriveType"><span class="pre">EnumDriveType</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anWheelNo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">afWheelRad</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">afWheelBase</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MobileRobotBase.html#CMobileRobot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MobileRobotBase.CMobileRobot" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>CMobileRobot은 모바일 로봇에 대한 클래스이다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>anDriveType</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><a class="reference internal" href="#MobileRobotBase.EnumDriveType" title="MobileRobotBase.EnumDriveType"><em>EnumDriveType</em></a><em>]</em>) – 모바일 로봇의 구동타입</p></li>
+<li><p><strong>anWheelNo</strong> (<em>int</em>) – 바퀴 갯수</p></li>
+<li><p><strong>afWheelRad</strong> (<em>float</em>) – 바퀴 반지름</p></li>
+<li><p><strong>afWheelBase</strong> (<em>float</em>) – 바퀴 사이 거리</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.DriveType">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DriveType</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#MobileRobotBase.EnumDriveType" title="MobileRobotBase.EnumDriveType"><span class="pre">EnumDriveType</span></a></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.DriveType" title="Permalink to this definition"></a></dt>
+<dd><p>returns the drive type of the mobile robot</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.EncoderRes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EncoderRes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.EncoderRes" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.GearRatio">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GearRatio</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.GearRatio" title="Permalink to this definition"></a></dt>
+<dd><p>Common Signals</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.IsSerial">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">IsSerial</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.IsSerial" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.Length">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Length</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.Length" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.PayLoad">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PayLoad</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.PayLoad" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.PhyLimits">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PhyLimits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#MobileRobotBase.PhyLimits" title="MobileRobotBase.PhyLimits"><span class="pre">PhyLimits</span></a></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.PhyLimits" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.PhyLimitsT">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PhyLimitsT</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.PhyLimitsT" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.Weight">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.Weight" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.WheelBase">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">WheelBase</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.WheelBase" title="Permalink to this definition"></a></dt>
+<dd><p>Initiate Variables</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.WheelNo">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">WheelNo</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.WheelNo" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.WheelRad">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">WheelRad</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.WheelRad" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.Width">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Width</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.Width" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.bIsSerial">
+<span class="sig-name descname"><span class="pre">bIsSerial</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.bIsSerial" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.calculate_center_vel">
+<span class="sig-name descname"><span class="pre">calculate_center_vel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atupleAngVels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../../_modules/MobileRobotBase.html#CMobileRobot.calculate_center_vel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MobileRobotBase.CMobileRobot.calculate_center_vel" title="Permalink to this definition"></a></dt>
+<dd><p>calculates the center velocities of the mobile robot.
+Returns a tuple of central linear vel and yaw rate</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.calculate_joint_space_vel">
+<span class="sig-name descname"><span class="pre">calculate_joint_space_vel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">afVelCenter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">afAngVelCenter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../../_modules/MobileRobotBase.html#CMobileRobot.calculate_joint_space_vel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MobileRobotBase.CMobileRobot.calculate_joint_space_vel" title="Permalink to this definition"></a></dt>
+<dd><p>calculates the joint space velocities of the mobile robot.
+Returns a tuple of the calculated joint space velocities</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.calculate_pose">
+<span class="sig-name descname"><span class="pre">calculate_pose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atupleAngVels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">afDeltaT</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aenumFKMethod</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#MobileRobotBase.EnumFKMethod" title="MobileRobotBase.EnumFKMethod"><span class="pre">EnumFKMethod</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">EnumFKMethod.EULER</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#MobileRobotBase.RobotPose" title="MobileRobotBase.RobotPose"><span class="pre">RobotPose</span></a></span></span><a class="reference internal" href="../../_modules/MobileRobotBase.html#CMobileRobot.calculate_pose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MobileRobotBase.CMobileRobot.calculate_pose" title="Permalink to this definition"></a></dt>
+<dd><p>calculates the forward kinematics of the mobile robot.
+fJointsVel should be a tuple of the joint space velocities
+Returns the calculated position in the cartesian plane using the class XYPos.
+This should be called everytime the robot changes position.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.calculate_pose_actual">
+<span class="sig-name descname"><span class="pre">calculate_pose_actual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atupleAngVels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">afDeltaT</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aenumFKMethod</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#MobileRobotBase.EnumFKMethod" title="MobileRobotBase.EnumFKMethod"><span class="pre">EnumFKMethod</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">EnumFKMethod.EULER</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#MobileRobotBase.RobotPose" title="MobileRobotBase.RobotPose"><span class="pre">RobotPose</span></a></span></span><a class="reference internal" href="../../_modules/MobileRobotBase.html#CMobileRobot.calculate_pose_actual"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MobileRobotBase.CMobileRobot.calculate_pose_actual" title="Permalink to this definition"></a></dt>
+<dd><p>calculates the forward kinematics of the mobile robot considering gear ration and encoder resolution.
+fJointsVel should be a tuple of the joint space velocities
+Returns the calculated position in the cartesian plane using the class XYPos.
+This should be called everytime the robot changes position.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.enumDriveType">
+<span class="sig-name descname"><span class="pre">enumDriveType</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#MobileRobotBase.EnumDriveType" title="MobileRobotBase.EnumDriveType"><span class="pre">EnumDriveType</span></a></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.enumDriveType" title="Permalink to this definition"></a></dt>
+<dd><p>구동계 타입</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.fGearRatio">
+<span class="sig-name descname"><span class="pre">fGearRatio</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.fGearRatio" title="Permalink to this definition"></a></dt>
+<dd><p>모터 기어비</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.fLength">
+<span class="sig-name descname"><span class="pre">fLength</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.fLength" title="Permalink to this definition"></a></dt>
+<dd><p>로봇 길이</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.fPayLoad">
+<span class="sig-name descname"><span class="pre">fPayLoad</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.fPayLoad" title="Permalink to this definition"></a></dt>
+<dd><p>로봇 Payload</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.fWeight">
+<span class="sig-name descname"><span class="pre">fWeight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.fWeight" title="Permalink to this definition"></a></dt>
+<dd><p>로봇 무계</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.fWheelBase">
+<span class="sig-name descname"><span class="pre">fWheelBase</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.fWheelBase" title="Permalink to this definition"></a></dt>
+<dd><p>휠간 거리</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.fWheelRad">
+<span class="sig-name descname"><span class="pre">fWheelRad</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.fWheelRad" title="Permalink to this definition"></a></dt>
+<dd><p>휠 반지름</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.fWidth">
+<span class="sig-name descname"><span class="pre">fWidth</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.fWidth" title="Permalink to this definition"></a></dt>
+<dd><p>로봇 너비</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.get_curr_pos">
+<span class="sig-name descname"><span class="pre">get_curr_pos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#MobileRobotBase.RobotPose" title="MobileRobotBase.RobotPose"><span class="pre">RobotPose</span></a></span></span><a class="reference internal" href="../../_modules/MobileRobotBase.html#CMobileRobot.get_curr_pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MobileRobotBase.CMobileRobot.get_curr_pos" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the current position in the cartesian plane using the class XYPos</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.get_curr_pos_t">
+<span class="sig-name descname"><span class="pre">get_curr_pos_t</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/MobileRobotBase.html#CMobileRobot.get_curr_pos_t"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MobileRobotBase.CMobileRobot.get_curr_pos_t" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a tuple of the current position in the cartesian plane (x, y, z, theta)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.get_phy_limits">
+<span class="sig-name descname"><span class="pre">get_phy_limits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#MobileRobotBase.PhyLimits" title="MobileRobotBase.PhyLimits"><span class="pre">PhyLimits</span></a></span></span><a class="reference internal" href="../../_modules/MobileRobotBase.html#CMobileRobot.get_phy_limits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MobileRobotBase.CMobileRobot.get_phy_limits" title="Permalink to this definition"></a></dt>
+<dd><p>returns the physical limits of the robots (max velocity, max acceleration, max jerk, and max yaw)
+using the PhyLimit dataclass</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.get_phy_limits_t">
+<span class="sig-name descname"><span class="pre">get_phy_limits_t</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/MobileRobotBase.html#CMobileRobot.get_phy_limits_t"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MobileRobotBase.CMobileRobot.get_phy_limits_t" title="Permalink to this definition"></a></dt>
+<dd><p>returns a tuple of the physical limits of the robots (max velocity, max acceleration, and max jerk)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.get_wheel_spec">
+<span class="sig-name descname"><span class="pre">get_wheel_spec</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/MobileRobotBase.html#CMobileRobot.get_wheel_spec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MobileRobotBase.CMobileRobot.get_wheel_spec" title="Permalink to this definition"></a></dt>
+<dd><p>returns a tuple of the wheel specs (Encoder resolution, Gear ratio)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.is_serial_robot">
+<span class="sig-name descname"><span class="pre">is_serial_robot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/MobileRobotBase.html#CMobileRobot.is_serial_robot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MobileRobotBase.CMobileRobot.is_serial_robot" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.move_jog">
+<span class="sig-name descname"><span class="pre">move_jog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anDirection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#MobileRobotBase.EnumJogDirection" title="MobileRobotBase.EnumJogDirection"><span class="pre">EnumJogDirection</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">nJogDistance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">500</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/MobileRobotBase.html#CMobileRobot.move_jog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MobileRobotBase.CMobileRobot.move_jog" title="Permalink to this definition"></a></dt>
+<dd><p>moves the mobile robot on the speicifed direction (anDirection) with the configured
+jog distance (nJogDistance) in millimeters (mm). The default jog is 500 mm.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.nEncRes">
+<span class="sig-name descname"><span class="pre">nEncRes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.nEncRes" title="Permalink to this definition"></a></dt>
+<dd><p>모터 엔코더 레졸루션</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.nWheelNo">
+<span class="sig-name descname"><span class="pre">nWheelNo</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.nWheelNo" title="Permalink to this definition"></a></dt>
+<dd><p>휠 개수</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.reset_curr_pos">
+<span class="sig-name descname"><span class="pre">reset_curr_pos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MobileRobotBase.html#CMobileRobot.reset_curr_pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MobileRobotBase.CMobileRobot.reset_curr_pos" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.set_phy_limits">
+<span class="sig-name descname"><span class="pre">set_phy_limits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">afMaxVel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">afMaxAcc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">afMaxJerk</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">afMaxYaw</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MobileRobotBase.html#CMobileRobot.set_phy_limits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MobileRobotBase.CMobileRobot.set_phy_limits" title="Permalink to this definition"></a></dt>
+<dd><p>sets the physical limits of the robots (max velocity, max acceleration, max jerk, and max yaw)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.set_serial_robot">
+<span class="sig-name descname"><span class="pre">set_serial_robot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abIsSerial</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MobileRobotBase.html#CMobileRobot.set_serial_robot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MobileRobotBase.CMobileRobot.set_serial_robot" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.set_wheel_spec">
+<span class="sig-name descname"><span class="pre">set_wheel_spec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anEncoderRes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">afGearRatio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MobileRobotBase.html#CMobileRobot.set_wheel_spec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MobileRobotBase.CMobileRobot.set_wheel_spec" title="Permalink to this definition"></a></dt>
+<dd><p>sets the wheel spec of the robot (Encoder resolution, Gear ratio)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.stCurrPos">
+<span class="sig-name descname"><span class="pre">stCurrPos</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#MobileRobotBase.RobotPose" title="MobileRobotBase.RobotPose"><span class="pre">RobotPose</span></a></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.stCurrPos" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.CMobileRobot.stPhyLimits">
+<span class="sig-name descname"><span class="pre">stPhyLimits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#MobileRobotBase.PhyLimits" title="MobileRobotBase.PhyLimits"><span class="pre">PhyLimits</span></a></em><a class="headerlink" href="#MobileRobotBase.CMobileRobot.stPhyLimits" title="Permalink to this definition"></a></dt>
+<dd><p>로봇의 PhyLimits
+가속도, 선속도, 각속도, 저크</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="MobileRobotBase.EnumDriveType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">MobileRobotBase.</span></span><span class="sig-name descname"><span class="pre">EnumDriveType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MobileRobotBase.html#EnumDriveType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MobileRobotBase.EnumDriveType" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.EnumDriveType.CAR_TYPE">
+<span class="sig-name descname"><span class="pre">CAR_TYPE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#MobileRobotBase.EnumDriveType.CAR_TYPE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.EnumDriveType.DIFFERENTIAL">
+<span class="sig-name descname"><span class="pre">DIFFERENTIAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#MobileRobotBase.EnumDriveType.DIFFERENTIAL" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.EnumDriveType.MECANUM">
+<span class="sig-name descname"><span class="pre">MECANUM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#MobileRobotBase.EnumDriveType.MECANUM" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.EnumDriveType.NOT_A_ROBOT">
+<span class="sig-name descname"><span class="pre">NOT_A_ROBOT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#MobileRobotBase.EnumDriveType.NOT_A_ROBOT" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.EnumDriveType.OMNIDIRECTIONAL">
+<span class="sig-name descname"><span class="pre">OMNIDIRECTIONAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#MobileRobotBase.EnumDriveType.OMNIDIRECTIONAL" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.EnumDriveType.SYNCRHO">
+<span class="sig-name descname"><span class="pre">SYNCRHO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#MobileRobotBase.EnumDriveType.SYNCRHO" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="MobileRobotBase.EnumDriveType.toInt">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">toInt</span></span><a class="headerlink" href="#MobileRobotBase.EnumDriveType.toInt" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="MobileRobotBase.EnumFKMethod">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">MobileRobotBase.</span></span><span class="sig-name descname"><span class="pre">EnumFKMethod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MobileRobotBase.html#EnumFKMethod"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MobileRobotBase.EnumFKMethod" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.EnumFKMethod.EULER">
+<span class="sig-name descname"><span class="pre">EULER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#MobileRobotBase.EnumFKMethod.EULER" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.EnumFKMethod.EXACT">
+<span class="sig-name descname"><span class="pre">EXACT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#MobileRobotBase.EnumFKMethod.EXACT" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.EnumFKMethod.RUNGE_KUTTA">
+<span class="sig-name descname"><span class="pre">RUNGE_KUTTA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#MobileRobotBase.EnumFKMethod.RUNGE_KUTTA" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="MobileRobotBase.EnumFKMethod.toInt">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">toInt</span></span><a class="headerlink" href="#MobileRobotBase.EnumFKMethod.toInt" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="MobileRobotBase.EnumJogDirection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">MobileRobotBase.</span></span><span class="sig-name descname"><span class="pre">EnumJogDirection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MobileRobotBase.html#EnumJogDirection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MobileRobotBase.EnumJogDirection" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.EnumJogDirection.JOG_BW">
+<span class="sig-name descname"><span class="pre">JOG_BW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#MobileRobotBase.EnumJogDirection.JOG_BW" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.EnumJogDirection.JOG_BW_LEFT">
+<span class="sig-name descname"><span class="pre">JOG_BW_LEFT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#MobileRobotBase.EnumJogDirection.JOG_BW_LEFT" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.EnumJogDirection.JOG_BW_RIGHT">
+<span class="sig-name descname"><span class="pre">JOG_BW_RIGHT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em><a class="headerlink" href="#MobileRobotBase.EnumJogDirection.JOG_BW_RIGHT" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.EnumJogDirection.JOG_FW">
+<span class="sig-name descname"><span class="pre">JOG_FW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#MobileRobotBase.EnumJogDirection.JOG_FW" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.EnumJogDirection.JOG_FW_LEFT">
+<span class="sig-name descname"><span class="pre">JOG_FW_LEFT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#MobileRobotBase.EnumJogDirection.JOG_FW_LEFT" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.EnumJogDirection.JOG_FW_RIGHT">
+<span class="sig-name descname"><span class="pre">JOG_FW_RIGHT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#MobileRobotBase.EnumJogDirection.JOG_FW_RIGHT" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.EnumJogDirection.JOG_LEFT">
+<span class="sig-name descname"><span class="pre">JOG_LEFT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#MobileRobotBase.EnumJogDirection.JOG_LEFT" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.EnumJogDirection.JOG_RIGHT">
+<span class="sig-name descname"><span class="pre">JOG_RIGHT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#MobileRobotBase.EnumJogDirection.JOG_RIGHT" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="MobileRobotBase.EnumJogDirection.toInt">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">toInt</span></span><a class="headerlink" href="#MobileRobotBase.EnumJogDirection.toInt" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="MobileRobotBase.PhyLimits">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">MobileRobotBase.</span></span><span class="sig-name descname"><span class="pre">PhyLimits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">MAX_VEL</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MAX_ACC</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MAX_JERK</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MAX_YAW</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MobileRobotBase.html#PhyLimits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MobileRobotBase.PhyLimits" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.PhyLimits.MAX_ACC">
+<span class="sig-name descname"><span class="pre">MAX_ACC</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#MobileRobotBase.PhyLimits.MAX_ACC" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.PhyLimits.MAX_JERK">
+<span class="sig-name descname"><span class="pre">MAX_JERK</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#MobileRobotBase.PhyLimits.MAX_JERK" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.PhyLimits.MAX_VEL">
+<span class="sig-name descname"><span class="pre">MAX_VEL</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#MobileRobotBase.PhyLimits.MAX_VEL" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.PhyLimits.MAX_YAW">
+<span class="sig-name descname"><span class="pre">MAX_YAW</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#MobileRobotBase.PhyLimits.MAX_YAW" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="MobileRobotBase.RobotPose">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">MobileRobotBase.</span></span><span class="sig-name descname"><span class="pre">RobotPose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_POS</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y_POS</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Z_POS</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">THETA</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MobileRobotBase.html#RobotPose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MobileRobotBase.RobotPose" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.RobotPose.THETA">
+<span class="sig-name descname"><span class="pre">THETA</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#MobileRobotBase.RobotPose.THETA" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.RobotPose.X_POS">
+<span class="sig-name descname"><span class="pre">X_POS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#MobileRobotBase.RobotPose.X_POS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.RobotPose.Y_POS">
+<span class="sig-name descname"><span class="pre">Y_POS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#MobileRobotBase.RobotPose.Y_POS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MobileRobotBase.RobotPose.Z_POS">
+<span class="sig-name descname"><span class="pre">Z_POS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#MobileRobotBase.RobotPose.Z_POS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="MobileRobot" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="TMRDiff.html" class="btn btn-neutral float-right" title="TMRDiff module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

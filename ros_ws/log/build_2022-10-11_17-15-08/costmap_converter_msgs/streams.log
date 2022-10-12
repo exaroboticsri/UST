@@ -1,0 +1,132 @@
+[0.200s] Invoking command in '/home/jw/robot/ros_ws/build/costmap_converter_msgs': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/jw/robot/ros_ws/install/exa_robot:/opt/ros/galactic /usr/bin/cmake --build /home/jw/robot/ros_ws/build/costmap_converter_msgs -- -j12 -l12
+[0.634s] [  2%] Built target costmap_converter_msgs__cpp
+[0.635s] [ 12%] Built target costmap_converter_msgs__rosidl_generator_c
+[0.635s] [ 23%] Built target costmap_converter_msgs__rosidl_typesupport_cpp
+[0.635s] [ 33%] Built target costmap_converter_msgs__rosidl_typesupport_introspection_cpp
+[0.636s] [ 43%] Built target costmap_converter_msgs__rosidl_typesupport_introspection_c
+[0.638s] [ 53%] Built target costmap_converter_msgs__rosidl_typesupport_fastrtps_cpp
+[0.639s] [ 64%] Built target costmap_converter_msgs__rosidl_typesupport_c
+[0.639s] [ 74%] Built target costmap_converter_msgs__rosidl_typesupport_fastrtps_c
+[0.640s] [ 74%] Built target costmap_converter_msgs
+[0.640s] [ 76%] Built target costmap_converter_msgs__py
+[0.641s] [ 84%] Built target costmap_converter_msgs__python
+[0.642s] [ 89%] Built target costmap_converter_msgs__rosidl_typesupport_fastrtps_c__pyext
+[0.642s] [ 94%] Built target costmap_converter_msgs__rosidl_typesupport_introspection_c__pyext
+[0.643s] [100%] Built target costmap_converter_msgs__rosidl_typesupport_c__pyext
+[0.669s] Invoked command in '/home/jw/robot/ros_ws/build/costmap_converter_msgs' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/jw/robot/ros_ws/install/exa_robot:/opt/ros/galactic /usr/bin/cmake --build /home/jw/robot/ros_ws/build/costmap_converter_msgs -- -j12 -l12
+[0.795s] Invoking command in '/home/jw/robot/ros_ws/build/costmap_converter_msgs': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/jw/robot/ros_ws/install/exa_robot:/opt/ros/galactic /usr/bin/cmake --install /home/jw/robot/ros_ws/build/costmap_converter_msgs
+[0.813s] -- Install configuration: ""
+[0.814s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/ament_index/resource_index/rosidl_interfaces/costmap_converter_msgs
+[0.814s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs
+[0.815s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg
+[0.815s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/obstacle_msg.h
+[0.817s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/rosidl_generator_c__visibility_control.h
+[0.817s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail
+[0.820s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_array_msg__type_support.h
+[0.822s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_array_msg__functions.h
+[0.823s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_msg__functions.c
+[0.823s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_msg__struct.h
+[0.823s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_msg__type_support.h
+[0.823s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_array_msg__struct.h
+[0.823s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_array_msg__functions.c
+[0.823s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_msg__functions.h
+[0.824s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/obstacle_array_msg.h
+[0.824s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/environment/library_path.sh
+[0.824s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/environment/library_path.dsv
+[0.824s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/libcostmap_converter_msgs__rosidl_generator_c.so
+[0.824s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs
+[0.824s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg
+[0.824s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail
+[0.825s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_array_msg__rosidl_typesupport_fastrtps_c.h
+[0.825s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_msg__rosidl_typesupport_fastrtps_c.h
+[0.825s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+[0.825s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/libcostmap_converter_msgs__rosidl_typesupport_fastrtps_c.so
+[0.825s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs
+[0.826s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg
+[0.827s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail
+[0.829s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/dds_fastrtps
+[0.831s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_array_msg__rosidl_typesupport_fastrtps_cpp.hpp
+[0.832s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_msg__rosidl_typesupport_fastrtps_cpp.hpp
+[0.840s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+[0.841s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/libcostmap_converter_msgs__rosidl_typesupport_fastrtps_cpp.so
+[0.841s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs
+[0.841s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg
+[0.841s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail
+[0.842s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_array_msg__rosidl_typesupport_introspection_c.h
+[0.843s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_msg__rosidl_typesupport_introspection_c.h
+[0.843s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_msg__type_support.c
+[0.843s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_array_msg__type_support.c
+[0.843s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/rosidl_typesupport_introspection_c__visibility_control.h
+[0.843s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/libcostmap_converter_msgs__rosidl_typesupport_introspection_c.so
+[0.844s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/libcostmap_converter_msgs__rosidl_typesupport_c.so
+[0.844s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs
+[0.844s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg
+[0.844s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail
+[0.845s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_msg__builder.hpp
+[0.845s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_array_msg__struct.hpp
+[0.845s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_array_msg__traits.hpp
+[0.845s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_array_msg__builder.hpp
+[0.846s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_msg__struct.hpp
+[0.846s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_msg__traits.hpp
+[0.846s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/obstacle_array_msg.hpp
+[0.846s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/obstacle_msg.hpp
+[0.846s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs
+[0.847s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg
+[0.847s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail
+[0.847s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_array_msg__rosidl_typesupport_introspection_cpp.hpp
+[0.847s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_msg__type_support.cpp
+[0.847s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_msg__rosidl_typesupport_introspection_cpp.hpp
+[0.847s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/include/costmap_converter_msgs/msg/detail/obstacle_array_msg__type_support.cpp
+[0.848s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/libcostmap_converter_msgs__rosidl_typesupport_introspection_cpp.so
+[0.848s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/libcostmap_converter_msgs__rosidl_typesupport_cpp.so
+[0.848s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/environment/pythonpath.sh
+[0.848s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/environment/pythonpath.dsv
+[0.849s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages/costmap_converter_msgs/__init__.py
+[0.959s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages/costmap_converter_msgs/msg
+[0.960s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages/costmap_converter_msgs/msg/_obstacle_msg.py
+[0.965s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages/costmap_converter_msgs/msg/_obstacle_array_msg_s.c
+[0.966s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages/costmap_converter_msgs/msg/_obstacle_array_msg.py
+[0.966s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages/costmap_converter_msgs/msg/_obstacle_msg_s.c
+[0.967s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages/costmap_converter_msgs/msg/__init__.py
+[0.968s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages/costmap_converter_msgs/costmap_converter_msgs_s__rosidl_typesupport_fastrtps_c.cpython-38-x86_64-linux-gnu.so
+[0.968s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages/costmap_converter_msgs/costmap_converter_msgs_s__rosidl_typesupport_introspection_c.cpython-38-x86_64-linux-gnu.so
+[0.968s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages/costmap_converter_msgs/costmap_converter_msgs_s__rosidl_typesupport_c.cpython-38-x86_64-linux-gnu.so
+[0.969s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/libcostmap_converter_msgs__python.so
+[0.985s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/msg/ObstacleMsg.idl
+[0.986s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/msg/ObstacleArrayMsg.idl
+[0.986s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/msg/ObstacleMsg.msg
+[0.986s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/msg/ObstacleArrayMsg.msg
+[0.987s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/ament_index/resource_index/package_run_dependencies/costmap_converter_msgs
+[0.987s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/ament_index/resource_index/parent_prefix_path/costmap_converter_msgs
+[0.987s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/environment/ament_prefix_path.sh
+[0.991s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/environment/ament_prefix_path.dsv
+[0.991s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/environment/path.sh
+[0.999s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/environment/path.dsv
+[0.999s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/local_setup.bash
+[0.999s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/local_setup.sh
+[1.000s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/local_setup.zsh
+[1.000s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/local_setup.dsv
+[1.001s] -- Installing: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/package.dsv
+[1.002s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/ament_index/resource_index/packages/costmap_converter_msgs
+[1.002s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/cmake/costmap_converter_msgs__rosidl_generator_cExport.cmake
+[1.002s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/cmake/costmap_converter_msgs__rosidl_generator_cExport-noconfig.cmake
+[1.002s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/cmake/costmap_converter_msgs__rosidl_typesupport_introspection_cExport.cmake
+[1.003s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/cmake/costmap_converter_msgs__rosidl_typesupport_introspection_cExport-noconfig.cmake
+[1.003s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/cmake/costmap_converter_msgs__rosidl_typesupport_cExport.cmake
+[1.003s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/cmake/costmap_converter_msgs__rosidl_typesupport_cExport-noconfig.cmake
+[1.003s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/cmake/costmap_converter_msgs__rosidl_generator_cppExport.cmake
+[1.003s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/cmake/costmap_converter_msgs__rosidl_typesupport_introspection_cppExport.cmake
+[1.004s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/cmake/costmap_converter_msgs__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+[1.004s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/cmake/costmap_converter_msgs__rosidl_typesupport_cppExport.cmake
+[1.004s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/cmake/costmap_converter_msgs__rosidl_typesupport_cppExport-noconfig.cmake
+[1.004s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/cmake/rosidl_cmake-extras.cmake
+[1.004s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/cmake/ament_cmake_export_dependencies-extras.cmake
+[1.005s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/cmake/ament_cmake_export_libraries-extras.cmake
+[1.005s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/cmake/ament_cmake_export_targets-extras.cmake
+[1.005s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/cmake/ament_cmake_export_include_directories-extras.cmake
+[1.005s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+[1.005s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+[1.006s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/cmake/costmap_converter_msgsConfig.cmake
+[1.006s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/cmake/costmap_converter_msgsConfig-version.cmake
+[1.006s] -- Up-to-date: /home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/package.xml
+[1.073s] Invoked command in '/home/jw/robot/ros_ws/build/costmap_converter_msgs' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/jw/robot/ros_ws/install/exa_robot:/opt/ros/galactic /usr/bin/cmake --install /home/jw/robot/ros_ws/build/costmap_converter_msgs

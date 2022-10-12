@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TMRStellaB2 &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>TMRStellaB2</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for TMRStellaB2</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="c1"># File Name    : TMRKobuki2.py</span>
+<span class="c1"># Project Name : ExaRobotCtrl</span>
+<span class="c1"># Author       : Raim.Delgado</span>
+<span class="c1"># Organization : SeoulTech</span>
+<span class="c1"># Description  :</span>
+<span class="c1"># [Revision History]</span>
+<span class="c1"># &gt;&gt; 2021.01.29 - First Commit</span>
+<span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">pi</span>
+<span class="kn">from</span> <span class="nn">TMRDiff</span> <span class="k">import</span> <span class="o">*</span>
+
+<span class="n">FILE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>  <span class="c1"># %PROJECT_ROOT%/Library/Socket</span>
+<span class="n">ROOT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">FILE_PATH</span><span class="p">))</span>
+<span class="n">INCLUDE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Include&quot;</span><span class="p">)</span>
+<span class="n">MDI_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;MdiBackground&quot;</span><span class="p">)</span>
+<span class="n">DOCK_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;DockWidgets&quot;</span><span class="p">)</span>
+<span class="n">MISC_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Misc&quot;</span><span class="p">)</span>
+<span class="n">RESOURCES_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Resources&quot;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">DOCK_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">])</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+<span class="k">del</span> <span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">DOCK_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span>
+
+<span class="kn">from</span> <span class="nn">SerialPort</span> <span class="k">import</span> <span class="n">CSerialPort</span>
+<span class="kn">from</span> <span class="nn">Commons</span> <span class="k">import</span> <span class="n">PySignal</span><span class="p">,</span> <span class="n">is_system_win</span><span class="p">,</span> <span class="n">MAX_SERIAL_BUFFER</span>
+<span class="kn">from</span> <span class="nn">Commons</span> <span class="k">import</span> <span class="n">convert_u16_to_bytearray_le</span><span class="p">,</span> <span class="n">convert_u32_to_bytearray_le</span><span class="p">,</span> <span class="n">convert_bytearray_to_int_le</span><span class="p">,</span> \
+    <span class="n">search_pattern</span>
+
+
+<div class="viewcode-block" id="EnumStellaB2Stop"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.EnumStellaB2Stop">[docs]</a><span class="nd">@unique</span>
+<span class="k">class</span> <span class="nc">EnumStellaB2Stop</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="n">MOTOR_FREE</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># free-wheeling</span>
+    <span class="n">MOTOR_HOLD</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1"># stop immediately, keep motor holding torque</span>
+    <span class="n">MOTOR_HOLD_DECC</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># decelerate then stop, keep motor holding torque</span></div>
+
+
+<div class="viewcode-block" id="EnumStellaB2MotorCtrl"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.EnumStellaB2MotorCtrl">[docs]</a><span class="nd">@unique</span>
+<span class="k">class</span> <span class="nc">EnumStellaB2MotorCtrl</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="n">ALL</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">RIGHT</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">LEFT</span> <span class="o">=</span> <span class="mi">2</span></div>
+
+
+<div class="viewcode-block" id="EnumStellaB2Status"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.EnumStellaB2Status">[docs]</a><span class="nd">@unique</span>
+<span class="k">class</span> <span class="nc">EnumStellaB2Status</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="n">NORMAL</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">OVERLOAD_RIGHT</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">OVERLOAD_LEFT</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">OVERLOAD_ALL</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">OVER_VOLTAGE</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1"># voltage input &gt; 15</span>
+    <span class="n">LOW_VOLTAGE</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># voltage input &lt; 10</span>
+    <span class="n">POSITION_REACHED</span> <span class="o">=</span> <span class="mi">6</span>  <span class="c1"># only when using built-in position controller</span>
+    <span class="n">RUNNING</span> <span class="o">=</span> <span class="mi">7</span>  <span class="c1"># if wheel is rolling (serial commands)</span></div>
+
+
+<div class="viewcode-block" id="EnumStellaB2Cmd"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.EnumStellaB2Cmd">[docs]</a><span class="nd">@unique</span>
+<span class="k">class</span> <span class="nc">EnumStellaB2Cmd</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="n">MOVE_JOINT_SPACE</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">MOVE_GET_ENCODER</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">MOVE_STOP</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">FACTORY_RESET</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">GET_STATE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">GET_VELOCITY</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">GET_WHEEL_POSITION</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">GET_VERSION</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">GET_ENCODER</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="CTMRStellaB2"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2">[docs]</a><span class="k">class</span> <span class="nc">CTMRStellaB2</span><span class="p">(</span><span class="n">CTMRDiff</span><span class="p">):</span>
+    <span class="n">_serial</span><span class="p">:</span> <span class="n">CSerialPort</span>
+    <span class="n">btaSerialBuff</span><span class="p">:</span> <span class="nb">bytearray</span>
+    <span class="n">strSerialPort</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">nSerialBaud</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">nSerialByteSize</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">strSerialParity</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">fSerialStopBits</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">fRadiusLimit</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">fPrevTime</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">nPrevCmd</span><span class="p">:</span> <span class="n">EnumStellaB2Cmd</span>  <span class="c1"># for parsing</span>
+    <span class="n">threadMonitoring</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">adictConfig</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">adictConfig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># this is according to the CTMStellaB2 parameters</span>
+            <span class="n">fWheelBase</span> <span class="o">=</span> <span class="mf">0.289</span>
+            <span class="n">fWheelRadius</span> <span class="o">=</span> <span class="mf">0.0752</span>  <span class="c1"># circumference is 47.25 cm according to specs</span>
+            <span class="n">nEncoderRes</span> <span class="o">=</span> <span class="mi">1024</span>  <span class="c1"># PPR = 256</span>
+            <span class="n">fGearRatio</span> <span class="o">=</span> <span class="mf">13.71</span>  <span class="c1"># Spec = 14, but actual calculation states 13.71</span>
+            <span class="n">fMaxVel</span> <span class="o">=</span> <span class="mf">1.45</span>  <span class="c1"># motor max speed is 270 rads</span>
+            <span class="n">fMaxAcc</span> <span class="o">=</span> <span class="mf">0.4</span>  <span class="c1"># arbitrary</span>
+            <span class="n">fMaxJerk</span> <span class="o">=</span> <span class="mf">0.2</span>  <span class="c1"># arbitrary</span>
+            <span class="n">fMaxYaw</span> <span class="o">=</span> <span class="mf">3.14</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">CTMRStellaB2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">fWheelRadius</span><span class="p">,</span> <span class="n">fWheelBase</span><span class="p">,</span> <span class="n">fMaxVel</span><span class="p">,</span> <span class="n">fMaxAcc</span><span class="p">,</span> <span class="n">fMaxJerk</span><span class="p">,</span> <span class="n">fMaxYaw</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_wheel_spec</span><span class="p">(</span><span class="n">nEncoderRes</span><span class="p">,</span> <span class="n">fGearRatio</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># todo: add configuration file, preferably JSON</span>
+            <span class="k">pass</span>
+
+        <span class="c1"># Signals #</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_is_run_monitoring</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_move_get_enc</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+
+        <span class="c1"># Serial Communication Specifications</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nSerialBaud</span> <span class="o">=</span> <span class="mi">115200</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nSerialByteSize</span> <span class="o">=</span> <span class="mi">8</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strSerialParity</span> <span class="o">=</span> <span class="s1">&#39;N&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fSerialStopBits</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># Serial Callbacks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btaSerialBuff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span> <span class="o">=</span> <span class="n">CSerialPort</span><span class="p">(</span><span class="n">abIsRecvDirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># receive after send, deserialization is pretty difficult</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span><span class="o">.</span><span class="n">sig_connected</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_serial_connect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span><span class="o">.</span><span class="n">sig_disconnected</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_serial_disconnect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span><span class="o">.</span><span class="n">sig_send_data</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_serial_send</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span><span class="o">.</span><span class="n">sig_serial_error</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_serial_error</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span><span class="o">.</span><span class="n">sig_recv_data</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_serial_recv</span><span class="p">)</span>
+
+        <span class="c1"># calculate time difference to calculate velocity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fPrevTime</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nPrevEncL</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nPrevEncR</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">IsSerial</span> <span class="o">=</span> <span class="kc">True</span> <span class="c1"># serial robot</span>
+
+<div class="viewcode-block" id="CTMRStellaB2.release"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.release">[docs]</a>    <span class="k">def</span> <span class="nf">release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_monitoring_thread</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span></div>
+
+    <span class="c1">### Serial Communication ###</span>
+<div class="viewcode-block" id="CTMRStellaB2.connect"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strPort</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">strPort</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">is_system_win</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">strSerialPort</span> <span class="o">=</span> <span class="s2">&quot;COM1&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">strSerialPort</span> <span class="o">=</span> <span class="s2">&quot;/dev/ttyUSB0&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strSerialPort</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">strPort</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span><span class="o">.</span><span class="n">setParams</span><span class="p">(</span><span class="n">port</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">strSerialPort</span><span class="p">,</span> <span class="n">baudrate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nSerialBaud</span><span class="p">,</span> <span class="n">bytesize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nSerialByteSize</span><span class="p">,</span>
+                               <span class="n">parity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">strSerialParity</span><span class="p">,</span> <span class="n">stopbits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fSerialStopBits</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CTMRStellaB2.is_connected"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.is_connected">[docs]</a>    <span class="k">def</span> <span class="nf">is_connected</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span><span class="o">.</span><span class="n">is_connected</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CTMRStellaB2.disconnect"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_monitoring_thread</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_connected</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span></div>
+
+    <span class="c1">### Monitoring Thread ###</span>
+<div class="viewcode-block" id="CTMRStellaB2.start_monitoring_thread"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.start_monitoring_thread">[docs]</a>    <span class="k">def</span> <span class="nf">start_monitoring_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">threadMonitoring</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threadMonitoring</span><span class="p">:</span> <span class="n">CThreadStateMonitor</span> <span class="o">=</span> <span class="n">CThreadStateMonitor</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threadMonitoring</span><span class="o">.</span><span class="n">sig_is_run</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_thread_monitor_is_run</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threadMonitoring</span><span class="o">.</span><span class="n">sig_is_done</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_thread_monitor_is_done</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threadMonitoring</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CTMRStellaB2.stop_monitoring_thread"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.stop_monitoring_thread">[docs]</a>    <span class="k">def</span> <span class="nf">stop_monitoring_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">threadMonitoring</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threadMonitoring</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">threadMonitoring</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
+                <span class="k">pass</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threadMonitoring</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="CTMRStellaB2.on_thread_monitor_is_run"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.on_thread_monitor_is_run">[docs]</a>    <span class="k">def</span> <span class="nf">on_thread_monitor_is_run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_connected</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sig_is_run_monitoring</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CTMRStellaB2.on_thread_monitor_is_done"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.on_thread_monitor_is_done">[docs]</a>    <span class="k">def</span> <span class="nf">on_thread_monitor_is_done</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_connected</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sig_is_run_monitoring</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+
+    <span class="c1">### Serial Callbacks ###</span>
+<div class="viewcode-block" id="CTMRStellaB2.on_serial_connect"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.on_serial_connect">[docs]</a>    <span class="k">def</span> <span class="nf">on_serial_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_curr_pos</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_version</span><span class="p">()</span>  <span class="c1"># get software version when started</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.02</span><span class="p">)</span>
+        <span class="c1"># self.start_monitoring_thread()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_connected</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CTMRStellaB2.on_serial_disconnect"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.on_serial_disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">on_serial_disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_monitoring_thread</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_disconnected</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CTMRStellaB2.on_serial_error"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.on_serial_error">[docs]</a>    <span class="k">def</span> <span class="nf">on_serial_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_comm_error</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CTMRStellaB2.on_serial_send"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.on_serial_send">[docs]</a>    <span class="k">def</span> <span class="nf">on_serial_send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abtData</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="CTMRStellaB2.on_serial_recv"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.on_serial_recv">[docs]</a>    <span class="k">def</span> <span class="nf">on_serial_recv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abtData</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># print(abtData, self.nPrevCmd)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">btaSerialBuff</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">(</span><span class="n">abtData</span><span class="p">))</span>
+
+            <span class="c1"># check STX and ETX</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">btaSerialBuff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x02</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">btaSerialBuff</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x03</span><span class="p">:</span>
+                <span class="n">feedback</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btaSerialBuff</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nPrevCmd</span> <span class="o">==</span> <span class="n">EnumStellaB2Cmd</span><span class="o">.</span><span class="n">MOVE_GET_ENCODER</span><span class="p">:</span>
+                    <span class="c1"># todo: implement try except</span>
+                    <span class="n">right_encoder</span><span class="p">,</span> <span class="n">left_encoder</span><span class="p">,</span> <span class="n">robot_stat</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+                    <span class="k">if</span> <span class="n">feedback</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;F&#39;</span><span class="p">:</span>
+                        <span class="n">right_encoder</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">feedback</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">10</span><span class="p">])</span>
+                    <span class="k">elif</span> <span class="n">feedback</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span>
+                        <span class="n">right_encoder</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">feedback</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">10</span><span class="p">])</span>  <span class="c1"># * -1</span>
+
+                    <span class="k">if</span> <span class="n">feedback</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;F&#39;</span><span class="p">:</span>
+                        <span class="n">left_encoder</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">feedback</span><span class="p">[</span><span class="mi">11</span><span class="p">:</span><span class="mi">20</span><span class="p">])</span>
+                    <span class="k">elif</span> <span class="n">feedback</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span>
+                        <span class="n">left_encoder</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">feedback</span><span class="p">[</span><span class="mi">11</span><span class="p">:</span><span class="mi">20</span><span class="p">])</span>  <span class="c1"># * -1</span>
+
+                    <span class="k">if</span> <span class="n">feedback</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;S&#39;</span><span class="p">:</span>
+                        <span class="n">robot_stat</span> <span class="o">=</span> <span class="n">EnumStellaB2Status</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">feedback</span><span class="p">[</span><span class="mi">21</span><span class="p">]))</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">sig_move_get_enc</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">right_encoder</span><span class="p">,</span> <span class="n">left_encoder</span><span class="p">,</span> <span class="n">robot_stat</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nPrevCmd</span> <span class="o">==</span> <span class="n">EnumStellaB2Cmd</span><span class="o">.</span><span class="n">GET_ENCODER</span><span class="p">:</span>
+                    <span class="n">right_encoder</span><span class="p">,</span> <span class="n">left_encoder</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+                    <span class="k">if</span> <span class="n">feedback</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;F&#39;</span><span class="p">:</span>
+                        <span class="n">right_encoder</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">feedback</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">10</span><span class="p">])</span>
+                    <span class="k">elif</span> <span class="n">feedback</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span>
+                        <span class="n">right_encoder</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">feedback</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">10</span><span class="p">])</span>  <span class="c1"># * -1</span>
+
+                    <span class="k">if</span> <span class="n">feedback</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;F&#39;</span><span class="p">:</span>
+                        <span class="n">left_encoder</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">feedback</span><span class="p">[</span><span class="mi">11</span><span class="p">:</span><span class="mi">20</span><span class="p">])</span>
+                    <span class="k">elif</span> <span class="n">feedback</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span>
+                        <span class="n">left_encoder</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">feedback</span><span class="p">[</span><span class="mi">11</span><span class="p">:</span><span class="mi">20</span><span class="p">])</span>  <span class="c1"># * -1</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">sig_get_enc</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">right_encoder</span><span class="p">,</span> <span class="n">left_encoder</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nPrevCmd</span> <span class="o">==</span> <span class="n">EnumStellaB2Cmd</span><span class="o">.</span><span class="n">GET_STATE</span><span class="p">:</span>
+                    <span class="n">robot_stat</span> <span class="o">=</span> <span class="n">EnumStellaB2Status</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">feedback</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">sig_get_state</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">robot_stat</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nPrevCmd</span> <span class="o">==</span> <span class="n">EnumStellaB2Cmd</span><span class="o">.</span><span class="n">GET_VELOCITY</span><span class="p">:</span>
+                    <span class="n">right_vel</span><span class="p">,</span> <span class="n">left_vel</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span>
+                    <span class="k">if</span> <span class="n">feedback</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;F&#39;</span><span class="p">:</span>
+                        <span class="n">right_vel</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">feedback</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">6</span><span class="p">])</span>
+                    <span class="k">elif</span> <span class="n">feedback</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span>
+                        <span class="n">right_vel</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">feedback</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">6</span><span class="p">])</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span>
+
+                    <span class="k">if</span> <span class="n">feedback</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;F&#39;</span><span class="p">:</span>
+                        <span class="n">left_vel</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">feedback</span><span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">12</span><span class="p">])</span>
+                    <span class="k">elif</span> <span class="n">feedback</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span>
+                        <span class="n">left_vel</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">feedback</span><span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">12</span><span class="p">])</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">sig_get_vel</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">right_vel</span><span class="p">,</span> <span class="n">left_vel</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nPrevCmd</span> <span class="o">==</span> <span class="n">EnumStellaB2Cmd</span><span class="o">.</span><span class="n">GET_WHEEL_POSITION</span><span class="p">:</span>
+                    <span class="n">right_pos</span><span class="p">,</span> <span class="n">left_pos</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span>
+                    <span class="k">if</span> <span class="n">feedback</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;F&#39;</span><span class="p">:</span>
+                        <span class="n">right_pos</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">feedback</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">9</span><span class="p">])</span>
+                    <span class="k">elif</span> <span class="n">feedback</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span>
+                        <span class="n">right_pos</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">feedback</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">9</span><span class="p">])</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span>
+
+                    <span class="k">if</span> <span class="n">feedback</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;F&#39;</span><span class="p">:</span>
+                        <span class="n">left_pos</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">feedback</span><span class="p">[</span><span class="mi">10</span><span class="p">:</span><span class="mi">18</span><span class="p">])</span>
+                    <span class="k">elif</span> <span class="n">feedback</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span>
+                        <span class="n">left_pos</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">feedback</span><span class="p">[</span><span class="mi">10</span><span class="p">:</span><span class="mi">18</span><span class="p">])</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">sig_get_wheel_pos</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">right_pos</span><span class="p">,</span> <span class="n">left_pos</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nPrevCmd</span> <span class="o">==</span> <span class="n">EnumStellaB2Cmd</span><span class="o">.</span><span class="n">GET_VERSION</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">version</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">feedback</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">])</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="n">version</span> <span class="o">=</span> <span class="mf">0.00</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">sig_get_ver</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">version</span><span class="p">))</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">btaSerialBuff</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">btaSerialBuff</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+    <span class="c1">### COMMANDS ###</span>
+<div class="viewcode-block" id="CTMRStellaB2.move_stop"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.move_stop">[docs]</a>    <span class="k">def</span> <span class="nf">move_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anStopType</span><span class="p">:</span> <span class="n">EnumStellaB2Stop</span> <span class="o">=</span> <span class="n">EnumStellaB2Stop</span><span class="o">.</span><span class="n">MOTOR_HOLD_DECC</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">n_stop_type</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">EnumStellaB2Stop</span><span class="p">(</span><span class="n">anStopType</span><span class="p">))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">n_stop_type</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">EnumStellaB2Stop</span><span class="o">.</span><span class="n">MOTOR_HOLD_DECC</span><span class="p">)</span>
+
+        <span class="n">buff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        <span class="n">buff_str</span> <span class="o">=</span> <span class="s2">&quot;CSTOP&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n_stop_type</span><span class="p">)</span>
+        <span class="n">buff</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="n">buff_str</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_packet</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">buff</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CTMRStellaB2.move_joint_space"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.move_joint_space">[docs]</a>    <span class="k">def</span> <span class="nf">move_joint_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anAngVelR</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">anAngVelL</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">abGetEnc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="n">buff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        <span class="n">buff_str</span> <span class="o">=</span> <span class="s2">&quot;CV&quot;</span>
+        <span class="n">buff</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="n">buff_str</span><span class="p">))</span>
+
+        <span class="c1"># todo: add joint limits as a robot parameter</span>
+        <span class="n">n_AngVelR</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">anAngVelR</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n_AngVelR</span> <span class="o">&gt;</span> <span class="mi">270</span><span class="p">:</span>
+            <span class="n">n_AngVelR</span> <span class="o">=</span> <span class="mi">270</span>
+
+        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">anAngVelR</span><span class="p">:</span>
+            <span class="n">tmpR</span> <span class="o">=</span> <span class="s2">&quot;F&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:03d}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n_AngVelR</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tmpR</span> <span class="o">=</span> <span class="s2">&quot;B&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:03d}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n_AngVelR</span><span class="p">)</span>
+
+        <span class="n">buff</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="n">tmpR</span><span class="p">))</span>
+
+        <span class="c1"># todo: add joint limits as a robot parameter</span>
+        <span class="n">n_AngVelL</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">anAngVelL</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n_AngVelL</span> <span class="o">&gt;</span> <span class="mi">270</span><span class="p">:</span>
+            <span class="n">n_AngVelL</span> <span class="o">=</span> <span class="mi">270</span>
+
+        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">anAngVelL</span><span class="p">:</span>
+            <span class="n">tmpL</span> <span class="o">=</span> <span class="s2">&quot;F&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:03d}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n_AngVelL</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tmpL</span> <span class="o">=</span> <span class="s2">&quot;B&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:03d}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n_AngVelL</span><span class="p">)</span>
+
+        <span class="n">buff</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="n">tmpL</span><span class="p">))</span>
+
+        <span class="n">nCmd</span> <span class="o">=</span> <span class="n">EnumStellaB2Cmd</span><span class="o">.</span><span class="n">MOVE_JOINT_SPACE</span>
+        <span class="k">if</span> <span class="n">abGetEnc</span><span class="p">:</span>
+            <span class="n">buff</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">))</span>
+            <span class="n">nCmd</span> <span class="o">=</span> <span class="n">EnumStellaB2Cmd</span><span class="o">.</span><span class="n">MOVE_GET_ENCODER</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_packet</span><span class="p">(</span><span class="n">nCmd</span><span class="p">,</span> <span class="n">buff</span><span class="p">,</span> <span class="n">abGetEnc</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CTMRStellaB2.set_velocity_control"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.set_velocity_control">[docs]</a>    <span class="k">def</span> <span class="nf">set_velocity_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">afVel</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">afYawRate</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="n">f_r</span><span class="p">,</span> <span class="n">f_l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_joint_space_vel_actl</span><span class="p">(</span><span class="n">afVel</span><span class="p">,</span> <span class="n">afYawRate</span><span class="p">)</span>
+        <span class="c1"># todo: check scaling of joint space velocities</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">move_joint_space</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">f_r</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">f_l</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="CTMRStellaB2.reset_motor"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.reset_motor">[docs]</a>    <span class="k">def</span> <span class="nf">reset_motor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anMotor</span><span class="p">:</span> <span class="n">EnumStellaB2MotorCtrl</span> <span class="o">=</span> <span class="n">EnumStellaB2MotorCtrl</span><span class="o">.</span><span class="n">ALL</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">n_motor</span> <span class="o">=</span> <span class="n">EnumStellaB2MotorCtrl</span><span class="p">(</span><span class="n">anMotor</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">n_motor</span> <span class="o">=</span> <span class="n">EnumStellaB2MotorCtrl</span><span class="o">.</span><span class="n">ALL</span>
+
+        <span class="k">if</span> <span class="n">n_motor</span> <span class="o">==</span> <span class="n">EnumStellaB2MotorCtrl</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span>
+            <span class="n">str_motor</span> <span class="o">=</span> <span class="s2">&quot;L&quot;</span>
+        <span class="k">elif</span> <span class="n">n_motor</span> <span class="o">==</span> <span class="n">EnumStellaB2MotorCtrl</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span>
+            <span class="n">str_motor</span> <span class="o">=</span> <span class="s2">&quot;R&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">str_motor</span> <span class="o">=</span> <span class="s2">&quot;A&quot;</span>
+
+        <span class="n">buff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        <span class="n">buff_str</span> <span class="o">=</span> <span class="s2">&quot;CRESET&quot;</span> <span class="o">+</span> <span class="n">str_motor</span>
+        <span class="n">buff</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="n">buff_str</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_packet</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">buff</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CTMRStellaB2.set_factory_settings"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.set_factory_settings">[docs]</a>    <span class="k">def</span> <span class="nf">set_factory_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">buff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        <span class="n">buff_str</span> <span class="o">=</span> <span class="s2">&quot;CINIT&quot;</span>
+        <span class="n">buff</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="n">buff_str</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_packet</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">buff</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CTMRStellaB2.get_state"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.get_state">[docs]</a>    <span class="k">def</span> <span class="nf">get_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">buff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        <span class="n">buff_str</span> <span class="o">=</span> <span class="s2">&quot;GSTATE&quot;</span>
+        <span class="n">buff</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="n">buff_str</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_packet</span><span class="p">(</span><span class="n">EnumStellaB2Cmd</span><span class="o">.</span><span class="n">GET_STATE</span><span class="p">,</span> <span class="n">buff</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CTMRStellaB2.get_motor_velocity"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.get_motor_velocity">[docs]</a>    <span class="k">def</span> <span class="nf">get_motor_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anMotor</span><span class="p">:</span> <span class="n">EnumStellaB2MotorCtrl</span> <span class="o">=</span> <span class="n">EnumStellaB2MotorCtrl</span><span class="o">.</span><span class="n">ALL</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">n_motor</span> <span class="o">=</span> <span class="n">EnumStellaB2MotorCtrl</span><span class="p">(</span><span class="n">anMotor</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">n_motor</span> <span class="o">=</span> <span class="n">EnumStellaB2MotorCtrl</span><span class="o">.</span><span class="n">ALL</span>
+
+        <span class="k">if</span> <span class="n">n_motor</span> <span class="o">==</span> <span class="n">EnumStellaB2MotorCtrl</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span>
+            <span class="n">str_motor</span> <span class="o">=</span> <span class="s2">&quot;L&quot;</span>
+        <span class="k">elif</span> <span class="n">n_motor</span> <span class="o">==</span> <span class="n">EnumStellaB2MotorCtrl</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span>
+            <span class="n">str_motor</span> <span class="o">=</span> <span class="s2">&quot;R&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">str_motor</span> <span class="o">=</span> <span class="s2">&quot;A&quot;</span>
+
+        <span class="n">buff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        <span class="n">buff_str</span> <span class="o">=</span> <span class="s2">&quot;GVELOCITY&quot;</span> <span class="o">+</span> <span class="n">str_motor</span>
+        <span class="n">buff</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="n">buff_str</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_packet</span><span class="p">(</span><span class="n">EnumStellaB2Cmd</span><span class="o">.</span><span class="n">GET_VELOCITY</span><span class="p">,</span> <span class="n">buff</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CTMRStellaB2.get_motor_position"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.get_motor_position">[docs]</a>    <span class="k">def</span> <span class="nf">get_motor_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anMotor</span><span class="p">:</span> <span class="n">EnumStellaB2MotorCtrl</span> <span class="o">=</span> <span class="n">EnumStellaB2MotorCtrl</span><span class="o">.</span><span class="n">ALL</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">n_motor</span> <span class="o">=</span> <span class="n">EnumStellaB2MotorCtrl</span><span class="p">(</span><span class="n">anMotor</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">n_motor</span> <span class="o">=</span> <span class="n">EnumStellaB2MotorCtrl</span><span class="o">.</span><span class="n">ALL</span>
+
+        <span class="k">if</span> <span class="n">n_motor</span> <span class="o">==</span> <span class="n">EnumStellaB2MotorCtrl</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span>
+            <span class="n">str_motor</span> <span class="o">=</span> <span class="s2">&quot;L&quot;</span>
+        <span class="k">elif</span> <span class="n">n_motor</span> <span class="o">==</span> <span class="n">EnumStellaB2MotorCtrl</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span>
+            <span class="n">str_motor</span> <span class="o">=</span> <span class="s2">&quot;R&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">str_motor</span> <span class="o">=</span> <span class="s2">&quot;A&quot;</span>
+
+        <span class="n">buff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        <span class="n">buff_str</span> <span class="o">=</span> <span class="s2">&quot;GPOSITION&quot;</span> <span class="o">+</span> <span class="n">str_motor</span>
+        <span class="n">buff</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="n">buff_str</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_packet</span><span class="p">(</span><span class="n">EnumStellaB2Cmd</span><span class="o">.</span><span class="n">GET_WHEEL_POSITION</span><span class="p">,</span> <span class="n">buff</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CTMRStellaB2.get_version"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.get_version">[docs]</a>    <span class="k">def</span> <span class="nf">get_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">buff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        <span class="n">buff_str</span> <span class="o">=</span> <span class="s2">&quot;GVERSION&quot;</span>
+        <span class="n">buff</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="n">buff_str</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_packet</span><span class="p">(</span><span class="n">EnumStellaB2Cmd</span><span class="o">.</span><span class="n">GET_VERSION</span><span class="p">,</span> <span class="n">buff</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CTMRStellaB2.get_encoder_pulse"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.get_encoder_pulse">[docs]</a>    <span class="k">def</span> <span class="nf">get_encoder_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">buff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        <span class="n">buff_str</span> <span class="o">=</span> <span class="s2">&quot;GENC&quot;</span>
+        <span class="n">buff</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="n">buff_str</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_packet</span><span class="p">(</span><span class="n">EnumStellaB2Cmd</span><span class="o">.</span><span class="n">GET_ENCODER</span><span class="p">,</span> <span class="n">buff</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CTMRStellaB2.make_packet"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.make_packet">[docs]</a>    <span class="k">def</span> <span class="nf">make_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abtaPayload</span><span class="p">:</span> <span class="nb">bytearray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytearray</span><span class="p">:</span>
+        <span class="n">buff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([</span><span class="mh">0x02</span><span class="p">])</span>  <span class="c1"># STX</span>
+        <span class="n">buff</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">abtaPayload</span><span class="p">)</span>
+        <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mh">0x03</span><span class="p">)</span>  <span class="c1"># ETX</span>
+        <span class="k">return</span> <span class="n">buff</span></div>
+
+<div class="viewcode-block" id="CTMRStellaB2.send_packet"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CTMRStellaB2.send_packet">[docs]</a>    <span class="k">def</span> <span class="nf">send_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anCmd</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">abtaPayload</span><span class="p">:</span> <span class="nb">bytearray</span><span class="p">,</span> <span class="n">abIsWaitFeedback</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">tmp_cmd</span> <span class="o">=</span> <span class="n">EnumStellaB2Cmd</span><span class="p">(</span><span class="n">anCmd</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">tmp_cmd</span> <span class="o">=</span> <span class="n">EnumStellaB2Cmd</span><span class="o">.</span><span class="n">GET_ENCODER</span>
+
+        <span class="c1"># print(tmp_cmd)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nPrevCmd</span> <span class="o">=</span> <span class="n">tmp_cmd</span>
+        <span class="n">buff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_packet</span><span class="p">(</span><span class="n">abtaPayload</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span><span class="o">.</span><span class="n">is_connected</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span><span class="o">.</span><span class="n">sendData</span><span class="p">(</span><span class="n">buff</span><span class="p">,</span> <span class="n">abIsWaitFeedback</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div></div>
+
+
+<span class="c1"># todo: try to implement this on the parent class</span>
+<div class="viewcode-block" id="CThreadStateMonitor"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CThreadStateMonitor">[docs]</a><span class="k">class</span> <span class="nc">CThreadStateMonitor</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
+    <span class="n">_keepAlive</span><span class="p">:</span> <span class="nb">bool</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">robot</span><span class="p">:</span> <span class="n">CTMRStellaB2</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CThreadStateMonitor</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_keepAlive</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_robot</span> <span class="o">=</span> <span class="n">robot</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_is_run</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_is_done</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+
+<div class="viewcode-block" id="CThreadStateMonitor.stop"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CThreadStateMonitor.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_keepAlive</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="CThreadStateMonitor.run"><a class="viewcode-back" href="../Inc/MobileRobot/TMRStellaB2.html#TMRStellaB2.CThreadStateMonitor.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_is_run</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keepAlive</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_robot</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.02</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_robot</span><span class="o">.</span><span class="n">get_encoder_pulse</span><span class="p">()</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.02</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_robot</span><span class="o">.</span><span class="n">get_motor_velocity</span><span class="p">()</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.02</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_is_done</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div></div>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

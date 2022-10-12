@@ -1,0 +1,8 @@
+{
+  "package_name": "teb_msgs",
+  "non_idl_tuples": [
+    "/home/jw/robot/ros_ws/src/ExaRobot_ROS2/teb_local_planner/teb_msgs:msg/FeedbackMsg.msg",
+    "/home/jw/robot/ros_ws/src/ExaRobot_ROS2/teb_local_planner/teb_msgs:msg/TrajectoryMsg.msg",
+    "/home/jw/robot/ros_ws/src/ExaRobot_ROS2/teb_local_planner/teb_msgs:msg/TrajectoryPointMsg.msg"
+  ]
+}

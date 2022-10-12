@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MainWindow &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>MainWindow</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for MainWindow</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="c1"># File Name    : MainWindow.py</span>
+<span class="c1"># Project Name : MobileRobotTest</span>
+<span class="c1"># Author       : Raim.Delgado</span>
+<span class="c1"># Organization : SeoulTech</span>
+<span class="c1"># Description  :</span>
+<span class="c1"># [Revision History]</span>
+<span class="c1"># &gt;&gt; 2021.08.24 - First Commit</span>
+<span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">PyQt5 기반 제어 GUI의 MainWindow</span>
+
+<span class="sd">ControlCore 모듈을 통해서 얻어지는 상태정보 및 제어를 GUI 사용하여 접근할수 있다.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">FILE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>  <span class="c1"># %PROJECT_ROOT%/Include</span>
+<span class="n">ROOT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">FILE_PATH</span><span class="p">)</span>
+<span class="n">INCLUDE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Include&quot;</span><span class="p">)</span>
+<span class="n">MDI_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;MdiBackground&quot;</span><span class="p">)</span>
+<span class="n">DOCK_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;DockWidgets&quot;</span><span class="p">)</span>
+<span class="n">MISC_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;Misc&quot;</span><span class="p">)</span>
+<span class="n">RESOURCES_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Resources&quot;</span><span class="p">)</span>
+<span class="n">SUBWINDOW_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;SubWindow&quot;</span><span class="p">)</span>
+<span class="n">TRAJECTORYGEN_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;TrajectoryGenerator&quot;</span><span class="p">)</span>
+<span class="n">DIALOG_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;Dialog&quot;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MISC_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">DOCK_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">SUBWINDOW_PATH</span><span class="p">,</span>
+                 <span class="n">TRAJECTORYGEN_PATH</span><span class="p">,</span> <span class="n">DIALOG_PATH</span><span class="p">])</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+<span class="k">del</span> <span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">DOCK_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">MISC_PATH</span><span class="p">,</span> <span class="n">SUBWINDOW_PATH</span><span class="p">,</span> <span class="n">TRAJECTORYGEN_PATH</span><span class="p">,</span> <span class="n">DIALOG_PATH</span>
+
+<span class="kn">from</span> <span class="nn">UiCommon</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">Commons</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">DockLogger</span> <span class="k">import</span> <span class="n">DockLogger</span>
+<span class="kn">from</span> <span class="nn">DockServerConnect</span> <span class="k">import</span> <span class="n">DockServerConnect</span>
+<span class="c1"># from DockPathPlanSim import DockPathPlanSim</span>
+<span class="kn">from</span> <span class="nn">DockStellaB2Ctrl</span> <span class="k">import</span> <span class="n">DockStellaB2Ctrl</span>
+<span class="kn">from</span> <span class="nn">DockProcessMonitor</span> <span class="k">import</span> <span class="n">DockProcessMonitor</span>
+<span class="kn">from</span> <span class="nn">DockExaRobotCtrl</span> <span class="k">import</span> <span class="n">DockExaRobotCtrl</span>
+<span class="kn">from</span> <span class="nn">DockKobuki2Ctrl</span> <span class="k">import</span> <span class="n">DockKobuki2Ctrl</span>
+<span class="kn">from</span> <span class="nn">MdiBackground</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">EmbdLed</span> <span class="k">import</span> <span class="n">EmbdLed</span>
+<span class="kn">from</span> <span class="nn">ControlCore</span> <span class="k">import</span> <span class="n">EmbdControlCore</span>
+<span class="kn">from</span> <span class="nn">SubWinTrajectoryGenerator</span> <span class="k">import</span> <span class="n">SubWindowTrajGen</span>
+<span class="kn">from</span> <span class="nn">SubWindowSerialTerm</span> <span class="k">import</span> <span class="n">SubWindowSerialTerm</span>
+<span class="kn">from</span> <span class="nn">SubWindowTTS</span> <span class="k">import</span> <span class="n">SubWindowTTS</span>
+<span class="kn">from</span> <span class="nn">DlgCamViewer</span> <span class="k">import</span> <span class="n">DlgCamViewer</span>
+<span class="kn">from</span> <span class="nn">DlgFaceRecog</span> <span class="k">import</span> <span class="n">DlgFaceRecog</span>
+
+<span class="n">__appname__</span> <span class="o">=</span> <span class="s2">&quot;EMBD Mobile Robot Test&quot;</span>
+<span class="n">__author__</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;Raim.Delgado&quot;</span>
+<span class="n">__build__</span> <span class="o">=</span> <span class="s2">&quot;2022.01.22&quot;</span>
+<span class="n">__credits__</span> <span class="o">=</span> <span class="s2">&quot;Prof. Byoung Wook Choi&quot;</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;GPL&quot;</span>
+<span class="n">__status__</span> <span class="o">=</span> <span class="s2">&quot;(Alpha)&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.0.1&quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">__status__</span>
+<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s2">&quot;Raim.Delgado&quot;</span>
+<span class="n">__email__</span> <span class="o">=</span> <span class="s2">&quot;raim223@seoultech.ac.kr&quot;</span>
+
+
+<div class="viewcode-block" id="ThreadMonitoring"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.ThreadMonitoring">[docs]</a><span class="k">class</span> <span class="nc">ThreadMonitoring</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QThread</span><span class="p">):</span>
+    <span class="n">_keepAlive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">sig_terminated</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
+    <span class="n">sig_current_time</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ThreadMonitoring</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ThreadMonitoring.run"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.ThreadMonitoring.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keepAlive</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sig_current_time</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">msleep</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_terminated</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ThreadMonitoring.stop"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.ThreadMonitoring.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_keepAlive</span> <span class="o">=</span> <span class="kc">False</span></div></div>
+
+
+<div class="viewcode-block" id="MainWindow"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.MainWindow">[docs]</a><span class="k">class</span> <span class="nc">MainWindow</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QMainWindow</span><span class="p">):</span>
+    <span class="n">_widgetMdiBground</span><span class="p">:</span> <span class="n">EmbdMdiBground</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_dockSystemLog</span><span class="p">:</span> <span class="n">DockLogger</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_dockCommLog</span><span class="p">:</span> <span class="n">DockLogger</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_dockProcMonitor</span><span class="p">:</span> <span class="n">DockProcessMonitor</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_dockServerConnect</span><span class="p">:</span> <span class="n">DockServerConnect</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1"># _dockPathPlanSim: DockPathPlanSim = None</span>
+    <span class="n">_dockStellaB2Ctrl</span><span class="p">:</span> <span class="n">DockStellaB2Ctrl</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_dockKobuki2Ctrl</span><span class="p">:</span> <span class="n">DockKobuki2Ctrl</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_dockExaRobotCtrl</span><span class="p">:</span> <span class="n">DockExaRobotCtrl</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_subwinBezierTraj</span><span class="p">:</span> <span class="n">SubWindowTrajGen</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_subwinSerialTerm</span><span class="p">:</span> <span class="n">SubWindowSerialTerm</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_subwinTTSTest</span><span class="p">:</span> <span class="n">SubWindowTTS</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_dlgCamViewer</span><span class="p">:</span> <span class="n">DlgCamViewer</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_dlgFaceRecog</span><span class="p">:</span> <span class="n">DlgFaceRecog</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_threadMonitor</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ThreadMonitoring</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_core</span><span class="p">:</span> <span class="n">EmbdControlCore</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aembdCore</span><span class="p">:</span> <span class="n">EmbdControlCore</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MainWindow</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span> <span class="o">=</span> <span class="n">aembdCore</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initUi</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initThreadMonitoring</span><span class="p">()</span>
+
+<div class="viewcode-block" id="MainWindow.closeEvent"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.MainWindow.closeEvent">[docs]</a>    <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a0</span><span class="p">:</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QCloseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="MainWindow.release"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.MainWindow.release">[docs]</a>    <span class="k">def</span> <span class="nf">release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stopThreadMonitoring</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="MainWindow.initUi"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.MainWindow.initUi">[docs]</a>    <span class="k">def</span> <span class="nf">initUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">centralWidget</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">MainLayout</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">centralWidget</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setCentralWidget</span><span class="p">(</span><span class="n">centralWidget</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="n">__appname__</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowIcon</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s2">&quot;seoultech_icon.png&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initMdiBground</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">1265</span><span class="p">,</span> <span class="mi">891</span><span class="p">)</span>
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_widgetMdiBground</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">initMenuBar</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initToolBar</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initSubWindows</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initDocks</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initDialog</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initStatusBar</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initSlots</span><span class="p">()</span>
+
+        <span class="c1"># get process monitor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">get_proc_info</span><span class="p">()</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">get_proc_info</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="MainWindow.initDialog"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.MainWindow.initDialog">[docs]</a>    <span class="k">def</span> <span class="nf">initDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dlgCamViewer</span> <span class="o">=</span> <span class="n">DlgCamViewer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dlgCamViewer</span><span class="o">.</span><span class="n">sig_close</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">stopCam</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dlgCamViewer</span><span class="o">.</span><span class="n">sig_stop</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">stopCam</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dlgCamViewer</span><span class="o">.</span><span class="n">sig_start</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">onCamStart</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_cam_recv_stream</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dlgCamViewer</span><span class="o">.</span><span class="n">on_get_image</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_cam_stopped_stream</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dlgCamViewer</span><span class="o">.</span><span class="n">on_stopped_cam</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dlgFaceRecog</span> <span class="o">=</span> <span class="n">DlgFaceRecog</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_facerecog_stream</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dlgFaceRecog</span><span class="o">.</span><span class="n">on_get_image</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MainWindow.initToolBar"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.MainWindow.initToolBar">[docs]</a>    <span class="k">def</span> <span class="nf">initToolBar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBar</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QToolBar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addToolBar</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">TopToolBarArea</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">toolBar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBar</span><span class="o">.</span><span class="n">setMovable</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># steady</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBar</span><span class="o">.</span><span class="n">addSeparator</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBar</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowBezier</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBar</span><span class="o">.</span><span class="n">addSeparator</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBar</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowSerialTerm</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBar</span><span class="o">.</span><span class="n">addSeparator</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBar</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowTTS</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBar</span><span class="o">.</span><span class="n">addSeparator</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">showDlgCamera</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s1">&#39;camera.png&#39;</span><span class="p">),</span> <span class="s1">&#39;Camera Viewer&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showDlgCamera</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onTriggeredDlg</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">showDlgFaceRecognition</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s1">&#39;face.png&#39;</span><span class="p">),</span> <span class="s1">&#39;Face Recognition&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showDlgFaceRecognition</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onTriggeredDlgFaceRecog</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBar</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showDlgCamera</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBar</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showDlgFaceRecognition</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBar</span><span class="o">.</span><span class="n">addSeparator</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="MainWindow.initMenuBar"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.MainWindow.initMenuBar">[docs]</a>    <span class="k">def</span> <span class="nf">initMenuBar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuBar</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QMenuBar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuBar</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;menuBar&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setMenuBar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">menuBar</span><span class="p">)</span>
+        <span class="n">fileMenu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">menuBar</span><span class="o">.</span><span class="n">addMenu</span><span class="p">(</span><span class="s1">&#39;&amp;File&#39;</span><span class="p">)</span>
+        <span class="n">viewMenu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">menuBar</span><span class="o">.</span><span class="n">addMenu</span><span class="p">(</span><span class="s1">&#39;&amp;View&#39;</span><span class="p">)</span>
+        <span class="n">dockMenu</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QMenu</span><span class="p">(</span><span class="s1">&#39;&amp;Docks&#39;</span><span class="p">,</span> <span class="n">viewMenu</span><span class="p">)</span>
+        <span class="n">subWinMenu</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QMenu</span><span class="p">(</span><span class="s1">&#39;&amp;SubWindows&#39;</span><span class="p">,</span> <span class="n">viewMenu</span><span class="p">)</span>
+        <span class="n">viewMenu</span><span class="o">.</span><span class="n">addMenu</span><span class="p">(</span><span class="n">dockMenu</span><span class="p">)</span>
+        <span class="n">viewMenu</span><span class="o">.</span><span class="n">addMenu</span><span class="p">(</span><span class="n">subWinMenu</span><span class="p">)</span>
+        <span class="n">closeAction</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s1">&#39;close_box_red.ico&#39;</span><span class="p">),</span> <span class="s1">&#39;Close&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">closeAction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">)</span>
+        <span class="n">fileMenu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">closeAction</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">showExaRobotCtrlPanelAction</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span><span class="s1">&#39;&amp;ExaRobot Control Panel&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showExaRobotCtrlPanelAction</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showExaRobotCtrlPanelAction</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">dockMenu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showExaRobotCtrlPanelAction</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">showKobuki2CtrlPanelAction</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span><span class="s1">&#39;&amp;Kobuki2 Control Panel&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showKobuki2CtrlPanelAction</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showKobuki2CtrlPanelAction</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">dockMenu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showKobuki2CtrlPanelAction</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showStellaB2CtrlPanelAction</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span><span class="s1">&#39;&amp;StellaB2 Control Panel&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showStellaB2CtrlPanelAction</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showStellaB2CtrlPanelAction</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">dockMenu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showStellaB2CtrlPanelAction</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showServerConnDockAction</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span><span class="s1">&#39;&amp;Server Connection&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showServerConnDockAction</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showServerConnDockAction</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">dockMenu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showServerConnDockAction</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showCommLogDockAction</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span><span class="s1">&#39;&amp;Communication Log&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showCommLogDockAction</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showCommLogDockAction</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">dockMenu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showCommLogDockAction</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showSysLogDockAction</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span><span class="s1">&#39;&amp;System Log&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showSysLogDockAction</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showSysLogDockAction</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">dockMenu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showSysLogDockAction</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showProcMonitorAction</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span><span class="s1">&#39;&amp;Process Monitor&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showProcMonitorAction</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showProcMonitorAction</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">dockMenu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showProcMonitorAction</span><span class="p">)</span>
+
+        <span class="c1"># self.showPathPlannerDockAction = QtWidgets.QAction(&#39;&amp;Path Planner Simulation&#39;, self)</span>
+        <span class="c1"># self.showPathPlannerDockAction.setCheckable(True)</span>
+        <span class="c1"># self.showPathPlannerDockAction.setChecked(True)</span>
+        <span class="c1"># dockMenu.addAction(self.showPathPlannerDockAction)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowBezier</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span><span class="s1">&#39;&amp;Bezier Trajectory&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowBezier</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowBezier</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowBezier</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s2">&quot;path.png&quot;</span><span class="p">))</span>
+        <span class="n">subWinMenu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowBezier</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowSerialTerm</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;&amp;Serial Terminal&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowSerialTerm</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowSerialTerm</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowSerialTerm</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s2">&quot;serial_port_icon.svg&quot;</span><span class="p">))</span>
+        <span class="n">subWinMenu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowSerialTerm</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowTTS</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;&amp;TTS Test&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowTTS</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowTTS</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowTTS</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s2">&quot;tts.png&quot;</span><span class="p">))</span>
+        <span class="n">subWinMenu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowTTS</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MainWindow.initSlots"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.MainWindow.initSlots">[docs]</a>    <span class="k">def</span> <span class="nf">initSlots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># stella b2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_stellab2_comm_status</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">state</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">onConnectStatusMobileRobot</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dockStellaB2Ctrl</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_stellab2_get_ver</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockStellaB2Ctrl</span><span class="o">.</span><span class="n">set_fb_version</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_stellab2_is_monitoring</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockStellaB2Ctrl</span><span class="o">.</span><span class="n">on_changed_monitoring_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_stellab2_get_vel</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockStellaB2Ctrl</span><span class="o">.</span><span class="n">set_fb_velocity</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_stellab2_get_enc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockStellaB2Ctrl</span><span class="o">.</span><span class="n">set_fb_encoder</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_stellab2_get_state</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockStellaB2Ctrl</span><span class="o">.</span><span class="n">set_fb_state</span><span class="p">)</span>
+
+        <span class="c1"># kobuki2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_kobuki2_comm_status</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">state</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">onConnectStatusMobileRobot</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dockKobuki2Ctrl</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_kobuki2_get_ver</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockKobuki2Ctrl</span><span class="o">.</span><span class="n">set_fb_fw_version</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_kobuki2_get_vel</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockKobuki2Ctrl</span><span class="o">.</span><span class="n">set_fb_velocity</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_kobuki2_get_enc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockKobuki2Ctrl</span><span class="o">.</span><span class="n">set_fb_encoder</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_kobuki2_get_hw_ver</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockKobuki2Ctrl</span><span class="o">.</span><span class="n">set_fb_hw_version</span><span class="p">)</span>
+
+        <span class="c1"># Exa Robot</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_exarobot_get_vel</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockExaRobotCtrl</span><span class="o">.</span><span class="n">set_fb_velocity</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_exarobot_get_enc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockExaRobotCtrl</span><span class="o">.</span><span class="n">set_fb_encoder</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_exarobot_comm_status</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">state</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">onConnectStatusMobileRobot</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dockExaRobotCtrl</span><span class="p">))</span>
+
+        <span class="c1"># proc monitor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_proc_monitor_pid</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockProcMonitor</span><span class="o">.</span><span class="n">on_update_dict</span><span class="p">)</span>
+
+        <span class="c1"># external comm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_external_comm_client_connected</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockServerConnect</span><span class="o">.</span><span class="n">addClient</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_external_comm_client_disconnected</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockServerConnect</span><span class="o">.</span><span class="n">removeClient</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_external_comm_server_status</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onConnectStatusExternalComm</span><span class="p">)</span>
+
+        <span class="c1"># stt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_stt_msg</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subwinTTSTest</span><span class="o">.</span><span class="n">add_sst_message</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">is_newline</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+        <span class="c1"># actions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showKobuki2CtrlPanelAction</span><span class="o">.</span><span class="n">toggled</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">onToggleAction</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dockKobuki2Ctrl</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showStellaB2CtrlPanelAction</span><span class="o">.</span><span class="n">toggled</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">onToggleAction</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dockStellaB2Ctrl</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showSysLogDockAction</span><span class="o">.</span><span class="n">toggled</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">onToggleAction</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dockSystemLog</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showCommLogDockAction</span><span class="o">.</span><span class="n">toggled</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">onToggleAction</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dockCommLog</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showProcMonitorAction</span><span class="o">.</span><span class="n">toggled</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">onToggleAction</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dockProcMonitor</span><span class="p">))</span>
+        <span class="c1"># self.showPathPlannerDockAction.toggled.connect(lambda x: self.onToggleAction(x, self._dockPathPlanSim))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showServerConnDockAction</span><span class="o">.</span><span class="n">toggled</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">onToggleAction</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dockServerConnect</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowBezier</span><span class="o">.</span><span class="n">toggled</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">onToggleAction</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subwinBezierTraj</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowSerialTerm</span><span class="o">.</span><span class="n">toggled</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">onToggleAction</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subwinSerialTerm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowTTS</span><span class="o">.</span><span class="n">toggled</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">onToggleAction</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subwinTTSTest</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="MainWindow.onConnectStatusExternalComm"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.MainWindow.onConnectStatusExternalComm">[docs]</a>    <span class="k">def</span> <span class="nf">onConnectStatusExternalComm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">bStarted</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">state</span> <span class="o">==</span> <span class="s2">&quot;START&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ledSocketConnect</span><span class="o">.</span><span class="n">TurnOnG</span><span class="p">()</span>
+            <span class="n">bStarted</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">state</span> <span class="o">==</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ledSocketConnect</span><span class="o">.</span><span class="n">TurnOnR</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ledSocketConnect</span><span class="o">.</span><span class="n">TurnOff</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockServerConnect</span><span class="o">.</span><span class="n">onServerStart</span><span class="p">(</span><span class="n">bStarted</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MainWindow.onConnectStatusMobileRobot"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.MainWindow.onConnectStatusMobileRobot">[docs]</a>    <span class="k">def</span> <span class="nf">onConnectStatusMobileRobot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dockCtrl</span><span class="p">:</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDockWidget</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">state</span> <span class="o">==</span> <span class="s2">&quot;CONNECTED&quot;</span><span class="p">:</span>
+            <span class="n">dockCtrl</span><span class="o">.</span><span class="n">on_serial_connect</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">state</span> <span class="o">==</span> <span class="s2">&quot;DISCONNECTED&quot;</span><span class="p">:</span>
+            <span class="n">dockCtrl</span><span class="o">.</span><span class="n">on_serial_disconnect</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dockCtrl</span><span class="o">.</span><span class="n">on_serial_error</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="MainWindow.onToggleAction"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.MainWindow.onToggleAction">[docs]</a>    <span class="k">def</span> <span class="nf">onToggleAction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">dockToSetVisible</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDockWidget</span><span class="p">,</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QMdiSubWindow</span><span class="p">]):</span>
+        <span class="n">dockToSetVisible</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MainWindow.onCloseWindow"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.MainWindow.onCloseWindow">[docs]</a>    <span class="k">def</span> <span class="nf">onCloseWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subWindow</span><span class="p">:</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">,</span> <span class="n">qtAction</span><span class="p">:</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">):</span>
+        <span class="n">subWindow</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">qtAction</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span>
+            <span class="n">qtAction</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MainWindow.onTriggeredDlg"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.MainWindow.onTriggeredDlg">[docs]</a>    <span class="k">def</span> <span class="nf">onTriggeredDlg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dlgCamViewer</span><span class="o">.</span><span class="n">isVisible</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dlgCamViewer</span> <span class="o">=</span> <span class="n">DlgCamViewer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dlgCamViewer</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dlgCamViewer</span><span class="o">.</span><span class="n">sig_close</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">stopCam</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dlgCamViewer</span><span class="o">.</span><span class="n">sig_stop</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">stopCam</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dlgCamViewer</span><span class="o">.</span><span class="n">sig_start</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">onCamStart</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_cam_recv_stream</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dlgCamViewer</span><span class="o">.</span><span class="n">on_get_image</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_cam_stopped_stream</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dlgCamViewer</span><span class="o">.</span><span class="n">on_stopped_cam</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dlgCamViewer</span><span class="o">.</span><span class="n">activateWindow</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="MainWindow.onTriggeredDlgFaceRecog"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.MainWindow.onTriggeredDlgFaceRecog">[docs]</a>    <span class="k">def</span> <span class="nf">onTriggeredDlgFaceRecog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dlgFaceRecog</span><span class="o">.</span><span class="n">isVisible</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dlgFaceRecog</span> <span class="o">=</span> <span class="n">DlgFaceRecog</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dlgFaceRecog</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+            <span class="c1"># self._dlgFaceRecog.sig_close.connect(self._core.stopCam)</span>
+            <span class="c1"># self._dlgFaceRecog.sig_stop.connect(self._core.stopCam)</span>
+            <span class="c1"># self._dlgFaceRecog.sig_start.connect(self._core.onCamStart)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">sig_facerecog_stream</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dlgFaceRecog</span><span class="o">.</span><span class="n">on_get_image</span><span class="p">)</span>
+            <span class="c1"># self._core.sig_cam_stopped_stream.connect(self._dlgCamViewer.on_stopped_cam)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dlgFaceRecog</span><span class="o">.</span><span class="n">activateWindow</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="MainWindow.initThreadMonitoring"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.MainWindow.initThreadMonitoring">[docs]</a>    <span class="k">def</span> <span class="nf">initThreadMonitoring</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadMonitor</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadMonitor</span> <span class="o">=</span> <span class="n">ThreadMonitoring</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadMonitor</span><span class="o">.</span><span class="n">sig_current_time</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onThreadMonitorUpdateTime</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadMonitor</span><span class="o">.</span><span class="n">sig_terminated</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onThreadMonitorTerminate</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadMonitor</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="MainWindow.stopThreadMonitoring"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.MainWindow.stopThreadMonitoring">[docs]</a>    <span class="k">def</span> <span class="nf">stopThreadMonitoring</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadMonitor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadMonitor</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="MainWindow.onThreadMonitorUpdateTime"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.MainWindow.onThreadMonitorUpdateTime">[docs]</a>    <span class="k">def</span> <span class="nf">onThreadMonitorUpdateTime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cur_time</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lblCurrentDatetime</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">cur_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subwinSerialTerm</span><span class="o">.</span><span class="n">onThreadMonitorUpdateTime</span><span class="p">(</span><span class="n">cur_time</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MainWindow.onThreadMonitorTerminate"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.MainWindow.onThreadMonitorTerminate">[docs]</a>    <span class="k">def</span> <span class="nf">onThreadMonitorTerminate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadMonitor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_threadMonitor</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="MainWindow.initSubWindows"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.MainWindow.initSubWindows">[docs]</a>    <span class="k">def</span> <span class="nf">initSubWindows</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subwinBezierTraj</span> <span class="o">=</span> <span class="n">SubWindowTrajGen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subwinBezierTraj</span><span class="o">.</span><span class="n">sig_close</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">onCloseWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_subwinBezierTraj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowBezier</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subwinBezierTraj</span><span class="o">.</span><span class="n">sig_ros_add_vel_cmd</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">ros_vel_pub_add_vel</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subwinBezierTraj</span><span class="o">.</span><span class="n">sig_ros_reg_vel_cmd</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">ros_vel_pub_reg_vel</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subwinBezierTraj</span><span class="o">.</span><span class="n">sig_ros_stop_timer</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">ros_vel_pub_stop_timer</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subwinBezierTraj</span><span class="o">.</span><span class="n">sig_ros_start_timer</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">ros_vel_pub_start_timer</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subwinBezierTraj</span><span class="o">.</span><span class="n">sig_ros_clear_vel_cmd</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">ros_vel_pub_clear</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subwinBezierTraj</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subwinSerialTerm</span> <span class="o">=</span> <span class="n">SubWindowSerialTerm</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subwinSerialTerm</span><span class="o">.</span><span class="n">sig_close</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">onCloseWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_subwinSerialTerm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowSerialTerm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subwinSerialTerm</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subwinTTSTest</span> <span class="o">=</span> <span class="n">SubWindowTTS</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subwinTTSTest</span><span class="o">.</span><span class="n">sig_text_to_convert</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">tts_send_msg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subwinTTSTest</span><span class="o">.</span><span class="n">sig_listen_sst</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">start_stt_listen</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subwinTTSTest</span><span class="o">.</span><span class="n">sig_close</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">onCloseWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_subwinTTSTest</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">showSubWindowTTS</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subwinTTSTest</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetMdiBground</span><span class="o">.</span><span class="n">addSubWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_subwinSerialTerm</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetMdiBground</span><span class="o">.</span><span class="n">addSubWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_subwinBezierTraj</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetMdiBground</span><span class="o">.</span><span class="n">addSubWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_subwinTTSTest</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MainWindow.initDocks"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.MainWindow.initDocks">[docs]</a>    <span class="k">def</span> <span class="nf">initDocks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockServerConnect</span> <span class="o">=</span> <span class="n">DockServerConnect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockServerConnect</span><span class="o">.</span><span class="n">sig_start_server</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">external_comm_start</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockServerConnect</span><span class="o">.</span><span class="n">sig_stop_server</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">external_comm_stop</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockServerConnect</span><span class="o">.</span><span class="n">sig_send_msg</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">external_comm_send_raw</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockServerConnect</span><span class="o">.</span><span class="n">sig_disconnect_client</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">external_comm_disconnect_client</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockServerConnect</span><span class="o">.</span><span class="n">sig_close</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">onCloseWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockServerConnect</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">showServerConnDockAction</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addDockWidget</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">LeftDockWidgetArea</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dockServerConnect</span><span class="p">)</span>
+
+        <span class="c1"># self._dockPathPlanSim = DockPathPlanSim(self)</span>
+        <span class="c1"># self._dockPathPlanSim.sig_planner_pos.connect(self._core.startPathPlanningSim)</span>
+        <span class="c1"># self.addDockWidget(QtCore.Qt.RightDockWidgetArea, self._dockPathPlanSim)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockStellaB2Ctrl</span> <span class="o">=</span> <span class="n">DockStellaB2Ctrl</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockStellaB2Ctrl</span><span class="o">.</span><span class="n">sig_serial_connect</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">stellab2_connect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockStellaB2Ctrl</span><span class="o">.</span><span class="n">sig_serial_disconnect</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">stellab2_disconnect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockStellaB2Ctrl</span><span class="o">.</span><span class="n">sig_set_monitoring</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">stellab2_set_monitoring</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockStellaB2Ctrl</span><span class="o">.</span><span class="n">sig_reset</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">stellab2_reset_motor</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockStellaB2Ctrl</span><span class="o">.</span><span class="n">sig_init</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">stellab2_factory_reset</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockStellaB2Ctrl</span><span class="o">.</span><span class="n">sig_move_joint_space</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">stellab2_move_joint_space</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockStellaB2Ctrl</span><span class="o">.</span><span class="n">sig_stop_type</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">stellab2_stop_robot</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockStellaB2Ctrl</span><span class="o">.</span><span class="n">sig_close</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">onCloseWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockStellaB2Ctrl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">showStellaB2CtrlPanelAction</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addDockWidget</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">BottomDockWidgetArea</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dockStellaB2Ctrl</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockKobuki2Ctrl</span> <span class="o">=</span> <span class="n">DockKobuki2Ctrl</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockKobuki2Ctrl</span><span class="o">.</span><span class="n">sig_serial_connect</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">kobuki2_connect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockKobuki2Ctrl</span><span class="o">.</span><span class="n">sig_serial_disconnect</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">kobuki2_disconnect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockKobuki2Ctrl</span><span class="o">.</span><span class="n">sig_move_robot</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">kobuki2_set_velocity_control</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockKobuki2Ctrl</span><span class="o">.</span><span class="n">sig_init</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">kobuki2_factory_reset</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockKobuki2Ctrl</span><span class="o">.</span><span class="n">sig_reset</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">kobuki2_reset_motor</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockKobuki2Ctrl</span><span class="o">.</span><span class="n">sig_close</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">onCloseWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockKobuki2Ctrl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">showKobuki2CtrlPanelAction</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addDockWidget</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">BottomDockWidgetArea</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dockKobuki2Ctrl</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tabifyDockWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockStellaB2Ctrl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dockKobuki2Ctrl</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockExaRobotCtrl</span> <span class="o">=</span> <span class="n">DockExaRobotCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockExaRobotCtrl</span><span class="o">.</span><span class="n">sig_close</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">onCloseWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockExaRobotCtrl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">showExaRobotCtrlPanelAction</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockExaRobotCtrl</span><span class="o">.</span><span class="n">sig_serial_connect</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">exarobot_connect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockExaRobotCtrl</span><span class="o">.</span><span class="n">sig_serial_disconnect</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">exarobot_disconnect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockExaRobotCtrl</span><span class="o">.</span><span class="n">sig_move_robot</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">exarobot_set_velocity_control</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockExaRobotCtrl</span><span class="o">.</span><span class="n">sig_init</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">exarobot_factory_reset</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockExaRobotCtrl</span><span class="o">.</span><span class="n">sig_reset</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">exarobot_reset_motor</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockExaRobotCtrl</span><span class="o">.</span><span class="n">sig_close</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">onCloseWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockExaRobotCtrl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">showExaRobotCtrlPanelAction</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">addDockWidget</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">BottomDockWidgetArea</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dockExaRobotCtrl</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tabifyDockWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockKobuki2Ctrl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dockExaRobotCtrl</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockSystemLog</span> <span class="o">=</span> <span class="n">DockLogger</span><span class="p">(</span><span class="s1">&#39;System Log&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockSystemLog</span><span class="o">.</span><span class="n">sig_close</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">onCloseWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockSystemLog</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">showSysLogDockAction</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockCommLog</span> <span class="o">=</span> <span class="n">DockLogger</span><span class="p">(</span><span class="s1">&#39;Communication Log&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockCommLog</span><span class="o">.</span><span class="n">sig_close</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">onCloseWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockCommLog</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">showCommLogDockAction</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockProcMonitor</span> <span class="o">=</span> <span class="n">DockProcessMonitor</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockProcMonitor</span><span class="o">.</span><span class="n">sig_btn_refresh</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_core</span><span class="o">.</span><span class="n">get_proc_info</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dockProcMonitor</span><span class="o">.</span><span class="n">sig_close</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">onCloseWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockCommLog</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">showProcMonitorAction</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">addDockWidget</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">BottomDockWidgetArea</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dockSystemLog</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addDockWidget</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">BottomDockWidgetArea</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dockCommLog</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addDockWidget</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">BottomDockWidgetArea</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dockProcMonitor</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tabifyDockWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockCommLog</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dockSystemLog</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tabifyDockWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dockSystemLog</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dockProcMonitor</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MainWindow.initMdiBground"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.MainWindow.initMdiBground">[docs]</a>    <span class="k">def</span> <span class="nf">initMdiBground</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetMdiBground</span> <span class="o">=</span> <span class="n">EmbdMdiBground</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetMdiBground</span><span class="o">.</span><span class="n">setInfoEnv</span><span class="p">(</span><span class="s2">&quot;[&quot;</span> <span class="o">+</span> <span class="n">__appname__</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span><span class="p">,</span> <span class="n">__version__</span><span class="p">,</span> <span class="n">__build__</span><span class="p">,</span> <span class="n">__author__</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MainWindow.initStatusBar"><a class="viewcode-back" href="../Inc/MainWindow.html#MainWindow.MainWindow.initStatusBar">[docs]</a>    <span class="k">def</span> <span class="nf">initStatusBar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QStatusBar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s2">&quot;statusBar&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">setMaximumHeight</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setStatusBar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ledSocketConnect</span> <span class="o">=</span> <span class="n">EmbdLed</span><span class="p">(</span><span class="s2">&quot;SOCKET&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ledSocketConnect</span><span class="o">.</span><span class="n">setLedSize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ledSocketConnect</span><span class="o">.</span><span class="n">setTextSize</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ledSocketConnect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lblCurrentDatetime</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lblCurrentDatetime</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span> <span class="o">|</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">addPermanentWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lblCurrentDatetime</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

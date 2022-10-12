@@ -1,0 +1,5 @@
+[35m[1mScanning dependencies of target realsense2_camera[0m
+[ 12%] Built target realsense2_camera_node
+[ 25%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/realsense_node_factory.cpp.o[0m
+[ 25%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/t265_realsense_node.cpp.o[0m
+[ 31%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/base_realsense_node.cpp.o[0m

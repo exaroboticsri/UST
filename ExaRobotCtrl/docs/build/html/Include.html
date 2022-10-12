@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Overview &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Include" href="Inc/modules.html" />
+    <link rel="prev" title="Modules" href="apis.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="apis.html">Modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apis.html#include">Include</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apis.html#library">Library</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="apis.html">Modules</a> &raquo;</li>
+      <li>Overview</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Include.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h1>
+<ul class="simple">
+<li><p>Include</p></li>
+</ul>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="text-center head"><p>Module</p></th>
+<th class="text-center head"><p>Description</p></th>
+<th class="text-center head"><p>Etc</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>Commons</p></td>
+<td class="text-center"><p>기본적으로 사용되는 공통 모듈</p></td>
+<td class="text-center"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>ControlCore</p></td>
+<td class="text-center"><p>메인 컨트롤러로서 장치, 인터페이스 및 제어 모듈</p></td>
+<td class="text-center"><p></p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>MainWindow</p></td>
+<td class="text-center"><p>사용자 인터페이스(GUI)의 신호 및 슬롯 모듈</p></td>
+<td class="text-center"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>UiCommon</p></td>
+<td class="text-center"><p>GUI 공통 모듈</p></td>
+<td class="text-center"><p></p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>AudioRecognition</p></td>
+<td class="text-center"><p>음성 인식 모듈</p></td>
+<td class="text-center"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>Dialog</p></td>
+<td class="text-center"><p>카메라 뷰어 및 얼굴 인식 모듈</p></td>
+<td class="text-center"><p></p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>DockWidgets</p></td>
+<td class="text-center"><p>기능별 GUI를 구성하는 독 위젯 모듈</p></td>
+<td class="text-center"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>ExternalComm</p></td>
+<td class="text-center"><p>소켓 사용 외부 통신모듈 (TCP, UDP..)</p></td>
+<td class="text-center"><p></p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>MdiBackground</p></td>
+<td class="text-center"><p>GUI 배경 구성 모듈</p></td>
+<td class="text-center"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>Misc</p></td>
+<td class="text-center"><p>상태 표시를 위한 GUI 모듈</p></td>
+<td class="text-center"><p></p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>MobileRobot</p></td>
+<td class="text-center"><p>로봇 제어 를 위한 인터페이스 모듈</p></td>
+<td class="text-center"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>MultiProcessing</p></td>
+<td class="text-center"><p>멀티 프로세서 구현을 Base 및 기능별 구현 프로세스 모듈</p></td>
+<td class="text-center"><p></p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>PathPlanning</p></td>
+<td class="text-center"><p>경로 계획 모듈</p></td>
+<td class="text-center"><p>AStar, Dijkstra 구현</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>ROSIntegration</p></td>
+<td class="text-center"><p>ROS2를 인터페이스 를 위한 모듈</p></td>
+<td class="text-center"><p></p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>TextToSpeech</p></td>
+<td class="text-center"><p>음성 안내를 위한 모듈</p></td>
+<td class="text-center"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>SubWindow</p></td>
+<td class="text-center"><p>서브 윈도우 GUI 모듈</p></td>
+<td class="text-center"><p>TTS, Serial Term, Trajectort Gen 등.</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>SerialTerm</p></td>
+<td class="text-center"><p>Serial Term 기능 및 서브 윈도우를 구성하는 위젯 GUI 모듈</p></td>
+<td class="text-center"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>TrajectoryGenerator</p></td>
+<td class="text-center"><p>TrajectoryGenerator 기능 및 서브 윈도우를 구성하는 위젯 GUI 모듈</p></td>
+<td class="text-center"><p></p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>Library</p></li>
+</ul>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="text-center head"><p>Module</p></th>
+<th class="text-center head"><p>Description</p></th>
+<th class="text-center head"><p>Etc</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>Camera</p></td>
+<td class="text-center"><p>카메라 장치 인터페이스를 위한 모듈</p></td>
+<td class="text-center"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>Serial</p></td>
+<td class="text-center"><p>Serial 인터페이스를 위한 모듈</p></td>
+<td class="text-center"><p></p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>Socket</p></td>
+<td class="text-center"><p>외부 통신을 위한 소켓 모듈</p></td>
+<td class="text-center"><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="apis.html" class="btn btn-neutral float-left" title="Modules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Inc/modules.html" class="btn btn-neutral float-right" title="Include" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

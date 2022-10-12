@@ -1,0 +1,9 @@
+{
+  "package_name": "realsense2_camera_msgs",
+  "non_idl_tuples": [
+    "/home/jw/robot/ros_ws/src/ExaRobot_ROS2/realsense-ros/realsense2_camera_msgs:msg/IMUInfo.msg",
+    "/home/jw/robot/ros_ws/src/ExaRobot_ROS2/realsense-ros/realsense2_camera_msgs:msg/Extrinsics.msg",
+    "/home/jw/robot/ros_ws/src/ExaRobot_ROS2/realsense-ros/realsense2_camera_msgs:msg/Metadata.msg",
+    "/home/jw/robot/ros_ws/src/ExaRobot_ROS2/realsense-ros/realsense2_camera_msgs:srv/DeviceInfo.srv"
+  ]
+}

@@ -1,0 +1,38 @@
+[35m[1mScanning dependencies of target velocity_smoother[0m
+[ 25%] [32mBuilding CXX object CMakeFiles/velocity_smoother.dir/src/velocity_smoother.cpp.o[0m
+[ 50%] [32m[1mLinking CXX shared library libvelocity_smoother.so[0m
+[ 50%] Built target velocity_smoother
+[35m[1mScanning dependencies of target velocity_smoother_node[0m
+[ 75%] [32mBuilding CXX object CMakeFiles/velocity_smoother_node.dir/src/velocity_smoother_node.cpp.o[0m
+[100%] [32m[1mLinking CXX executable velocity_smoother[0m
+[100%] Built target velocity_smoother_node
+-- Install configuration: ""
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/lib/libvelocity_smoother.so
+-- Set runtime path of "/home/jw/robot/ros_ws/install/velocity_smoother/lib/libvelocity_smoother.so" to ""
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/include/velocity_smoother
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/include/velocity_smoother/velocity_smoother.hpp
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/lib/velocity_smoother/velocity_smoother
+-- Set runtime path of "/home/jw/robot/ros_ws/install/velocity_smoother/lib/velocity_smoother/velocity_smoother" to ""
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/config
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/config/velocity_smoother_params.yaml
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/launch
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/launch/velocity_smoother-composed-launch.py
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/launch/velocity_smoother-launch.py
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/lib/velocity_smoother/translational_command_profile.py
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/launch_test/test_translational_smoothing.py
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/share/ament_index/resource_index/package_run_dependencies/velocity_smoother
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/share/ament_index/resource_index/parent_prefix_path/velocity_smoother
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/environment/ament_prefix_path.sh
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/environment/ament_prefix_path.dsv
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/environment/path.sh
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/environment/path.dsv
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/local_setup.bash
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/local_setup.sh
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/local_setup.zsh
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/local_setup.dsv
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/package.dsv
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/share/ament_index/resource_index/packages/velocity_smoother
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/share/ament_index/resource_index/rclcpp_components/velocity_smoother
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/cmake/velocity_smootherConfig.cmake
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/cmake/velocity_smootherConfig-version.cmake
+-- Installing: /home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/package.xml

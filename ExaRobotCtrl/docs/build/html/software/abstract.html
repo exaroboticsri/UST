@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>개요 &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="설계" href="sw1.html" />
+    <link rel="prev" title="Jetson 시스템 설치 (Jetpack 5.0.2)" href="../develop_env/jetson_install2.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">개요</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">기술</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exa">EXA 로봇 적용 예시</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>개요</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/software/abstract.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="id1">
+<h1>개요<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
+<p>서비스 로봇을 위한 기능 구현을 위해서 ROS2.0 기반의 확장 가능한 유연한 소프트웨어 구조를 채택
+개발언어는 Python을 사용한다.</p>
+<ul class="simple">
+<li><p>AI 기술을 사용한 인간친화적 서비스 기술을 이미 구현된 Python 패키지를 통하여 쉽게 적용가능</p></li>
+<li><p>다양하고 유용한 Python 패키지 모듈의 제공으로 쉽고 빠른 개발가능</p></li>
+<li><p>ROS사용으로 구현에 필요한 적합한 수많은 유용한 패키지를 조합하여 integration 하여 보다 손쉽게 로봇개발 가능</p></li>
+</ul>
+<hr class="docutils" />
+<div class="section" id="id2">
+<h2>기술<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="text-center head"><p>항목</p></th>
+<th class="text-center head"><p>종류</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>지원 로봇 플랫폼</p></td>
+<td class="text-center"><p>Kobuki 2, Stella b2, EXA-robot</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>AI Core</p></td>
+<td class="text-center"><p>TTS, STT ,Facecognition, Obeject Detection &amp; Tracking</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>Navigation</p></td>
+<td class="text-center"><p>Navagation2 Stack</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>SLAM</p></td>
+<td class="text-center"><p>Cartographer</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>ROS2 package</p></td>
+<td class="text-center"><p>Cartographer, Realsense, Nav2, Lidar</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr class="docutils" />
+<div class="section" id="exa">
+<h2>EXA 로봇 적용 예시<a class="headerlink" href="#exa" title="Permalink to this heading"></a></h2>
+<p>EXA 로봇 제어를 위해 컨트롤 보드에 적용된 소프트웨어 구조는 아래와 같다.</p>
+<!-- <img src="../image/sw_deployment.png" width="1200px" height="800px" title="Software diagram" alt="sw_deployment"></img> -->
+<p><img alt="sw_deployment" src="../_images/sw_deployment.png" /></p>
+<ul class="simple">
+<li><p>테스트 영상</p></li>
+</ul>
+<iframe width="600" height="400" src="https://www.youtube.com/embed/eUQFtpxet1k" title="2019 CNU 임베디드 챌린지 3조 1차 주행 (성공)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../develop_env/jetson_install2.html" class="btn btn-neutral float-left" title="Jetson 시스템 설치 (Jetpack 5.0.2)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sw1.html" class="btn btn-neutral float-right" title="설계" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

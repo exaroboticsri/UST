@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SocketCommon &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>SocketCommon</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for SocketCommon</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="c1"># File Name    : SocketCommon.py</span>
+<span class="c1"># Project Name : ExaRobotCtrl</span>
+<span class="c1"># Author       : Raim.Delgado</span>
+<span class="c1"># Organization : SeoulTech</span>
+<span class="c1"># Description  :</span>
+<span class="c1"># [Revision History]</span>
+<span class="c1"># &gt;&gt; 2021.07.09 - First Commit</span>
+<span class="c1"># &gt;&gt; 2022.05.04 - Add TCP Server</span>
+<span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">queue</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span>
+
+<span class="n">FILE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>  <span class="c1"># %PROJECT_ROOT%/Library/Socket</span>
+<span class="n">ROOT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">FILE_PATH</span><span class="p">))</span>
+<span class="n">SOURCES_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Sources&quot;</span><span class="p">)</span>
+<span class="n">MDI_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;MdiBackground&quot;</span><span class="p">)</span>
+<span class="n">DOCK_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;DockWidgets&quot;</span><span class="p">)</span>
+<span class="n">MISC_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Misc&quot;</span><span class="p">)</span>
+<span class="n">RESOURCES_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Resources&quot;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">SOURCES_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">DOCK_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">])</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+<span class="k">del</span> <span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">SOURCES_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">DOCK_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span>
+
+<span class="kn">from</span> <span class="nn">Commons</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="EmbdSocket"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdSocket">[docs]</a><span class="k">class</span> <span class="nc">EmbdSocket</span><span class="p">:</span>
+    <span class="n">_socket</span><span class="p">:</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">afTimeOut</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">EmbdSocket</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_connected</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_connect_failed</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_disconnected</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_error</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buffsz</span> <span class="o">=</span> <span class="n">MAX_SERIAL_BUFFER</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_threadSend</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_threadRecv</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_queueSend</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_queueRecv</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_logging</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fTimeOut</span> <span class="o">=</span> <span class="n">afTimeOut</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bIsSocketInit</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bIsSocketTcp</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="EmbdSocket.init_socket_with_server"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdSocket.init_socket_with_server">[docs]</a>    <span class="k">def</span> <span class="nf">init_socket_with_server</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aSocket</span><span class="p">:</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span> <span class="o">=</span> <span class="n">aSocket</span></div>
+
+<div class="viewcode-block" id="EmbdSocket.init_socket"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdSocket.init_socket">[docs]</a>    <span class="k">def</span> <span class="nf">init_socket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bIsTcp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">nSocketType</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_DGRAM</span>  <span class="c1"># UDP</span>
+        <span class="k">if</span> <span class="n">bIsTcp</span><span class="p">:</span>
+            <span class="n">nSocketType</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">nSocketType</span><span class="p">)</span>
+
+        <span class="c1"># reuse address to prevent &quot;Address already in use&quot; error</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SO_REUSEADDR</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bIsSocketInit</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bIsSocketTcp</span> <span class="o">=</span> <span class="n">bIsTcp</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="EmbdSocket.shutdown_socket"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdSocket.shutdown_socket">[docs]</a>    <span class="k">def</span> <span class="nf">shutdown_socket</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SHUT_RDWR</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdSocket.connect_to_server"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdSocket.connect_to_server">[docs]</a>    <span class="k">def</span> <span class="nf">connect_to_server</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strAddr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">nPort</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">afTimeOut</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_socket_init</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="n">afTimeOut</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="n">strAddr</span><span class="p">,</span> <span class="n">nPort</span><span class="p">))</span>
+
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">setblocking</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="EmbdSocket.set_blocking"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdSocket.set_blocking">[docs]</a>    <span class="k">def</span> <span class="nf">set_blocking</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bIsBlocking</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_socket_init</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">setblocking</span><span class="p">(</span><span class="n">bIsBlocking</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdSocket.bind_address"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdSocket.bind_address">[docs]</a>    <span class="k">def</span> <span class="nf">bind_address</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anPort</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">strAddress</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_socket_init</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span>
+
+        <span class="c1"># only TCP needs listening</span>
+        <span class="n">strHost</span> <span class="o">=</span> <span class="n">strAddress</span>  <span class="c1"># default is blank, which is INADDRY_ANY or &#39;0.0.0.0&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="n">strHost</span><span class="p">,</span> <span class="n">anPort</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="EmbdSocket.listen_socket"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdSocket.listen_socket">[docs]</a>    <span class="k">def</span> <span class="nf">listen_socket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anBackLog</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_socket_init</span><span class="p">()</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_socket_tcp</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span>
+
+        <span class="c1"># only TCP needs listening</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="n">anBackLog</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdSocket.accept_client"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdSocket.accept_client">[docs]</a>    <span class="k">def</span> <span class="nf">accept_client</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_socket_init</span><span class="p">()</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_socket_tcp</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="EmbdSocket.close_socket"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdSocket.close_socket">[docs]</a>    <span class="k">def</span> <span class="nf">close_socket</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="p">:</span>
+            <span class="c1"># self.shutdown_socket()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+            <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">shutdown_socket</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">close_socket</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="EmbdSocket.is_socket_tcp"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdSocket.is_socket_tcp">[docs]</a>    <span class="k">def</span> <span class="nf">is_socket_tcp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bIsSocketTcp</span></div>
+
+<div class="viewcode-block" id="EmbdSocket.is_socket_init"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdSocket.is_socket_init">[docs]</a>    <span class="k">def</span> <span class="nf">is_socket_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bIsSocketInit</span></div>
+
+<div class="viewcode-block" id="EmbdSocket.get_socket"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdSocket.get_socket">[docs]</a>    <span class="k">def</span> <span class="nf">get_socket</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span></div>
+
+<div class="viewcode-block" id="EmbdSocket.get_buff_size"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdSocket.get_buff_size">[docs]</a>    <span class="k">def</span> <span class="nf">get_buff_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffsz</span></div></div>
+
+
+<div class="viewcode-block" id="TcpClientRcvThread"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.TcpClientRcvThread">[docs]</a><span class="k">class</span> <span class="nc">TcpClientRcvThread</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
+    <span class="n">keepAlive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">asSocket</span><span class="p">:</span> <span class="n">EmbdSocket</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TcpClientRcvThread</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_recv</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">bytes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_terminated</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span> <span class="o">=</span> <span class="n">asSocket</span><span class="o">.</span><span class="n">get_socket</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buffsize</span> <span class="o">=</span> <span class="n">asSocket</span><span class="o">.</span><span class="n">get_buff_size</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TcpClientRcvThread.stop"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.TcpClientRcvThread.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keepAlive</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="TcpClientRcvThread.run"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.TcpClientRcvThread.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">write_log</span><span class="p">(</span><span class="s2">&quot;Started&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">keepAlive</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">recv_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffsize</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">recv_data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">sig_recv</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">recv_data</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="n">write_log</span><span class="p">(</span><span class="s2">&quot;Terminated&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_terminated</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="TcpClientSendThread"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.TcpClientSendThread">[docs]</a><span class="k">class</span> <span class="nc">TcpClientSendThread</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
+    <span class="n">keepAlive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">asSocket</span><span class="p">:</span> <span class="n">EmbdSocket</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TcpClientSendThread</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_send</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">bytes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_terminated</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span> <span class="o">=</span> <span class="n">asSocket</span><span class="o">.</span><span class="n">get_socket</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span> <span class="o">=</span> <span class="n">q</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buffsize</span> <span class="o">=</span> <span class="n">asSocket</span><span class="o">.</span><span class="n">get_buff_size</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TcpClientSendThread.stop"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.TcpClientSendThread.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keepAlive</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="TcpClientSendThread.run"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.TcpClientSendThread.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bBreakFromException</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">write_log</span><span class="p">(</span><span class="s2">&quot;Started&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">keepAlive</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">empty</span><span class="p">():</span>
+                    <span class="n">send_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">send_data</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">sig_send</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">send_data</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">bBreakFromException</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span>
+
+        <span class="n">write_log</span><span class="p">(</span><span class="s2">&quot;Terminated&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_terminated</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">bBreakFromException</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="EmbdTcpClient"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpClient">[docs]</a><span class="k">class</span> <span class="nc">EmbdTcpClient</span><span class="p">:</span>
+    <span class="n">_threadRecv</span><span class="p">:</span> <span class="n">TcpClientRcvThread</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_threadSend</span><span class="p">:</span> <span class="n">TcpClientSendThread</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_queueSend</span><span class="p">:</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_isConnected</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span> <span class="o">=</span> <span class="n">EmbdSocket</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_connected</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">tuple</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_disconnected</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">tuple</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_send_data</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">bytes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_recv_data</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">bytes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tupleAddPort</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">()</span>
+
+<div class="viewcode-block" id="EmbdTcpClient.connect_to_server"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpClient.connect_to_server">[docs]</a>    <span class="k">def</span> <span class="nf">connect_to_server</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strAddress</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">nPort</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">close_socket</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">init_socket</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">bRet</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">connect_to_server</span><span class="p">(</span><span class="n">strAddress</span><span class="p">,</span> <span class="n">nPort</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">bRet</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">start_listening</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tupleAddPort</span> <span class="o">=</span> <span class="p">(</span><span class="n">strAddress</span><span class="p">,</span> <span class="n">nPort</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">bRet</span></div>
+
+<div class="viewcode-block" id="EmbdTcpClient.init_with_server"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpClient.init_with_server">[docs]</a>    <span class="k">def</span> <span class="nf">init_with_server</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aSocket</span><span class="p">:</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">,</span> <span class="n">tplAddPort</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">init_socket_with_server</span><span class="p">(</span><span class="n">aSocket</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tupleAddPort</span> <span class="o">=</span> <span class="n">tplAddPort</span></div>
+
+<div class="viewcode-block" id="EmbdTcpClient.start_listening"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpClient.start_listening">[docs]</a>    <span class="k">def</span> <span class="nf">start_listening</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_isConnected</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_recv_thread</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_send_thread</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_connected</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tupleAddPort</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">start_recv_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadRecv</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadRecv</span> <span class="o">=</span> <span class="n">TcpClientRcvThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadRecv</span><span class="o">.</span><span class="n">sig_recv</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_recv_recv_thread</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadRecv</span><span class="o">.</span><span class="n">sig_terminated</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_terminated_recv_thread</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadRecv</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">stop_recv_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadRecv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadRecv</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">on_recv_recv_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abData</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_recv_data</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">abData</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">on_terminated_recv_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadRecv</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_threadRecv</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_connected</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_isConnected</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">sendData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sData</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># String to Bytes: Ascii</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+                <span class="n">tmp</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+                <span class="n">sData</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">bytearray</span><span class="p">):</span>
+                <span class="n">sData</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_queueSend</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">sData</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">start_send_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadSend</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_queueSend</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadSend</span> <span class="o">=</span> <span class="n">TcpClientSendThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queueSend</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadSend</span><span class="o">.</span><span class="n">sig_send</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_send_send_thread</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadSend</span><span class="o">.</span><span class="n">sig_terminated</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_terminated_send_thread</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadSend</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">stop_send_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadSend</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadSend</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">on_send_send_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abData</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_send_data</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">abData</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">on_terminated_send_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bBreakFromException</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadSend</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_threadSend</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">bBreakFromException</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_isConnected</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_recv_thread</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_send_thread</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">close_socket</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sig_disconnected</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tupleAddPort</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">is_connected</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_isConnected</span>
+
+<div class="viewcode-block" id="EmbdTcpClient.start_recv_thread"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpClient.start_recv_thread">[docs]</a>    <span class="k">def</span> <span class="nf">start_recv_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadRecv</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadRecv</span> <span class="o">=</span> <span class="n">TcpClientRcvThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadRecv</span><span class="o">.</span><span class="n">sig_recv</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_recv_recv_thread</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadRecv</span><span class="o">.</span><span class="n">sig_terminated</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_terminated_recv_thread</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadRecv</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="EmbdTcpClient.stop_recv_thread"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpClient.stop_recv_thread">[docs]</a>    <span class="k">def</span> <span class="nf">stop_recv_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadRecv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadRecv</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="EmbdTcpClient.on_recv_recv_thread"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpClient.on_recv_recv_thread">[docs]</a>    <span class="k">def</span> <span class="nf">on_recv_recv_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abData</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_recv_data</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">abData</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdTcpClient.on_terminated_recv_thread"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpClient.on_terminated_recv_thread">[docs]</a>    <span class="k">def</span> <span class="nf">on_terminated_recv_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadRecv</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_threadRecv</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_isConnected</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="EmbdTcpClient.sendData"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpClient.sendData">[docs]</a>    <span class="k">def</span> <span class="nf">sendData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sData</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># String to Bytes: Ascii</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+                <span class="n">tmp</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+                <span class="n">sData</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">bytearray</span><span class="p">):</span>
+                <span class="n">sData</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_queueSend</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">sData</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="EmbdTcpClient.start_send_thread"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpClient.start_send_thread">[docs]</a>    <span class="k">def</span> <span class="nf">start_send_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadSend</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_queueSend</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadSend</span> <span class="o">=</span> <span class="n">TcpClientSendThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queueSend</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadSend</span><span class="o">.</span><span class="n">sig_send</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_send_send_thread</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadSend</span><span class="o">.</span><span class="n">sig_terminated</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_terminated_recv_thread</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadSend</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="EmbdTcpClient.stop_send_thread"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpClient.stop_send_thread">[docs]</a>    <span class="k">def</span> <span class="nf">stop_send_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadSend</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadSend</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="EmbdTcpClient.on_send_send_thread"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpClient.on_send_send_thread">[docs]</a>    <span class="k">def</span> <span class="nf">on_send_send_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abData</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_send_data</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">abData</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdTcpClient.on_terminated_send_thread"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpClient.on_terminated_send_thread">[docs]</a>    <span class="k">def</span> <span class="nf">on_terminated_send_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadSend</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_threadSend</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_isConnected</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="EmbdTcpClient.close"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpClient.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_recv_thread</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_send_thread</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">close_socket</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_disconnected</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tupleAddPort</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="EmbdTcpClient.is_connected"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpClient.is_connected">[docs]</a>    <span class="k">def</span> <span class="nf">is_connected</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_isConnected</span></div></div>
+
+
+<span class="k">class</span> <span class="nc">EmbdTcpServer</span><span class="p">:</span>
+    <span class="n">_listClients</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EmbdTcpClient</span><span class="p">]</span>
+    <span class="n">_threadAcceptClient</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_threadKillDeadClient</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="EmbdTcpServer"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpServer">[docs]</a><span class="k">class</span> <span class="nc">EmbdTcpServer</span><span class="p">:</span>
+    <span class="n">_listClients</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EmbdTcpClient</span><span class="p">]</span>
+    <span class="n">_threadAcceptClient</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_threadKillDeadClient</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">EmbdTcpServer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_start</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_stop</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_send_data</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">bytes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_recv_data</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">bytes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_accept_client</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">tuple</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_disconnect_client</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">tuple</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span> <span class="o">=</span> <span class="n">EmbdSocket</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_listClients</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="EmbdTcpServer.start_server"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpServer.start_server">[docs]</a>    <span class="k">def</span> <span class="nf">start_server</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anPort</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">strIPAddr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">anBackLog</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">abIsNonBlocking</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">init_socket</span><span class="p">(</span><span class="n">bIsTcp</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">bind_address</span><span class="p">(</span><span class="n">anPort</span><span class="p">,</span> <span class="n">strIPAddr</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">listen_socket</span><span class="p">(</span><span class="n">anBackLog</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">abIsNonBlocking</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">set_blocking</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">sig_start</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
+
+        <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">strIPAddr</span><span class="p">:</span>
+            <span class="n">strIPAddr</span> <span class="o">=</span> <span class="s2">&quot;localhost&quot;</span>
+
+        <span class="n">write_log</span><span class="p">(</span><span class="s2">&quot;Starting server: &quot;</span> <span class="o">+</span> <span class="n">strIPAddr</span> <span class="o">+</span> <span class="s2">&quot;:</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">anPort</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_client_accept_thread</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_client_killer_thread</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="EmbdTcpServer.send_to_clients"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpServer.send_to_clients">[docs]</a>    <span class="k">def</span> <span class="nf">send_to_clients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">client</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_listClients</span><span class="p">:</span>
+            <span class="n">client</span><span class="o">.</span><span class="n">sendData</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdTcpServer.add_client"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpServer.add_client">[docs]</a>    <span class="k">def</span> <span class="nf">add_client</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aClient</span><span class="p">:</span> <span class="n">EmbdTcpClient</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_listClients</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aClient</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdTcpServer.remove_client_by_address"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpServer.remove_client_by_address">[docs]</a>    <span class="k">def</span> <span class="nf">remove_client_by_address</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tplAddrPort</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">client</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_listClients</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">client</span><span class="o">.</span><span class="n">tupleAddPort</span> <span class="o">==</span> <span class="n">tplAddrPort</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">remove_client</span><span class="p">(</span><span class="n">client</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdTcpServer.remove_client"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpServer.remove_client">[docs]</a>    <span class="k">def</span> <span class="nf">remove_client</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aClient</span><span class="p">:</span> <span class="n">EmbdTcpClient</span><span class="p">):</span>
+        <span class="n">aClient</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_listClients</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">aClient</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdTcpServer.get_clients"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpServer.get_clients">[docs]</a>    <span class="k">def</span> <span class="nf">get_clients</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_listClients</span></div>
+
+<div class="viewcode-block" id="EmbdTcpServer.is_connected"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpServer.is_connected">[docs]</a>    <span class="k">def</span> <span class="nf">is_connected</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_listClients</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="EmbdTcpServer.accept_client"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpServer.accept_client">[docs]</a>    <span class="k">def</span> <span class="nf">accept_client</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">accept_client</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="EmbdTcpServer.start_client_accept_thread"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpServer.start_client_accept_thread">[docs]</a>    <span class="k">def</span> <span class="nf">start_client_accept_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadAcceptClient</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadAcceptClient</span> <span class="o">=</span> <span class="n">ClientAcceptThread</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadAcceptClient</span><span class="o">.</span><span class="n">sig_terminated</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_terminate_client_accept_thread</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadAcceptClient</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="EmbdTcpServer.stop_client_accept_thread"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpServer.stop_client_accept_thread">[docs]</a>    <span class="k">def</span> <span class="nf">stop_client_accept_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadAcceptClient</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadAcceptClient</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="EmbdTcpServer.on_terminate_client_accept_thread"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpServer.on_terminate_client_accept_thread">[docs]</a>    <span class="k">def</span> <span class="nf">on_terminate_client_accept_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadAcceptClient</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_threadAcceptClient</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="EmbdTcpServer.start_client_killer_thread"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpServer.start_client_killer_thread">[docs]</a>    <span class="k">def</span> <span class="nf">start_client_killer_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadKillDeadClient</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadKillDeadClient</span> <span class="o">=</span> <span class="n">ClientKillerThread</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadKillDeadClient</span><span class="o">.</span><span class="n">sig_terminated</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_terminate_client_killer_thread</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadKillDeadClient</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="EmbdTcpServer.stop_client_killer_thread"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpServer.stop_client_killer_thread">[docs]</a>    <span class="k">def</span> <span class="nf">stop_client_killer_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadKillDeadClient</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadKillDeadClient</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="EmbdTcpServer.on_terminate_client_killer_thread"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpServer.on_terminate_client_killer_thread">[docs]</a>    <span class="k">def</span> <span class="nf">on_terminate_client_killer_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadKillDeadClient</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_threadKillDeadClient</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="EmbdTcpServer.on_client_recv"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpServer.on_client_recv">[docs]</a>    <span class="k">def</span> <span class="nf">on_client_recv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abData</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_recv_data</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">abData</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdTcpServer.on_client_send"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpServer.on_client_send">[docs]</a>    <span class="k">def</span> <span class="nf">on_client_send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abData</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_send_data</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">abData</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdTcpServer.on_accept_client"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpServer.on_accept_client">[docs]</a>    <span class="k">def</span> <span class="nf">on_accept_client</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tplAddPort</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_accept_client</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">tplAddPort</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdTcpServer.on_disconnect_client"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpServer.on_disconnect_client">[docs]</a>    <span class="k">def</span> <span class="nf">on_disconnect_client</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tplAddPort</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_disconnect_client</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">tplAddPort</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdTcpServer.stop"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.EmbdTcpServer.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_client_accept_thread</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_client_killer_thread</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">client</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_listClients</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_listClients</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">close_socket</span><span class="p">()</span>
+        <span class="n">write_log</span><span class="p">(</span><span class="s2">&quot;Stopped server!&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_stop</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="ClientKillerThread"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.ClientKillerThread">[docs]</a><span class="k">class</span> <span class="nc">ClientKillerThread</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
+    <span class="n">_keepAlive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="n">EmbdTcpServer</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ClientKillerThread</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_server</span> <span class="o">=</span> <span class="n">server</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_terminated</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ClientKillerThread.stop"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.ClientKillerThread.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_keepAlive</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="ClientKillerThread.run"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.ClientKillerThread.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keepAlive</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">client</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">get_clients</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">client</span><span class="o">.</span><span class="n">is_connected</span><span class="p">():</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">remove_client</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_terminated</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="ClientAcceptThread"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.ClientAcceptThread">[docs]</a><span class="k">class</span> <span class="nc">ClientAcceptThread</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
+    <span class="n">_keepAlive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="n">EmbdTcpServer</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ClientAcceptThread</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_server</span> <span class="o">=</span> <span class="n">server</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_terminated</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ClientAcceptThread.stop"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.ClientAcceptThread.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_keepAlive</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="ClientAcceptThread.run"><a class="viewcode-back" href="../Lib/Socket/SocketCommon.html#SocketCommon.ClientAcceptThread.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keepAlive</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">client_sck</span><span class="p">,</span> <span class="n">client_address</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">accept_client</span><span class="p">()</span>  <span class="c1"># this should be blocking</span>
+                <span class="n">newClient</span> <span class="o">=</span> <span class="n">EmbdTcpClient</span><span class="p">()</span>
+                <span class="n">newClient</span><span class="o">.</span><span class="n">sig_connected</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">on_accept_client</span><span class="p">)</span>
+                <span class="n">newClient</span><span class="o">.</span><span class="n">sig_disconnected</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">on_disconnect_client</span><span class="p">)</span>
+                <span class="n">newClient</span><span class="o">.</span><span class="n">sig_send_data</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">on_client_send</span><span class="p">)</span>
+                <span class="n">newClient</span><span class="o">.</span><span class="n">sig_recv_data</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">on_client_recv</span><span class="p">)</span>
+                <span class="n">newClient</span><span class="o">.</span><span class="n">init_with_server</span><span class="p">(</span><span class="n">client_sck</span><span class="p">,</span> <span class="n">client_address</span><span class="p">)</span>
+                <span class="n">newClient</span><span class="o">.</span><span class="n">start_listening</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">add_client</span><span class="p">(</span><span class="n">newClient</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_terminated</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

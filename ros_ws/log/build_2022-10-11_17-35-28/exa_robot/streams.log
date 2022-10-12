@@ -1,0 +1,22 @@
+[1.538s] Invoking command in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/exa_robot': PYTHONPATH=/home/jw/robot/ros_ws/install/exa_robot/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../../build/exa_robot build --build-base /home/jw/robot/ros_ws/build/exa_robot/build install --prefix /home/jw/robot/ros_ws/install/exa_robot --record /home/jw/robot/ros_ws/build/exa_robot/install.log --single-version-externally-managed
+[2.035s] running egg_info
+[2.035s] writing ../../../build/exa_robot/exa_robot.egg-info/PKG-INFO
+[2.041s] writing dependency_links to ../../../build/exa_robot/exa_robot.egg-info/dependency_links.txt
+[2.042s] writing entry points to ../../../build/exa_robot/exa_robot.egg-info/entry_points.txt
+[2.042s] writing requirements to ../../../build/exa_robot/exa_robot.egg-info/requires.txt
+[2.042s] writing top-level names to ../../../build/exa_robot/exa_robot.egg-info/top_level.txt
+[2.092s] reading manifest file '../../../build/exa_robot/exa_robot.egg-info/SOURCES.txt'
+[2.092s] writing manifest file '../../../build/exa_robot/exa_robot.egg-info/SOURCES.txt'
+[2.092s] running build
+[2.093s] running build_py
+[2.094s] running install
+[2.094s] running install_lib
+[2.095s] running install_data
+[2.095s] copying config/nav2_params.yaml -> /home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/config
+[2.095s] running install_egg_info
+[2.100s] removing '/home/jw/robot/ros_ws/install/exa_robot/lib/python3.8/site-packages/exa_robot-0.0.0-py3.8.egg-info' (and everything under it)
+[2.101s] Copying ../../../build/exa_robot/exa_robot.egg-info to /home/jw/robot/ros_ws/install/exa_robot/lib/python3.8/site-packages/exa_robot-0.0.0-py3.8.egg-info
+[2.102s] running install_scripts
+[2.146s] Installing robot_node script to /home/jw/robot/ros_ws/install/exa_robot/lib/exa_robot
+[2.147s] writing list of installed files to '/home/jw/robot/ros_ws/build/exa_robot/install.log'
+[2.254s] Invoked command in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/exa_robot' returned '0': PYTHONPATH=/home/jw/robot/ros_ws/install/exa_robot/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../../build/exa_robot build --build-base /home/jw/robot/ros_ws/build/exa_robot/build install --prefix /home/jw/robot/ros_ws/install/exa_robot --record /home/jw/robot/ros_ws/build/exa_robot/install.log --single-version-externally-managed

@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ControlCore &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>ControlCore</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ControlCore</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="c1"># File Name    : ControlCore.py</span>
+<span class="c1"># Project Name : MobileRobotTest</span>
+<span class="c1"># Author       : Raim.Delgado</span>
+<span class="c1"># Organization : SeoulTech</span>
+<span class="c1"># Description  :</span>
+<span class="c1"># [Revision History]</span>
+<span class="c1"># &gt;&gt; 2021.08.24 - First Commit</span>
+<span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">queue</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="k">as</span> <span class="nn">mp</span>
+<span class="kn">from</span> <span class="nn">cmath</span> <span class="k">import</span> <span class="n">tan</span>
+<span class="kn">from</span> <span class="nn">tf_transformations</span> <span class="k">import</span> <span class="n">quaternion_from_euler</span><span class="p">,</span> <span class="n">euler_from_quaternion</span>
+
+<span class="n">FILE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>  <span class="c1"># %PROJECT_ROOT%/Include</span>
+<span class="n">ROOT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">FILE_PATH</span><span class="p">)</span>
+
+<span class="n">INCLUDE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Include&quot;</span><span class="p">)</span>
+<span class="n">MDI_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;MdiBackground&quot;</span><span class="p">)</span>
+<span class="n">DOCK_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;DockWidgets&quot;</span><span class="p">)</span>
+<span class="n">PATH_PLANNER_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;PathPlanning&quot;</span><span class="p">)</span>
+<span class="n">MOBILE_ROBOT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;MobileRobot&quot;</span><span class="p">)</span>
+<span class="n">MISC_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;Misc&quot;</span><span class="p">)</span>
+<span class="n">RESOURCES_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Resources&quot;</span><span class="p">)</span>
+<span class="n">MULTIPROC_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;MultiProcessing&quot;</span><span class="p">)</span>
+<span class="n">TTS_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s1">&#39;AudioRecognition&#39;</span><span class="p">)</span>
+<span class="n">LIBRATY_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Library&quot;</span><span class="p">)</span>
+<span class="n">CAMERA_DEV_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">LIBRATY_PATH</span><span class="p">,</span> <span class="s2">&quot;Devices/Camera&quot;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">DOCK_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">PATH_PLANNER_PATH</span><span class="p">,</span> <span class="n">MOBILE_ROBOT_PATH</span><span class="p">,</span>
+     <span class="n">MULTIPROC_PATH</span><span class="p">,</span> <span class="n">CAMERA_DEV_PATH</span><span class="p">,</span> <span class="n">TTS_PATH</span><span class="p">])</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+<span class="k">del</span> <span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">DOCK_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">PATH_PLANNER_PATH</span><span class="p">,</span> <span class="n">MOBILE_ROBOT_PATH</span><span class="p">,</span> <span class="n">MULTIPROC_PATH</span><span class="p">,</span> <span class="n">CAMERA_DEV_PATH</span><span class="p">,</span> <span class="n">TTS_PATH</span>
+
+<span class="kn">from</span> <span class="nn">Commons</span> <span class="k">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">MultiProcessing.MultiProcessBase</span> <span class="k">import</span> <span class="n">CMultiProcessBase</span>
+<span class="kn">import</span> <span class="nn">MultiProcessing.MPMobileRobot</span> <span class="k">as</span> <span class="nn">MPMobileRobot</span>
+<span class="kn">import</span> <span class="nn">MultiProcessing.MPExternalComm</span> <span class="k">as</span> <span class="nn">MPExternalComm</span>
+<span class="kn">from</span> <span class="nn">Library.Devices.Camera.CameraCommon</span> <span class="k">import</span> <span class="n">CCameraCommon</span>
+
+
+<span class="k">if</span> <span class="n">is_ros_installed</span><span class="p">():</span>
+    <span class="kn">import</span> <span class="nn">MultiProcessing.MPROSVelPub</span> <span class="k">as</span> <span class="nn">MPROSVelPub</span>
+    <span class="kn">import</span> <span class="nn">MultiProcessing.MPROSRobot</span> <span class="k">as</span> <span class="nn">MPROSRobot</span>
+    <span class="kn">import</span> <span class="nn">MultiProcessing.MPROSNavigation</span> <span class="k">as</span> <span class="nn">MPROSNavigation</span>
+    <span class="kn">import</span> <span class="nn">MultiProcessing.MPROSRealsense</span> <span class="k">as</span> <span class="nn">MPROSRealsense</span>
+    <span class="kn">from</span> <span class="nn">ROSIntegration.ROSNavigator</span> <span class="k">import</span> <span class="n">CROSNavigator</span>
+
+
+<div class="viewcode-block" id="EmbdControlCore"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore">[docs]</a><span class="k">class</span> <span class="nc">EmbdControlCore</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    메인 컨트롤러로서 로봇제어 및 서비스 기능 구현을 위한 모듈을 제어 할 수 있도록 인터페이스 메소드를 제공한다.</span>
+<span class="sd">    </span>
+<span class="sd">    MultiProcess 모듈을 상속받아 각 기능별 프로세스와 Queue,Pipe,Signal 등을 사용하여 제어할 수 있도록 구현됨</span>
+
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># queuePlotter: queue.Queue = None</span>
+    <span class="c1"># threadingPlotter: ThreadPlotter = None</span>
+    <span class="c1"># Robot</span>
+    <span class="n">_mpStellaB2</span><span class="p">:</span> <span class="n">CMultiProcessBase</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_mpKobuki2</span><span class="p">:</span> <span class="n">CMultiProcessBase</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_mpExaRobot</span><span class="p">:</span> <span class="n">CMultiProcessBase</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1"># ROS</span>
+    <span class="n">_mpROSCmdVelPub</span><span class="p">:</span> <span class="n">CMultiProcessBase</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_mpROSCmdVelSub</span><span class="p">:</span> <span class="n">CMultiProcessBase</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_mpROSRobotNode</span><span class="p">:</span> <span class="n">CMultiProcessBase</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_mpROSNavigation</span><span class="p">:</span> <span class="n">CMultiProcessBase</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_mpROSRealsense</span><span class="p">:</span> <span class="n">CMultiProcessBase</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1"># Etc</span>
+    <span class="n">_mpCamTest</span><span class="p">:</span> <span class="n">CMultiProcessBase</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_mpExternalComm</span><span class="p">:</span> <span class="n">CMultiProcessBase</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">_dictProc</span><span class="p">:</span> <span class="nb">dict</span>
+    <span class="n">_camTest</span><span class="p">:</span> <span class="n">CCameraCommon</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_face_pos_z</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_face_pos_y</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_face_pos_x</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_face_distance</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_pos_x</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_pos_y</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_pos_theta</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="n">write_log</span><span class="p">(</span><span class="s2">&quot;Started Control Core&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">EmbdControlCore</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="c1"># self.StartThreadPlanner()</span>
+
+        <span class="c1"># stella_b2 signals</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_stellab2_connected</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_stellab2_disconnected</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_stellab2_comm_error</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_stellab2_comm_status</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_stellab2_is_monitoring</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_stellab2_get_vel</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_stellab2_get_enc</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_stellab2_get_wheel_pos</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_stellab2_get_pos</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_stellab2_get_state</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_stellab2_get_ver</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+
+        <span class="c1"># kobuki2 signals</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_kobuki2_connected</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_kobuki2_disconnected</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_kobuki2_comm_error</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_kobuki2_comm_status</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_kobuki2_get_vel</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_kobuki2_get_enc</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_kobuki2_get_wheel_pos</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_kobuki2_get_pos</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_kobuki2_get_state</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_kobuki2_get_ver</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_kobuki2_get_hw_ver</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+
+        <span class="c1"># exarobot signals</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_exarobot_connected</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_exarobot_disconnected</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_exarobot_comm_error</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_exarobot_comm_status</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_exarobot_get_vel</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_exarobot_get_enc</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_exarobot_get_wheel_pos</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_exarobot_get_pos</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_exarobot_get_state</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="c1"># external comm signals</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_external_comm_server_status</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_external_comm_client_connected</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">tuple</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_external_comm_client_disconnected</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">tuple</span><span class="p">)</span>
+
+        <span class="c1"># camera</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_cam_recv_stream</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">tuple</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_cam_stopped_stream</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+
+        <span class="c1"># process manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_proc_monitor_pid</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dictProc</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+
+        <span class="c1"># multiprocessing</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_multi_processes</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stellab2_create</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kobuki2_create</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exarobot_create</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">external_comm_create</span><span class="p">()</span>
+ 
+        <span class="c1"># Navigator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">navigator</span> <span class="o">=</span> <span class="n">CROSNavigator</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prev_x</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prev_y</span> <span class="o">=</span> <span class="mf">0.</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dx</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dy</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">server_status</span> <span class="o">=</span> <span class="kc">False</span>
+<div class="viewcode-block" id="EmbdControlCore.release"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.release">[docs]</a>    <span class="k">def</span> <span class="nf">release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        생성된 모든 멀티 프로세서를 종료 한다.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_multi_processes</span><span class="p">()</span>
+        <span class="n">write_log</span><span class="p">(</span><span class="s2">&quot;Release Control Core&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
+        <span class="c1"># self.StopThreadPlanner()</span>
+
+<div class="viewcode-block" id="EmbdControlCore.init_multi_processes"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.init_multi_processes">[docs]</a>    <span class="k">def</span> <span class="nf">init_multi_processes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        멀티 프로세스를 생성하고 초기화한다.</span>
+<span class="sd">        </span>
+<span class="sd">        생성되는 프로세스</span>
+<span class="sd">        </span>
+<span class="sd">        proc_mobile_robot (Stella)</span>
+<span class="sd">        </span>
+<span class="sd">        proc_mobile_robot (Kobuki2)</span>
+<span class="sd">        </span>
+<span class="sd">        proc_mobile_robot (ExaRobot)</span>
+<span class="sd">        </span>
+<span class="sd">        proc_external_comm</span>
+<span class="sd">        </span>
+<span class="sd">        proc_text_to_speech</span>
+<span class="sd">        </span>
+<span class="sd">        proc_ros_robot_node</span>
+<span class="sd">        </span>
+<span class="sd">        proc_ros_nav_node</span>
+<span class="sd">        </span>
+<span class="sd">        proc_ros_rs_node</span>
+<span class="sd">                </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># main process</span>
+            <span class="c1"># mp.set_start_method(&#39;fork&#39;)</span>
+            <span class="n">appProc</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">current_process</span><span class="p">()</span>
+            <span class="n">pid</span> <span class="o">=</span> <span class="n">appProc</span><span class="o">.</span><span class="n">pid</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dictProc</span><span class="p">[</span><span class="s1">&#39;MAIN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pid</span>
+            <span class="n">this_proc</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+            <span class="n">this_proc</span><span class="o">.</span><span class="n">nice</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="c1"># set_cpu_affinity(appProc.pid, {1})</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpStellaB2</span> <span class="o">=</span> <span class="n">CMultiProcessBase</span><span class="p">(</span><span class="s1">&#39;Stella B2&#39;</span><span class="p">,</span> <span class="n">MPMobileRobot</span><span class="o">.</span><span class="n">proc_mobile_robot</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpStellaB2</span><span class="o">.</span><span class="n">sig_queue_bcast</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_stellab2_queue_bcast</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpStellaB2</span><span class="o">.</span><span class="n">sig_error</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_mp_error</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpStellaB2</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dictProc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mpStellaB2</span><span class="o">.</span><span class="n">NAME</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mpStellaB2</span><span class="o">.</span><span class="n">PID</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpKobuki2</span> <span class="o">=</span> <span class="n">CMultiProcessBase</span><span class="p">(</span><span class="s1">&#39;Kobuki2&#39;</span><span class="p">,</span> <span class="n">MPMobileRobot</span><span class="o">.</span><span class="n">proc_mobile_robot</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpKobuki2</span><span class="o">.</span><span class="n">sig_queue_bcast</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_kobuki2_queue_bcast</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpKobuki2</span><span class="o">.</span><span class="n">sig_error</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_mp_error</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpKobuki2</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dictProc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mpKobuki2</span><span class="o">.</span><span class="n">NAME</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mpKobuki2</span><span class="o">.</span><span class="n">PID</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpExaRobot</span> <span class="o">=</span> <span class="n">CMultiProcessBase</span><span class="p">(</span><span class="s1">&#39;ExaRobot&#39;</span><span class="p">,</span> <span class="n">MPMobileRobot</span><span class="o">.</span><span class="n">proc_mobile_robot</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpExaRobot</span><span class="o">.</span><span class="n">sig_queue_bcast</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_exarobot_queue_bcast</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpExaRobot</span><span class="o">.</span><span class="n">sig_error</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_mp_error</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpExaRobot</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dictProc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mpExaRobot</span><span class="o">.</span><span class="n">NAME</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mpExaRobot</span><span class="o">.</span><span class="n">PID</span>
+            <span class="c1"># set_cpu_affinity(self._mpExaRobot.PID, {1})</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpExternalComm</span> <span class="o">=</span> <span class="n">CMultiProcessBase</span><span class="p">(</span><span class="s1">&#39;ExternalComm&#39;</span><span class="p">,</span> <span class="n">MPExternalComm</span><span class="o">.</span><span class="n">proc_external_comm</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpExternalComm</span><span class="o">.</span><span class="n">sig_queue_bcast</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_external_comm_queue_bcast</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpExternalComm</span><span class="o">.</span><span class="n">sig_error</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_mp_error</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpExternalComm</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dictProc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mpExternalComm</span><span class="o">.</span><span class="n">NAME</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mpExternalComm</span><span class="o">.</span><span class="n">PID</span>
+
+        
+            
+            <span class="k">if</span> <span class="n">is_ros_installed</span><span class="p">():</span>
+                <span class="c1"># self._mpROSCmdVelPub = CMultiProcessBase(&#39;ROS Cmd Vel Pub&#39;, MPROSVelPub.proc_ros_vel_node, False, True)</span>
+                <span class="c1"># self._mpROSCmdVelPub.sig_queue_bcast.connect(self.on_ros_cmd_vel_pub)</span>
+                <span class="c1"># self._mpROSCmdVelPub.sig_error.connect(self.on_mp_error)</span>
+                <span class="c1"># self._mpROSCmdVelPub.start()</span>
+                <span class="c1"># self._dictProc[self._mpROSCmdVelPub.NAME] = self._mpROSCmdVelPub.PID</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mpROSRobotNode</span> <span class="o">=</span> <span class="n">CMultiProcessBase</span><span class="p">(</span><span class="s1">&#39;ROS Robot Node&#39;</span><span class="p">,</span> <span class="n">MPROSRobot</span><span class="o">.</span><span class="n">proc_ros_robot_node</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mpROSRobotNode</span><span class="o">.</span><span class="n">sig_queue_bcast</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_ros_robot_node_vel_sub</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mpROSRobotNode</span><span class="o">.</span><span class="n">sig_error</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_mp_error</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mpROSRobotNode</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dictProc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mpROSRobotNode</span><span class="o">.</span><span class="n">NAME</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mpROSRobotNode</span><span class="o">.</span><span class="n">PID</span>
+                <span class="c1"># set_cpu_affinity(self._mpROSRobotNode.PID, {1})</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mpROSNavigation</span> <span class="o">=</span> <span class="n">CMultiProcessBase</span><span class="p">(</span><span class="s1">&#39;ROS Robot Navigation&#39;</span><span class="p">,</span> <span class="n">MPROSNavigation</span><span class="o">.</span><span class="n">proc_ros_nav_node</span><span class="p">,</span>
+                                                          <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mpROSNavigation</span><span class="o">.</span><span class="n">sig_error</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_mp_error</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mpROSNavigation</span><span class="o">.</span><span class="n">sig_queue_bcast</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_nav_queue_bcast</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mpROSNavigation</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dictProc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mpROSNavigation</span><span class="o">.</span><span class="n">NAME</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mpROSNavigation</span><span class="o">.</span><span class="n">PID</span>
+                <span class="c1"># set_cpu_affinity(self._mpROSNavigation.PID, {0,3,4,5})</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mpROSRealsense</span> <span class="o">=</span> <span class="n">CMultiProcessBase</span><span class="p">(</span><span class="s1">&#39;ROS Robot Realsense&#39;</span><span class="p">,</span> <span class="n">MPROSRealsense</span><span class="o">.</span><span class="n">proc_ros_rs_node</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span>
+                                                         <span class="kc">False</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mpROSRealsense</span><span class="o">.</span><span class="n">sig_error</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_mp_error</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mpROSRealsense</span><span class="o">.</span><span class="n">sig_queue_bcast</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_ros_rs_node_queue_bcast</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mpROSRealsense</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dictProc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mpROSRealsense</span><span class="o">.</span><span class="n">NAME</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mpROSRealsense</span><span class="o">.</span><span class="n">PID</span>
+
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.get_proc_info"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.get_proc_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_proc_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        모니터링 프로세스에 관찰할 새로운 프로세스를 추가한다. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_proc_monitor_pid</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dictProc</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.stop_multi_processes"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.stop_multi_processes">[docs]</a>    <span class="k">def</span> <span class="nf">stop_multi_processes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        생성된 모든 멀티 프로세스를 종료한다.</span>
+<span class="sd">    </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># self.stellab2_release()</span>
+            <span class="c1"># self._mpStellaB2.release()</span>
+            <span class="c1"># self.kobuki2_release()</span>
+            <span class="c1"># self._mpKobuki2.release()</span>
+            <span class="c1"># self.exarobot_release()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpExaRobot</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">external_comm_release</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpExternalComm</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">is_ros_installed</span><span class="p">():</span>
+                <span class="c1"># self._mpROSCmdVelPub.release()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mpROSNavigation</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mpROSRobotNode</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mpROSRealsense</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+
+    <span class="c1">### Kobuki2 ####</span>
+<div class="viewcode-block" id="EmbdControlCore.send_cmd_kobuki2"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.send_cmd_kobuki2">[docs]</a>    <span class="k">def</span> <span class="nf">send_cmd_kobuki2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">acmd</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">aparams</span><span class="p">:</span> <span class="nb">object</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">aCmd</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">acmd</span><span class="p">)</span>
+        <span class="n">dictCmd</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">dictCmd</span><span class="p">[</span><span class="s2">&quot;CMD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aCmd</span>
+        <span class="n">dictCmd</span><span class="p">[</span><span class="s2">&quot;VAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aparams</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mpKobuki2</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">dictCmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.kobuki2_create"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.kobuki2_create">[docs]</a>    <span class="k">def</span> <span class="nf">kobuki2_create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_kobuki2</span><span class="p">(</span><span class="s1">&#39;CREATE&#39;</span><span class="p">,</span> <span class="s1">&#39;KOBUKI2&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.kobuki2_release"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.kobuki2_release">[docs]</a>    <span class="k">def</span> <span class="nf">kobuki2_release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_kobuki2</span><span class="p">(</span><span class="s1">&#39;RELEASE&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.kobuki2_connect"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.kobuki2_connect">[docs]</a>    <span class="k">def</span> <span class="nf">kobuki2_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strComPort</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_kobuki2</span><span class="p">(</span><span class="s1">&#39;CONNECT&#39;</span><span class="p">,</span> <span class="n">strComPort</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Robot Node Create&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ros_robot_node_create</span><span class="p">(</span><span class="mf">0.02</span><span class="p">,</span> <span class="s1">&#39;odom&#39;</span><span class="p">,</span> <span class="s1">&#39;cmd_vel&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Robot Node Timer Start (/tf, /odom publish)&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ros_robot_node_start_timer</span><span class="p">()</span></div>
+        <span class="c1"># print(&#39;Robot Realsense Node Launching&#39;)</span>
+        <span class="c1"># self.ros_rs_node_create()</span>
+        <span class="c1"># self.ros_rs_node_launch()</span>
+        <span class="c1"># print(&#39;Robot Navigation Stack Launching&#39;)</span>
+        <span class="c1"># self.ros_nav_node_create(&#39;3D&#39;)</span>
+        <span class="c1"># self.ros_nav_node_launch_nav_stack()</span>
+
+<div class="viewcode-block" id="EmbdControlCore.kobuki2_disconnect"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.kobuki2_disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">kobuki2_disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+        <span class="c1"># print(&quot;###ros_rs_node_release&quot;)</span>
+        <span class="c1"># self.ros_rs_node_release()</span>
+        <span class="c1"># print(&quot;###ros_nav_node_release&quot;)</span>
+        <span class="c1"># self.ros_nav_node_release()</span>
+        <span class="c1"># (&quot;###ros_robot_node_stop_timer&quot;)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ros_robot_node_stop_timer</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;###ros_robot_node_release&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ros_robot_node_release</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;###send_cmd_exarobot DISCONNECT&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_kobuki2</span><span class="p">(</span><span class="s1">&#39;DISCONNECT&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.kobuki2_reset_motor"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.kobuki2_reset_motor">[docs]</a>    <span class="k">def</span> <span class="nf">kobuki2_reset_motor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># send sound sequence 1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_kobuki2</span><span class="p">(</span><span class="s1">&#39;RESET_MOTOR&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.kobuki2_factory_reset"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.kobuki2_factory_reset">[docs]</a>    <span class="k">def</span> <span class="nf">kobuki2_factory_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># send sound sequence 0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_kobuki2</span><span class="p">(</span><span class="s1">&#39;INIT_MOTOR&#39;</span><span class="p">)</span></div>
+
+    <span class="c1"># todo: make this extendable to other robots</span>
+<div class="viewcode-block" id="EmbdControlCore.kobuki2_move_joint_space"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.kobuki2_move_joint_space">[docs]</a>    <span class="k">def</span> <span class="nf">kobuki2_move_joint_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">right_vel</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">left_vel</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_kobuki2</span><span class="p">(</span><span class="s2">&quot;MOVE_JOINT_SPACE&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">right_vel</span><span class="p">,</span> <span class="n">left_vel</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.kobuki2_set_velocity_control"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.kobuki2_set_velocity_control">[docs]</a>    <span class="k">def</span> <span class="nf">kobuki2_set_velocity_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vel</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ang_vel</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_kobuki2</span><span class="p">(</span><span class="s2">&quot;SET_VELOCITY_CONTROL&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">vel</span><span class="p">,</span> <span class="n">ang_vel</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.kobuki2_stop_robot"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.kobuki2_stop_robot">[docs]</a>    <span class="k">def</span> <span class="nf">kobuki2_stop_robot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stop_type</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_kobuki2</span><span class="p">(</span><span class="s2">&quot;STOP&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">stop_type</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.kobuki2_get_pos"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.kobuki2_get_pos">[docs]</a>    <span class="k">def</span> <span class="nf">kobuki2_get_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_kobuki2</span><span class="p">(</span><span class="s2">&quot;POS&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.on_kobuki2_queue_bcast"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.on_kobuki2_queue_bcast">[docs]</a>    <span class="k">def</span> <span class="nf">on_kobuki2_queue_bcast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;VERSION&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">version</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s1">&#39;VERSION&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_kobuki2_get_ver</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">version</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="s2">&quot;HW_VERSION&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">version</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s1">&#39;HW_VERSION&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_kobuki2_get_hw_ver</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">version</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="s2">&quot;COMM_STATUS&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">comm_status</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s1">&#39;COMM_STATUS&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_kobuki2_comm_status</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">comm_status</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="s2">&quot;ENCODER&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">right</span><span class="p">,</span> <span class="n">left</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;ENCODER&quot;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_kobuki2_get_enc</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">right</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">left</span><span class="p">))</span>
+
+            <span class="k">elif</span> <span class="s2">&quot;VELOCITY&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">right</span><span class="p">,</span> <span class="n">left</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;VELOCITY&quot;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_kobuki2_get_vel</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">right</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">left</span><span class="p">))</span>
+
+            <span class="k">elif</span> <span class="s2">&quot;WHEEL_POSITION&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">right</span><span class="p">,</span> <span class="n">left</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;WHEEL_POSITION&quot;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_kobuki2_get_wheel_pos</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">right</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">left</span><span class="p">))</span>
+
+            <span class="k">elif</span> <span class="s2">&quot;STATUS&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">state</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;STATUS&quot;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_kobuki2_get_state</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+
+            <span class="k">elif</span> <span class="s2">&quot;POSITION&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;POSITION&quot;</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">is_ros_installed</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ros_tf_pub_update_odom</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+
+    <span class="c1">### ROS CMD_VEL Publisher ####</span>
+<div class="viewcode-block" id="EmbdControlCore.send_cmd_ros_vel_pub"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.send_cmd_ros_vel_pub">[docs]</a>    <span class="k">def</span> <span class="nf">send_cmd_ros_vel_pub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">acmd</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">aparams</span><span class="p">:</span> <span class="nb">object</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">aCmd</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">acmd</span><span class="p">)</span>
+        <span class="n">dictCmd</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">dictCmd</span><span class="p">[</span><span class="s2">&quot;CMD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aCmd</span>
+        <span class="n">dictCmd</span><span class="p">[</span><span class="s2">&quot;VAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aparams</span>
+        <span class="k">if</span> <span class="n">is_ros_installed</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpROSCmdVelPub</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">dictCmd</span><span class="p">)</span></div>
+
+    <span class="c1"># todo: fPeriod should be a paramater of start_timer</span>
+<div class="viewcode-block" id="EmbdControlCore.ros_vel_pub_create"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_vel_pub_create">[docs]</a>    <span class="k">def</span> <span class="nf">ros_vel_pub_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fPeriod</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">strTopicName</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">createParam</span> <span class="o">=</span> <span class="p">(</span><span class="n">fPeriod</span><span class="p">,</span> <span class="n">strTopicName</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_vel_pub</span><span class="p">(</span><span class="s2">&quot;CREATE&quot;</span><span class="p">,</span> <span class="n">createParam</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_vel_pub_start_timer"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_vel_pub_start_timer">[docs]</a>    <span class="k">def</span> <span class="nf">ros_vel_pub_start_timer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_vel_pub</span><span class="p">(</span><span class="s2">&quot;START_TIMER&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_vel_pub_stop_timer"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_vel_pub_stop_timer">[docs]</a>    <span class="k">def</span> <span class="nf">ros_vel_pub_stop_timer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_vel_pub</span><span class="p">(</span><span class="s2">&quot;STOP_TIMER&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_vel_pub_clear"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_vel_pub_clear">[docs]</a>    <span class="k">def</span> <span class="nf">ros_vel_pub_clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_vel_pub</span><span class="p">(</span><span class="s2">&quot;CLEAR&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_vel_pub_add_vel"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_vel_pub_add_vel">[docs]</a>    <span class="k">def</span> <span class="nf">ros_vel_pub_add_vel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">velCmds</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_vel_pub</span><span class="p">(</span><span class="s2">&quot;ADD_VEL_CMD&quot;</span><span class="p">,</span> <span class="n">velCmds</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_vel_pub_reset_vel"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_vel_pub_reset_vel">[docs]</a>    <span class="k">def</span> <span class="nf">ros_vel_pub_reset_vel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_vel_pub</span><span class="p">(</span><span class="s2">&quot;RESET_VEL_CMD&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_vel_pub_reg_vel"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_vel_pub_reg_vel">[docs]</a>    <span class="k">def</span> <span class="nf">ros_vel_pub_reg_vel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">velCmds</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_vel_pub</span><span class="p">(</span><span class="s2">&quot;REG_VEL_CMD&quot;</span><span class="p">,</span> <span class="n">velCmds</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_vel_pub_destroy"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_vel_pub_destroy">[docs]</a>    <span class="k">def</span> <span class="nf">ros_vel_pub_destroy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_vel_pub</span><span class="p">(</span><span class="s2">&quot;DESTROY&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_vel_pub_release"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_vel_pub_release">[docs]</a>    <span class="k">def</span> <span class="nf">ros_vel_pub_release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_vel_pub</span><span class="p">(</span><span class="s2">&quot;RELEASE&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.on_ros_cmd_vel_pub"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.on_ros_cmd_vel_pub">[docs]</a>    <span class="k">def</span> <span class="nf">on_ros_cmd_vel_pub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">msg</span> <span class="o">==</span> <span class="s2">&quot;LAST_CMD&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ros_vel_pub_stop_timer</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ros_vel_pub_reset_vel</span><span class="p">()</span></div>
+
+    <span class="c1">### ExaRobot ####</span>
+<div class="viewcode-block" id="EmbdControlCore.send_cmd_exarobot"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.send_cmd_exarobot">[docs]</a>    <span class="k">def</span> <span class="nf">send_cmd_exarobot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">acmd</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">aparams</span><span class="p">:</span> <span class="nb">object</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">aCmd</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">acmd</span><span class="p">)</span>
+        <span class="n">dictCmd</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">dictCmd</span><span class="p">[</span><span class="s2">&quot;CMD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aCmd</span>
+        <span class="n">dictCmd</span><span class="p">[</span><span class="s2">&quot;VAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aparams</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mpExaRobot</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">dictCmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.exarobot_create"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.exarobot_create">[docs]</a>    <span class="k">def</span> <span class="nf">exarobot_create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        로봇제어 모듈 생성을 요청한다.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_exarobot</span><span class="p">(</span><span class="s1">&#39;CREATE&#39;</span><span class="p">,</span> <span class="s1">&#39;EXAROBOT&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.exarobot_release"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.exarobot_release">[docs]</a>    <span class="k">def</span> <span class="nf">exarobot_release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        로봇제어 모듈 종료 요청한다.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_exarobot</span><span class="p">(</span><span class="s1">&#39;RELEASE&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.exarobot_connect"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.exarobot_connect">[docs]</a>    <span class="k">def</span> <span class="nf">exarobot_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strComPort</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        로봇의 시리얼 장치연결을 요청하고 초기화를 한다.</span>
+<span class="sd">        </span>
+<span class="sd">        로봇 프로세스 초기화</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            strComPort (str): 로봇이 연결된 시리얼 장치</span>
+<span class="sd">             </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;exarobot_connecting&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_exarobot</span><span class="p">(</span><span class="s1">&#39;CONNECT&#39;</span><span class="p">,</span> <span class="n">strComPort</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_when_robot_connected</span><span class="p">()</span></div>
+        
+<span class="c1"># </span>
+<div class="viewcode-block" id="EmbdControlCore.exarobot_disconnect"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.exarobot_disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">exarobot_disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># self.nav.release()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;###ros_rs_node_release&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ros_rs_node_release</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;###ros_nav_node_release&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ros_nav_node_release</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;###ros_robot_node_stop_timer&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ros_robot_node_stop_timer</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;###ros_robot_node_release&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ros_robot_node_release</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;###send_cmd_exarobot DISCONNECT&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_exarobot</span><span class="p">(</span><span class="s1">&#39;DISCONNECT&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.exarobot_reset_motor"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.exarobot_reset_motor">[docs]</a>    <span class="k">def</span> <span class="nf">exarobot_reset_motor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># send sound sequence 1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_exarobot</span><span class="p">(</span><span class="s1">&#39;RESET_MOTOR&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.exarobot_factory_reset"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.exarobot_factory_reset">[docs]</a>    <span class="k">def</span> <span class="nf">exarobot_factory_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># send sound sequence 0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_exarobot</span><span class="p">(</span><span class="s1">&#39;INIT_MOTOR&#39;</span><span class="p">)</span></div>
+
+    <span class="c1"># todo: make this extendable to other robots</span>
+<div class="viewcode-block" id="EmbdControlCore.exarobot_move_joint_space"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.exarobot_move_joint_space">[docs]</a>    <span class="k">def</span> <span class="nf">exarobot_move_joint_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">right_vel</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">left_vel</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_exarobot</span><span class="p">(</span><span class="s2">&quot;MOVE_JOINT_SPACE&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">right_vel</span><span class="p">,</span> <span class="n">left_vel</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.exarobot_set_velocity_control"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.exarobot_set_velocity_control">[docs]</a>    <span class="k">def</span> <span class="nf">exarobot_set_velocity_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vel</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ang_vel</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        로봇 속도 제어 명령을 보낸다.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            vel (float): 선속도 [m/s]</span>
+<span class="sd">            ang_vel (float): 각속도 [radian]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_exarobot</span><span class="p">(</span><span class="s2">&quot;SET_VELOCITY_CONTROL&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">vel</span><span class="p">,</span> <span class="n">ang_vel</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.exarobot_stop_robot"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.exarobot_stop_robot">[docs]</a>    <span class="k">def</span> <span class="nf">exarobot_stop_robot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stop_type</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_exarobot</span><span class="p">(</span><span class="s2">&quot;STOP&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">stop_type</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.exarobot_get_pos"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.exarobot_get_pos">[docs]</a>    <span class="k">def</span> <span class="nf">exarobot_get_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        로봇 포지션 요청 명령</span>
+<span class="sd">        </span>
+<span class="sd">        모터 엔코더기반 포지션을 요청한다.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_exarobot</span><span class="p">(</span><span class="s2">&quot;POS&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.on_exarobot_queue_bcast"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.on_exarobot_queue_bcast">[docs]</a>    <span class="k">def</span> <span class="nf">on_exarobot_queue_bcast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        exarobot 프로세스로부터 받는 Queue msg수신시 동작하는  Callback이다.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            msg (dict): Queue msg</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;COMM_STATUS&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">comm_status</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s1">&#39;COMM_STATUS&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_exarobot_comm_status</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">comm_status</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="s2">&quot;ENCODER&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">right</span><span class="p">,</span> <span class="n">left</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;ENCODER&quot;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_exarobot_get_enc</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">right</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">left</span><span class="p">))</span>
+
+            <span class="k">elif</span> <span class="s2">&quot;VELOCITY&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">right</span><span class="p">,</span> <span class="n">left</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;VELOCITY&quot;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_exarobot_get_vel</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">right</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">left</span><span class="p">))</span>
+
+            <span class="k">elif</span> <span class="s2">&quot;WHEEL_POSITION&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">right</span><span class="p">,</span> <span class="n">left</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;WHEEL_POSITION&quot;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_exarobot_get_wheel_pos</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">right</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">left</span><span class="p">))</span>
+
+            <span class="k">elif</span> <span class="s2">&quot;STATUS&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">state</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;STATUS&quot;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_exarobot_get_state</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+
+            <span class="k">elif</span> <span class="s2">&quot;POSITION&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;POSITION&quot;</span><span class="p">]</span>
+                <span class="c1"># print(&#39;ControlCore&#39;, x,y,theta)</span>
+
+                <span class="k">if</span> <span class="n">is_ros_installed</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_current_pos_x</span> <span class="o">=</span> <span class="n">x</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_current_pos_y</span> <span class="o">=</span> <span class="n">y</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_current_pos_theta</span> <span class="o">=</span> <span class="n">theta</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ros_robot_node_update_odom</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+
+    <span class="c1">### STELLA B2 ####</span>
+<div class="viewcode-block" id="EmbdControlCore.send_cmd_stellab2"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.send_cmd_stellab2">[docs]</a>    <span class="k">def</span> <span class="nf">send_cmd_stellab2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">acmd</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">aparams</span><span class="p">:</span> <span class="nb">object</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">aCmd</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">acmd</span><span class="p">)</span>
+        <span class="n">dictCmd</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">dictCmd</span><span class="p">[</span><span class="s2">&quot;CMD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aCmd</span>
+        <span class="n">dictCmd</span><span class="p">[</span><span class="s2">&quot;VAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aparams</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mpStellaB2</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">dictCmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.stellab2_create"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.stellab2_create">[docs]</a>    <span class="k">def</span> <span class="nf">stellab2_create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_stellab2</span><span class="p">(</span><span class="s1">&#39;CREATE&#39;</span><span class="p">,</span> <span class="s1">&#39;STELLAB2&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.stellab2_release"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.stellab2_release">[docs]</a>    <span class="k">def</span> <span class="nf">stellab2_release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_stellab2</span><span class="p">(</span><span class="s1">&#39;RELEASE&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.stellab2_connect"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.stellab2_connect">[docs]</a>    <span class="k">def</span> <span class="nf">stellab2_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strComPort</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_stellab2</span><span class="p">(</span><span class="s1">&#39;CONNECT&#39;</span><span class="p">,</span> <span class="n">strComPort</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.stellab2_disconnect"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.stellab2_disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">stellab2_disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_stellab2</span><span class="p">(</span><span class="s1">&#39;DISCONNECT&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.stellab2_set_monitoring"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.stellab2_set_monitoring">[docs]</a>    <span class="k">def</span> <span class="nf">stellab2_set_monitoring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_stellab2</span><span class="p">(</span><span class="s1">&#39;MONITORING&#39;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">(</span><span class="n">state</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.stellab2_reset_motor"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.stellab2_reset_motor">[docs]</a>    <span class="k">def</span> <span class="nf">stellab2_reset_motor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_stellab2</span><span class="p">(</span><span class="s1">&#39;RESET_MOTOR&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.stellab2_factory_reset"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.stellab2_factory_reset">[docs]</a>    <span class="k">def</span> <span class="nf">stellab2_factory_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_stellab2</span><span class="p">(</span><span class="s1">&#39;INIT_MOTOR&#39;</span><span class="p">)</span></div>
+
+    <span class="c1"># todo: make this extendable to other robots</span>
+<div class="viewcode-block" id="EmbdControlCore.stellab2_move_joint_space"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.stellab2_move_joint_space">[docs]</a>    <span class="k">def</span> <span class="nf">stellab2_move_joint_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">right_vel</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">left_vel</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_stellab2</span><span class="p">(</span><span class="s2">&quot;MOVE_JOINT_SPACE&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">right_vel</span><span class="p">,</span> <span class="n">left_vel</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.stellab2_set_velocity_control"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.stellab2_set_velocity_control">[docs]</a>    <span class="k">def</span> <span class="nf">stellab2_set_velocity_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vel</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ang_vel</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_stellab2</span><span class="p">(</span><span class="s2">&quot;SET_VELOCITY_CONTROL&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">vel</span><span class="p">,</span> <span class="n">ang_vel</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.stellab2_stop_robot"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.stellab2_stop_robot">[docs]</a>    <span class="k">def</span> <span class="nf">stellab2_stop_robot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stop_type</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_stellab2</span><span class="p">(</span><span class="s2">&quot;STOP&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">stop_type</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.on_stellab2_queue_bcast"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.on_stellab2_queue_bcast">[docs]</a>    <span class="k">def</span> <span class="nf">on_stellab2_queue_bcast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;VERSION&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">version</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s1">&#39;VERSION&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_stellab2_get_ver</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">version</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="s2">&quot;COMM_STATUS&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">comm_status</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s1">&#39;COMM_STATUS&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_stellab2_comm_status</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">comm_status</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="s2">&quot;MONITORING&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">monitoring_state</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;MONITORING&quot;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_stellab2_is_monitoring</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">monitoring_state</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="s2">&quot;ENCODER&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">right</span><span class="p">,</span> <span class="n">left</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;ENCODER&quot;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_stellab2_get_enc</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">right</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">left</span><span class="p">))</span>
+
+            <span class="k">elif</span> <span class="s2">&quot;VELOCITY&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">right</span><span class="p">,</span> <span class="n">left</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;VELOCITY&quot;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_stellab2_get_vel</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">right</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">left</span><span class="p">))</span>
+
+            <span class="k">elif</span> <span class="s2">&quot;WHEEL_POSITION&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">right</span><span class="p">,</span> <span class="n">left</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;WHEEL_POSITION&quot;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_stellab2_get_wheel_pos</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">right</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">left</span><span class="p">))</span>
+
+            <span class="k">elif</span> <span class="s2">&quot;STATUS&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">state</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;STATUS&quot;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_stellab2_get_state</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.on_mp_error"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.on_mp_error">[docs]</a>    <span class="k">def</span> <span class="nf">on_mp_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+    <span class="c1">### External Communication ####</span>
+<div class="viewcode-block" id="EmbdControlCore.send_external_comm"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.send_external_comm">[docs]</a>    <span class="k">def</span> <span class="nf">send_external_comm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">acmd</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">aparams</span><span class="p">:</span> <span class="nb">object</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">aCmd</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">acmd</span><span class="p">)</span>
+        <span class="n">dictCmd</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">dictCmd</span><span class="p">[</span><span class="s2">&quot;CMD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aCmd</span>
+        <span class="n">dictCmd</span><span class="p">[</span><span class="s2">&quot;VAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aparams</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mpExternalComm</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">dictCmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.external_comm_create"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.external_comm_create">[docs]</a>    <span class="k">def</span> <span class="nf">external_comm_create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_external_comm</span><span class="p">(</span><span class="s1">&#39;CREATE&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.external_comm_start"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.external_comm_start">[docs]</a>    <span class="k">def</span> <span class="nf">external_comm_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bSckType</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">strAddr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">nPort</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="c1"># todo: add UDP later. socket will be determined by bScktype</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_external_comm</span><span class="p">(</span><span class="s1">&#39;START&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">strAddr</span><span class="p">,</span> <span class="n">nPort</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.external_comm_stop"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.external_comm_stop">[docs]</a>    <span class="k">def</span> <span class="nf">external_comm_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_external_comm</span><span class="p">(</span><span class="s1">&#39;STOP&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.external_comm_send_raw"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.external_comm_send_raw">[docs]</a>    <span class="k">def</span> <span class="nf">external_comm_send_raw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strMsg</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_external_comm</span><span class="p">(</span><span class="s1">&#39;SEND_RAW&#39;</span><span class="p">,</span> <span class="n">strMsg</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.external_comm_disconnect_client"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.external_comm_disconnect_client">[docs]</a>    <span class="k">def</span> <span class="nf">external_comm_disconnect_client</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tplAddrPort</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_external_comm</span><span class="p">(</span><span class="s1">&#39;REMOVE_CLIENT&#39;</span><span class="p">,</span> <span class="n">tplAddrPort</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.external_comm_send_tts"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.external_comm_send_tts">[docs]</a>    <span class="k">def</span> <span class="nf">external_comm_send_tts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strMsg</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_external_comm</span><span class="p">(</span><span class="s1">&#39;SEND_TTS&#39;</span><span class="p">,</span> <span class="n">strMsg</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="EmbdControlCore.external_comm_release"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.external_comm_release">[docs]</a>    <span class="k">def</span> <span class="nf">external_comm_release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_external_comm</span><span class="p">(</span><span class="s1">&#39;RELEASE&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.is_server_status_alive"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.is_server_status_alive">[docs]</a>    <span class="k">def</span> <span class="nf">is_server_status_alive</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span> 
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">server_status</span></div>
+    
+<div class="viewcode-block" id="EmbdControlCore.on_external_comm_queue_bcast"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.on_external_comm_queue_bcast">[docs]</a>    <span class="k">def</span> <span class="nf">on_external_comm_queue_bcast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        external_comm 프로세스로부터 받는 Queue msg수신시 동작하는  Callback이다.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            msg (dict): Queue msg</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;SERVER_STATUS&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">server_status</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;SERVER_STATUS&quot;</span><span class="p">]</span>
+                
+                <span class="k">if</span> <span class="n">server_status</span> <span class="o">==</span> <span class="s1">&#39;START&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">server_status</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">server_status</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;SERVER_STATUS: &#39;</span><span class="p">,</span><span class="n">server_status</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_external_comm_server_status</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">server_status</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="s2">&quot;CLIENT_CONNECT&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">tplAddrPort</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;CLIENT_CONNECT&quot;</span><span class="p">]</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;CLIENT_CONNECT :&#39;</span><span class="p">,</span> <span class="n">tplAddrPort</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_external_comm_client_connected</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">tplAddrPort</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tts_send_msg</span><span class="p">(</span><span class="s1">&#39;connect OK&#39;</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="s2">&quot;CLIENT_DISCONNECT&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">tplAddrPort</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;CLIENT_DISCONNECT&quot;</span><span class="p">]</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;CLIENT_DISCONNECT :&#39;</span><span class="p">,</span> <span class="n">tplAddrPort</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_external_comm_client_disconnected</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">tplAddrPort</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="s2">&quot;RECV_RAW&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">strMsg</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;RECV_RAW&quot;</span><span class="p">]</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;RECV_RAW&#39;</span><span class="p">,</span> <span class="n">strMsg</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="s2">&quot;EMG_STOP&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;EMG STOP&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tts_send_msg</span><span class="p">(</span><span class="s1">&#39;Stop&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">exarobot_set_velocity_control</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">navigator</span><span class="o">.</span><span class="n">cancel_nav</span><span class="p">()</span>
+
+
+            <span class="k">elif</span> <span class="s2">&quot;MOVE_POSE&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">xPos</span><span class="p">,</span> <span class="n">yPos</span><span class="p">,</span> <span class="n">aAngle</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;MOVE_POSE&quot;</span><span class="p">]</span>
+                
+                <span class="c1"># tts_msg = &#39;Move Pose %s %s&#39;%(xPos, yPos)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">navigator</span><span class="o">.</span><span class="n">isTaskComplete</span><span class="p">():</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MOVE_POSE&#39;</span><span class="p">,</span> <span class="n">xPos</span><span class="p">,</span> <span class="n">yPos</span><span class="p">,</span> <span class="n">aAngle</span><span class="p">)</span>
+                    <span class="n">tts_msg</span> <span class="o">=</span> <span class="s1">&#39;Move Pose&#39;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tts_send_msg</span><span class="p">(</span><span class="n">tts_msg</span><span class="p">)</span>
+                    <span class="n">q</span> <span class="o">=</span> <span class="n">quaternion_from_euler</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">aAngle</span><span class="p">)</span>
+                    <span class="n">pose</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">navigator</span><span class="o">.</span><span class="n">make_pose</span><span class="p">([</span><span class="n">xPos</span><span class="p">,</span> <span class="n">yPos</span><span class="p">],</span> <span class="p">[</span><span class="n">q</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">q</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">q</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">q</span><span class="p">[</span><span class="mi">3</span><span class="p">]])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">navigator</span><span class="o">.</span><span class="n">go_to_pose</span><span class="p">(</span><span class="n">pose</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.tts_send_msg"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.tts_send_msg">[docs]</a>    <span class="k">def</span> <span class="nf">tts_send_msg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strMsg</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_server_status_alive</span><span class="p">()</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">external_comm_send_tts</span><span class="p">(</span><span class="n">strMsg</span><span class="p">)</span></div>
+
+    <span class="c1">### Camera ###</span>
+<div class="viewcode-block" id="EmbdControlCore.onCamStart"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.onCamStart">[docs]</a>    <span class="k">def</span> <span class="nf">onCamStart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nId</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">nWidth</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">nHeight</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camTest</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_camTest</span> <span class="o">=</span> <span class="n">CCameraCommon</span><span class="p">(</span><span class="n">nId</span><span class="p">,</span> <span class="n">nWidth</span><span class="p">,</span> <span class="n">nHeight</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_camTest</span><span class="o">.</span><span class="n">sig_image_data</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_recv_image</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_camTest</span><span class="o">.</span><span class="n">sig_stopped</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_stopped_cam</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_camTest</span><span class="o">.</span><span class="n">start_stream</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.stopCam"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.stopCam">[docs]</a>    <span class="k">def</span> <span class="nf">stopCam</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camTest</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_camTest</span><span class="o">.</span><span class="n">stop_stream</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.on_recv_image"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.on_recv_image">[docs]</a>    <span class="k">def</span> <span class="nf">on_recv_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_cam_recv_stream</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.on_stopped_cam"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.on_stopped_cam">[docs]</a>    <span class="k">def</span> <span class="nf">on_stopped_cam</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camTest</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camTest</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_camTest</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_cam_stopped_stream</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+    <span class="c1"># ROS Robot Node</span>
+<div class="viewcode-block" id="EmbdControlCore.send_cmd_ros_robot_node"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.send_cmd_ros_robot_node">[docs]</a>    <span class="k">def</span> <span class="nf">send_cmd_ros_robot_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">acmd</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">aparams</span><span class="p">:</span> <span class="nb">object</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ROS 로봇 프로세스로 제어 명령을 보낸다.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            acmd (str): 제어 명령</span>
+<span class="sd">            aparams (object, optional): 제어 값. Defaults to None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">aCmd</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">acmd</span><span class="p">)</span>
+        <span class="n">dictCmd</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">dictCmd</span><span class="p">[</span><span class="s2">&quot;CMD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aCmd</span>
+        <span class="n">dictCmd</span><span class="p">[</span><span class="s2">&quot;VAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aparams</span>
+        <span class="k">if</span> <span class="n">is_ros_installed</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpROSRobotNode</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">dictCmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_robot_node_create"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_robot_node_create">[docs]</a>    <span class="k">def</span> <span class="nf">ros_robot_node_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fPeriod</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">strTopicNameOdom</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">strTopicNameVel</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ROS 로봇 노드 생성 명령을 보낸다.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            fPeriod (float): odom 토픽 발행 주기</span>
+<span class="sd">            strTopicNameOdom (str): 발행할 odometry 토픽 이름</span>
+<span class="sd">            strTopicNameVel (str): 구독할 속도 제어 토픽 이름 </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">createParam</span> <span class="o">=</span> <span class="p">(</span><span class="n">fPeriod</span><span class="p">,</span> <span class="n">strTopicNameOdom</span><span class="p">,</span> <span class="n">strTopicNameVel</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_robot_node</span><span class="p">(</span><span class="s2">&quot;CREATE&quot;</span><span class="p">,</span> <span class="n">createParam</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_robot_node_start_timer"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_robot_node_start_timer">[docs]</a>    <span class="k">def</span> <span class="nf">ros_robot_node_start_timer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ROS 로봇 노드의 odometry 토픽 발행을 시작한다.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_robot_node</span><span class="p">(</span><span class="s2">&quot;START_TIMER&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_robot_node_stop_timer"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_robot_node_stop_timer">[docs]</a>    <span class="k">def</span> <span class="nf">ros_robot_node_stop_timer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ROS 로봇 노드의 odometry 토픽 발행을 종료한다.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_robot_node</span><span class="p">(</span><span class="s2">&quot;STOP_TIMER&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_robot_node_release"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_robot_node_release">[docs]</a>    <span class="k">def</span> <span class="nf">ros_robot_node_release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_robot_node</span><span class="p">(</span><span class="s2">&quot;RELEASE&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_robot_node_update_odom"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_robot_node_update_odom">[docs]</a>    <span class="k">def</span> <span class="nf">ros_robot_node_update_odom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fPos_X</span><span class="p">,</span> <span class="n">fPos_Y</span><span class="p">,</span> <span class="n">fPos_Theta</span><span class="p">,</span> <span class="n">fVel_c</span><span class="p">,</span> <span class="n">fOmega_c</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ROS 로봇 노드 Odometry 데이터를 업데이트 한다.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            fPos_X (float): 로봇 X 포지션</span>
+<span class="sd">            fPos_Y (float): 로봇 Y 포지션</span>
+<span class="sd">            fPos_Theta (float): 로봇 회전각도</span>
+<span class="sd">            fVel_c (float): 로봇 속도</span>
+<span class="sd">            fOmega_c (float): 로봇 회전속도</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">odom</span> <span class="o">=</span> <span class="p">(</span><span class="n">fPos_X</span><span class="p">,</span> <span class="n">fPos_Y</span><span class="p">,</span> <span class="n">fPos_Theta</span><span class="p">,</span> <span class="n">fVel_c</span><span class="p">,</span> <span class="n">fOmega_c</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_robot_node</span><span class="p">(</span><span class="s2">&quot;UPDATE_ODOM&quot;</span><span class="p">,</span> <span class="n">odom</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.on_ros_robot_node_vel_sub"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.on_ros_robot_node_vel_sub">[docs]</a>    <span class="k">def</span> <span class="nf">on_ros_robot_node_vel_sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ROS 로봇 노드로부터 속도 제어 명령을 수신시 동작하는 Callback 함수이다</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            msg (dict): 속도 제어 메시지</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;VEL_CMD&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="c1"># print(msg)</span>
+            <span class="n">vel</span><span class="p">,</span> <span class="n">ang_vel</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;VEL_CMD&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exarobot_set_velocity_control</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">vel</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">ang_vel</span><span class="p">))</span>
+            <span class="c1"># self.kobuki2_set_velocity_control(float(vel), float(ang_vel))</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+
+    <span class="c1"># ROS Nav Node</span>
+
+<div class="viewcode-block" id="EmbdControlCore.on_nav_queue_bcast"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.on_nav_queue_bcast">[docs]</a>    <span class="k">def</span> <span class="nf">on_nav_queue_bcast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ROS Navagation2 프로세스로부터 받는 Queue msg수신시 동작하는  Callback이다.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            msg (dict): Queue msg</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;NODE_LIST&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="c1"># print(&#39;RCV !!:&#39;,msg)</span>
+                <span class="n">node_list</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s1">&#39;NODE_LIST&#39;</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">node_list</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;# Add MP Monitoring - NAME[</span><span class="si">{}</span><span class="s1">]: PID[</span><span class="si">{}</span><span class="s1">]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">node_list</span><span class="p">[</span><span class="n">name</span><span class="p">]))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_dictProc</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_list</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_proc_info</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.send_cmd_ros_nav_node"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.send_cmd_ros_nav_node">[docs]</a>    <span class="k">def</span> <span class="nf">send_cmd_ros_nav_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">acmd</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">aparams</span><span class="p">:</span> <span class="nb">object</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">aCmd</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">acmd</span><span class="p">)</span>
+        <span class="n">dictCmd</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">dictCmd</span><span class="p">[</span><span class="s2">&quot;CMD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aCmd</span>
+        <span class="n">dictCmd</span><span class="p">[</span><span class="s2">&quot;VAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aparams</span>
+        <span class="k">if</span> <span class="n">is_ros_installed</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpROSNavigation</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">dictCmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_nav_node_create"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_nav_node_create">[docs]</a>    <span class="k">def</span> <span class="nf">ros_nav_node_create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ROS Navagation2 모듈 오브젝트 생성 명령을 보낸다.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_nav_node</span><span class="p">(</span><span class="s2">&quot;CREATE&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_nav_node_request_pid_list"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_nav_node_request_pid_list">[docs]</a>    <span class="k">def</span> <span class="nf">ros_nav_node_request_pid_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ROS Navagation2 Launch로 생성된 프로세스의 PID 를 요청한다.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_nav_node</span><span class="p">(</span><span class="s2">&quot;NODE_LIST&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_nav_node_launch_lidar"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_nav_node_launch_lidar">[docs]</a>    <span class="k">def</span> <span class="nf">ros_nav_node_launch_lidar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_nav_node</span><span class="p">(</span><span class="s2">&quot;LAUNCH_LIDAR&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_nav_node_launch_cartograhper"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_nav_node_launch_cartograhper">[docs]</a>    <span class="k">def</span> <span class="nf">ros_nav_node_launch_cartograhper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_nav_node</span><span class="p">(</span><span class="s2">&quot;LAUNCH_CARTO&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_nav_node_launch_nav"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_nav_node_launch_nav">[docs]</a>    <span class="k">def</span> <span class="nf">ros_nav_node_launch_nav</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_nav_node</span><span class="p">(</span><span class="s2">&quot;LAUNCH_NAV&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_nav_node_move_pose"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_nav_node_move_pose">[docs]</a>    <span class="k">def</span> <span class="nf">ros_nav_node_move_pose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xPos</span><span class="p">,</span> <span class="n">yPos</span><span class="p">,</span> <span class="n">angle</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        지정위치로 이동할수 있도록 Navigation 명령을 보낸다.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            xPos (float): X 포지션 [m]</span>
+<span class="sd">            yPos (float): Y 포지션 [m]</span>
+<span class="sd">            angle (float): heading angle [radian]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">xPos</span><span class="p">,</span> <span class="n">yPos</span><span class="p">,</span> <span class="n">angle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_nav_node</span><span class="p">(</span><span class="s2">&quot;MOVE_POSE&quot;</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_nav_node_move_cancle"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_nav_node_move_cancle">[docs]</a>    <span class="k">def</span> <span class="nf">ros_nav_node_move_cancle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        현재 Navagation 중인 명령을 취소한다.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_nav_node</span><span class="p">(</span><span class="s2">&quot;MOVE_CANCLE&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_nav_node_release"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_nav_node_release">[docs]</a>    <span class="k">def</span> <span class="nf">ros_nav_node_release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        rs_node 프로세스로부터 받는 Queue msg수신시 동작하는  Callback이다.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            msg (dict): Queue msg</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_nav_node</span><span class="p">(</span><span class="s2">&quot;RELEASE&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># ROS RS Node</span>
+<div class="viewcode-block" id="EmbdControlCore.on_ros_rs_node_queue_bcast"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.on_ros_rs_node_queue_bcast">[docs]</a>    <span class="k">def</span> <span class="nf">on_ros_rs_node_queue_bcast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;NODE_LIST&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="c1"># print(&#39;RCV !!:&#39;,msg)</span>
+                <span class="n">node_list</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s1">&#39;NODE_LIST&#39;</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">node_list</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;# Add MP Monitoring - NAME[</span><span class="si">{}</span><span class="s1">]: PID[</span><span class="si">{}</span><span class="s1">]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">node_list</span><span class="p">[</span><span class="n">name</span><span class="p">]))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_dictProc</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_list</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_proc_info</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.send_cmd_ros_rs_node"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.send_cmd_ros_rs_node">[docs]</a>    <span class="k">def</span> <span class="nf">send_cmd_ros_rs_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">acmd</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">aparams</span><span class="p">:</span> <span class="nb">object</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">aCmd</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">acmd</span><span class="p">)</span>
+        <span class="n">dictCmd</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">dictCmd</span><span class="p">[</span><span class="s2">&quot;CMD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aCmd</span>
+        <span class="n">dictCmd</span><span class="p">[</span><span class="s2">&quot;VAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aparams</span>
+        <span class="k">if</span> <span class="n">is_ros_installed</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpROSRealsense</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">dictCmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_rs_node_request_pid_list"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_rs_node_request_pid_list">[docs]</a>    <span class="k">def</span> <span class="nf">ros_rs_node_request_pid_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_rs_node</span><span class="p">(</span><span class="s2">&quot;NODE_LIST&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_rs_node_create"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_rs_node_create">[docs]</a>    <span class="k">def</span> <span class="nf">ros_rs_node_create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_rs_node</span><span class="p">(</span><span class="s2">&quot;CREATE&quot;</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="EmbdControlCore.ros_rs_node_launch"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_rs_node_launch">[docs]</a>    <span class="k">def</span> <span class="nf">ros_rs_node_launch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_rs_node</span><span class="p">(</span><span class="s2">&quot;LAUNCH&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EmbdControlCore.ros_rs_node_release"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.ros_rs_node_release">[docs]</a>    <span class="k">def</span> <span class="nf">ros_rs_node_release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_cmd_ros_rs_node</span><span class="p">(</span><span class="s2">&quot;RELEASE&quot;</span><span class="p">)</span></div>
+            
+<div class="viewcode-block" id="EmbdControlCore.do_when_robot_connected"><a class="viewcode-back" href="../Inc/ControlCore.html#ControlCore.EmbdControlCore.do_when_robot_connected">[docs]</a>    <span class="k">def</span> <span class="nf">do_when_robot_connected</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Robot Node Create&#39;</span><span class="p">)</span>
+        
+        
+        <span class="c1"># os.environ[&#39;RMW_IMPLEMENTATION&#39;] = &#39;rmw_fastrtps_cpp&#39;</span>
+        <span class="c1"># os.environ[&#39;FASTRTPS_DEFAULT_PROFILES_FILE&#39;] = &#39;/opt/dds_config/fastrtps.xml&#39;</span>
+        
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;RMW_IMPLEMENTATION&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;rmw_cyclonedds_cpp&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ros_robot_node_create</span><span class="p">(</span><span class="mf">0.02</span><span class="p">,</span> <span class="s1">&#39;odom&#39;</span><span class="p">,</span> <span class="s1">&#39;cmd_vel&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Robot Node Timer Start (/tf, /odom publish)&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ros_robot_node_start_timer</span><span class="p">()</span>
+
+        
+        
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Robot Navigation Stack Launching&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ros_nav_node_create</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ros_nav_node_launch_lidar</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ros_nav_node_launch_cartograhper</span><span class="p">()</span>
+
+
+        <span class="c1"># self.ros_face_recog_create()</span>
+
+        <span class="c1">#self.tts_send_msg(&#39;Localization start&#39;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exarobot_set_velocity_control</span><span class="p">(</span><span class="mf">0.</span> <span class="p">,</span> <span class="mf">0.7</span><span class="p">)</span>
+        <span class="c1">#self.tts_send_msg(&#39;wait 7 sec&#39;)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exarobot_set_velocity_control</span><span class="p">(</span><span class="mf">0.</span> <span class="p">,</span> <span class="o">-</span><span class="mf">0.7</span><span class="p">)</span>
+        <span class="c1">#self.tts_send_msg(&#39;wait 7 sec&#39;)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;##### spin time : &#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exarobot_set_velocity_control</span><span class="p">(</span><span class="mf">0.</span> <span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+        
+        <span class="c1"># os.environ[&#39;RMW_IMPLEMENTATION&#39;] = &#39;rmw_cyclonedds_cpp&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ros_nav_node_launch_nav</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">navigator</span><span class="o">.</span><span class="n">wait_nav2_active</span><span class="p">()</span>
+
+
+        <span class="c1"># os.environ[&#39;RMW_IMPLEMENTATION&#39;] = &#39;rmw_fastrtps_cpp&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Robot Realsense Node Launching&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ros_rs_node_create</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ros_rs_node_launch</span><span class="p">()</span></div></div>
+
+        <span class="c1"># #self.tts_send_msg(&#39;Navigation is On&#39;)</span>
+
+        <span class="c1"># #self.tts_send_msg(&quot;Hellow  I am Ready To GO&quot;)</span>
+        
+        <span class="c1"># time.sleep(2)</span>
+        <span class="c1"># self.navigator.clear_all_costmap()</span>
+        <span class="c1"># self.navigator.clear_all_costmap()</span>
+        
+        <span class="c1"># self.ros_nav_node_request_pid_list()</span>
+        <span class="c1"># self.ros_rs_node_request_pid_list()</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">try</span> <span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Creat Contorol Core&#39;</span><span class="p">)</span>
+        <span class="n">core</span> <span class="o">=</span> <span class="n">EmbdControlCore</span><span class="p">()</span>
+        <span class="n">core</span><span class="o">.</span><span class="n">exarobot_connect</span><span class="p">(</span><span class="s1">&#39;/dev/ttyRobot&#39;</span><span class="p">)</span>
+        <span class="c1"># core.kobuki2_connect(&#39;/dev/ttyUSB0&#39;)</span>
+        <span class="n">core</span><span class="o">.</span><span class="n">external_comm_start</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">strAddr</span><span class="o">=</span><span class="s1">&#39;0.0.0.0&#39;</span><span class="p">,</span> <span class="n">nPort</span><span class="o">=</span><span class="mi">7506</span><span class="p">)</span>
+        <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># t = input()</span>
+
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+            <span class="n">core</span><span class="o">.</span><span class="n">tts_send_msg</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">_exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AStar &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>AStar</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for AStar</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="c1"># File Name    : AStar.py</span>
+<span class="c1"># Project Name : MobileRobotTest</span>
+<span class="c1"># Author       : Raim.Delgado</span>
+<span class="c1"># Organization : SeoulTech</span>
+<span class="c1"># Description  :</span>
+<span class="c1"># [Revision History]</span>
+<span class="c1"># &gt;&gt; 2021.08.24 - First Commit</span>
+<span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">heapq</span>
+
+<span class="kn">import</span> <span class="nn">plotting</span>
+<span class="kn">import</span> <span class="nn">env</span>
+
+<div class="viewcode-block" id="AStar"><a class="viewcode-back" href="../Inc/PathPlanning/AStar.html#AStar.AStar">[docs]</a><span class="k">class</span> <span class="nc">AStar</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;AStar set the cost + heuristics as the priority</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s_start</span><span class="p">,</span> <span class="n">s_goal</span><span class="p">,</span> <span class="n">heuristic_type</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">s_start</span> <span class="o">=</span> <span class="n">s_start</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">s_goal</span> <span class="o">=</span> <span class="n">s_goal</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">heuristic_type</span> <span class="o">=</span> <span class="n">heuristic_type</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Env</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">Env</span><span class="p">()</span>  <span class="c1"># class Env</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">u_set</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Env</span><span class="o">.</span><span class="n">motions</span>  <span class="c1"># feasible input set</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Env</span><span class="o">.</span><span class="n">obs</span>  <span class="c1"># position of obstacles</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">OPEN</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># priority queue / OPEN set</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CLOSED</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># CLOSED set / VISITED order</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">PARENT</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>  <span class="c1"># recorded parent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>  <span class="c1"># cost to come</span>
+
+<div class="viewcode-block" id="AStar.searching"><a class="viewcode-back" href="../Inc/PathPlanning/AStar.html#AStar.AStar.searching">[docs]</a>    <span class="k">def</span> <span class="nf">searching</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A_star Searching.</span>
+<span class="sd">        :return: path, visited order</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">PARENT</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">s_start</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_start</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">s_start</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">s_goal</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span>
+        <span class="n">heapq</span><span class="o">.</span><span class="n">heappush</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">OPEN</span><span class="p">,</span>
+                       <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s_start</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_start</span><span class="p">))</span>
+
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">OPEN</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">heapq</span><span class="o">.</span><span class="n">heappop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">OPEN</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">CLOSED</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_goal</span><span class="p">:</span>  <span class="c1"># stop condition</span>
+                <span class="k">break</span>
+
+            <span class="k">for</span> <span class="n">s_n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_neighbor</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+                <span class="n">new_cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cost</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">s_n</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">s_n</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">[</span><span class="n">s_n</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span>
+
+                <span class="k">if</span> <span class="n">new_cost</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">[</span><span class="n">s_n</span><span class="p">]:</span>  <span class="c1"># conditions for updating Cost</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">[</span><span class="n">s_n</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_cost</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">PARENT</span><span class="p">[</span><span class="n">s_n</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
+                    <span class="n">heapq</span><span class="o">.</span><span class="n">heappush</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">OPEN</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f_value</span><span class="p">(</span><span class="n">s_n</span><span class="p">),</span> <span class="n">s_n</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PARENT</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">CLOSED</span></div>
+
+<div class="viewcode-block" id="AStar.searching_repeated_astar"><a class="viewcode-back" href="../Inc/PathPlanning/AStar.html#AStar.AStar.searching_repeated_astar">[docs]</a>    <span class="k">def</span> <span class="nf">searching_repeated_astar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        repeated A*.</span>
+<span class="sd">        :param e: weight of A*</span>
+<span class="sd">        :return: path and visited order</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">path</span><span class="p">,</span> <span class="n">visited</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+
+        <span class="k">while</span> <span class="n">e</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">p_k</span><span class="p">,</span> <span class="n">v_k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">repeated_searching</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s_start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_goal</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+            <span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p_k</span><span class="p">)</span>
+            <span class="n">visited</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v_k</span><span class="p">)</span>
+            <span class="n">e</span> <span class="o">-=</span> <span class="mf">0.5</span>
+
+        <span class="k">return</span> <span class="n">path</span><span class="p">,</span> <span class="n">visited</span></div>
+
+<div class="viewcode-block" id="AStar.repeated_searching"><a class="viewcode-back" href="../Inc/PathPlanning/AStar.html#AStar.AStar.repeated_searching">[docs]</a>    <span class="k">def</span> <span class="nf">repeated_searching</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s_start</span><span class="p">,</span> <span class="n">s_goal</span><span class="p">,</span> <span class="n">e</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        run A* with weight e.</span>
+<span class="sd">        :param s_start: starting state</span>
+<span class="sd">        :param s_goal: goal state</span>
+<span class="sd">        :param e: weight of a*</span>
+<span class="sd">        :return: path and visited order.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">g</span> <span class="o">=</span> <span class="p">{</span><span class="n">s_start</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s_goal</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)}</span>
+        <span class="n">PARENT</span> <span class="o">=</span> <span class="p">{</span><span class="n">s_start</span><span class="p">:</span> <span class="n">s_start</span><span class="p">}</span>
+        <span class="n">OPEN</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">CLOSED</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">heapq</span><span class="o">.</span><span class="n">heappush</span><span class="p">(</span><span class="n">OPEN</span><span class="p">,</span>
+                       <span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">s_start</span><span class="p">]</span> <span class="o">+</span> <span class="n">e</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">heuristic</span><span class="p">(</span><span class="n">s_start</span><span class="p">),</span> <span class="n">s_start</span><span class="p">))</span>
+
+        <span class="k">while</span> <span class="n">OPEN</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">heapq</span><span class="o">.</span><span class="n">heappop</span><span class="p">(</span><span class="n">OPEN</span><span class="p">)</span>
+            <span class="n">CLOSED</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="n">s_goal</span><span class="p">:</span>
+                <span class="k">break</span>
+
+            <span class="k">for</span> <span class="n">s_n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_neighbor</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+                <span class="n">new_cost</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cost</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">s_n</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">s_n</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">g</span><span class="p">:</span>
+                    <span class="n">g</span><span class="p">[</span><span class="n">s_n</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span>
+
+                <span class="k">if</span> <span class="n">new_cost</span> <span class="o">&lt;</span> <span class="n">g</span><span class="p">[</span><span class="n">s_n</span><span class="p">]:</span>  <span class="c1"># conditions for updating Cost</span>
+                    <span class="n">g</span><span class="p">[</span><span class="n">s_n</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_cost</span>
+                    <span class="n">PARENT</span><span class="p">[</span><span class="n">s_n</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
+                    <span class="n">heapq</span><span class="o">.</span><span class="n">heappush</span><span class="p">(</span><span class="n">OPEN</span><span class="p">,</span> <span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">s_n</span><span class="p">]</span> <span class="o">+</span> <span class="n">e</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">heuristic</span><span class="p">(</span><span class="n">s_n</span><span class="p">),</span> <span class="n">s_n</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_path</span><span class="p">(</span><span class="n">PARENT</span><span class="p">),</span> <span class="n">CLOSED</span></div>
+
+<div class="viewcode-block" id="AStar.get_neighbor"><a class="viewcode-back" href="../Inc/PathPlanning/AStar.html#AStar.AStar.get_neighbor">[docs]</a>    <span class="k">def</span> <span class="nf">get_neighbor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        find neighbors of state s that not in obstacles.</span>
+<span class="sd">        :param s: state</span>
+<span class="sd">        :return: neighbors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="p">[(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_set</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="AStar.cost"><a class="viewcode-back" href="../Inc/PathPlanning/AStar.html#AStar.AStar.cost">[docs]</a>    <span class="k">def</span> <span class="nf">cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s_start</span><span class="p">,</span> <span class="n">s_goal</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate Cost for this motion</span>
+<span class="sd">        :param s_start: starting node</span>
+<span class="sd">        :param s_goal: end node</span>
+<span class="sd">        :return:  Cost for this motion</span>
+<span class="sd">        :note: Cost function could be more complicate!</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_collision</span><span class="p">(</span><span class="n">s_start</span><span class="p">,</span> <span class="n">s_goal</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span>
+
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="n">s_goal</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">s_start</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">s_goal</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">s_start</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="AStar.is_collision"><a class="viewcode-back" href="../Inc/PathPlanning/AStar.html#AStar.AStar.is_collision">[docs]</a>    <span class="k">def</span> <span class="nf">is_collision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s_start</span><span class="p">,</span> <span class="n">s_end</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        check if the line segment (s_start, s_end) is collision.</span>
+<span class="sd">        :param s_start: start node</span>
+<span class="sd">        :param s_end: end node</span>
+<span class="sd">        :return: True: is collision / False: not collision</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">s_start</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obs</span> <span class="ow">or</span> <span class="n">s_end</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obs</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="n">s_start</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s_end</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">s_start</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s_end</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">s_end</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">s_start</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">s_start</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">s_end</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">s1</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">s_start</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">s_end</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">min</span><span class="p">(</span><span class="n">s_start</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">s_end</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                <span class="n">s2</span> <span class="o">=</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">s_start</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">s_end</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">max</span><span class="p">(</span><span class="n">s_start</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">s_end</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">s1</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">s_start</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">s_end</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">max</span><span class="p">(</span><span class="n">s_start</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">s_end</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                <span class="n">s2</span> <span class="o">=</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">s_start</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">s_end</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">min</span><span class="p">(</span><span class="n">s_start</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">s_end</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="k">if</span> <span class="n">s1</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obs</span> <span class="ow">or</span> <span class="n">s2</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obs</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="AStar.f_value"><a class="viewcode-back" href="../Inc/PathPlanning/AStar.html#AStar.AStar.f_value">[docs]</a>    <span class="k">def</span> <span class="nf">f_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        f = g + h. (g: Cost to come, h: heuristic value)</span>
+<span class="sd">        :param s: current state</span>
+<span class="sd">        :return: f</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">heuristic</span><span class="p">(</span><span class="n">s</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AStar.extract_path"><a class="viewcode-back" href="../Inc/PathPlanning/AStar.html#AStar.AStar.extract_path">[docs]</a>    <span class="k">def</span> <span class="nf">extract_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">PARENT</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract the path based on the PARENT set.</span>
+<span class="sd">        :return: The planning path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">s_goal</span><span class="p">]</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_goal</span>
+
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">PARENT</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
+            <span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_start</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AStar.heuristic"><a class="viewcode-back" href="../Inc/PathPlanning/AStar.html#AStar.AStar.heuristic">[docs]</a>    <span class="k">def</span> <span class="nf">heuristic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate heuristic.</span>
+<span class="sd">        :param s: current node (state)</span>
+<span class="sd">        :return: heuristic function value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">heuristic_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">heuristic_type</span>  <span class="c1"># heuristic type</span>
+        <span class="n">goal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_goal</span>  <span class="c1"># goal node</span>
+
+        <span class="k">if</span> <span class="n">heuristic_type</span> <span class="o">==</span> <span class="s2">&quot;manhattan&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">goal</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">goal</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="n">goal</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">goal</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../Inc/PathPlanning/AStar.html#AStar.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">s_start</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="n">s_goal</span> <span class="o">=</span> <span class="p">(</span><span class="mi">45</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>
+
+    <span class="n">astar</span> <span class="o">=</span> <span class="n">AStar</span><span class="p">(</span><span class="n">s_start</span><span class="p">,</span> <span class="n">s_goal</span><span class="p">,</span> <span class="s2">&quot;euclidean&quot;</span><span class="p">)</span>
+    <span class="n">plot</span> <span class="o">=</span> <span class="n">plotting</span><span class="o">.</span><span class="n">Plotting</span><span class="p">(</span><span class="n">s_start</span><span class="p">,</span> <span class="n">s_goal</span><span class="p">)</span>
+
+    <span class="n">path</span><span class="p">,</span> <span class="n">visited</span> <span class="o">=</span> <span class="n">astar</span><span class="o">.</span><span class="n">searching</span><span class="p">()</span>
+    <span class="n">plot</span><span class="o">.</span><span class="n">animation</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">visited</span><span class="p">,</span> <span class="s2">&quot;A*&quot;</span><span class="p">)</span>  <span class="c1"># animation</span></div>
+
+    <span class="c1"># path, visited = astar.searching_repeated_astar(2.5)               # initial weight e = 2.5</span>
+    <span class="c1"># plot.animation_ara_star(path, visited, &quot;Repeated A*&quot;)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

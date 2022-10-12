@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TMRKobuki2 &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>TMRKobuki2</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for TMRKobuki2</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="c1"># File Name    : TMRKobuki2.py</span>
+<span class="c1"># Project Name : ExaRobotCtrl</span>
+<span class="c1"># Author       : Raim.Delgado</span>
+<span class="c1"># Organization : SeoulTech</span>
+<span class="c1"># Description  :</span>
+<span class="c1"># [Revision History]</span>
+<span class="c1"># &gt;&gt; 2021.01.24 - First Commit</span>
+<span class="c1"># &gt;&gt; 2021.01.25 - Add Serial Communication</span>
+<span class="c1"># &gt;&gt; 2021.01.25 - Add Send Commands except Set GPO</span>
+<span class="c1"># &gt;&gt; 2021.02.08 - Add Packet Parsing</span>
+<span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">pi</span>
+
+<span class="kn">from</span> <span class="nn">TMRDiff</span> <span class="k">import</span> <span class="o">*</span>
+
+<span class="n">FILE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>  <span class="c1"># %PROJECT_ROOT%/Library/Socket</span>
+<span class="n">ROOT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">FILE_PATH</span><span class="p">))</span>
+<span class="n">INCLUDE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Include&quot;</span><span class="p">)</span>
+<span class="n">MDI_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;MdiBackground&quot;</span><span class="p">)</span>
+<span class="n">DOCK_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;DockWidgets&quot;</span><span class="p">)</span>
+<span class="n">MISC_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;Misc&quot;</span><span class="p">)</span>
+<span class="n">RESOURCES_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;Resources&quot;</span><span class="p">)</span>
+<span class="n">LIBRARY_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Library&quot;</span><span class="p">)</span>
+<span class="n">SERIAL_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">LIBRARY_PATH</span><span class="p">,</span> <span class="s2">&quot;Serial&quot;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">DOCK_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">LIBRARY_PATH</span><span class="p">,</span> <span class="n">SERIAL_PATH</span><span class="p">])</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+<span class="k">del</span> <span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">DOCK_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">LIBRARY_PATH</span><span class="p">,</span> <span class="n">SERIAL_PATH</span>
+
+<span class="kn">from</span> <span class="nn">SerialPort</span> <span class="k">import</span> <span class="n">CSerialPort</span>
+<span class="kn">from</span> <span class="nn">Commons</span> <span class="k">import</span> <span class="n">PySignal</span><span class="p">,</span> <span class="n">is_system_win</span><span class="p">,</span> <span class="n">MAX_SERIAL_BUFFER</span><span class="p">,</span> <span class="n">search_pattern</span>
+<span class="kn">from</span> <span class="nn">Commons</span> <span class="k">import</span> <span class="n">convert_u16_to_bytearray_le</span><span class="p">,</span> <span class="n">convert_u32_to_bytearray_le</span><span class="p">,</span> <span class="n">convert_bytearray_to_int_le</span>
+<span class="kn">from</span> <span class="nn">Commons</span> <span class="k">import</span> <span class="n">convert_s16_to_bytearray_le</span><span class="p">,</span> <span class="n">convert_s32_to_bytearray_le</span>
+
+
+<div class="viewcode-block" id="EnumKobuki2CmdIdentifier"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.EnumKobuki2CmdIdentifier">[docs]</a><span class="nd">@unique</span>
+<span class="k">class</span> <span class="nc">EnumKobuki2CmdIdentifier</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="n">BASE_CONTROL</span> <span class="o">=</span> <span class="mh">0x01</span>
+    <span class="n">SOUND</span> <span class="o">=</span> <span class="mh">0x03</span>
+    <span class="n">SOUND_SEQUENCE</span> <span class="o">=</span> <span class="mh">0x04</span>
+    <span class="n">REQUEST_EXTRA</span> <span class="o">=</span> <span class="mh">0x09</span>
+    <span class="n">CHANGE_FRAME</span> <span class="o">=</span> <span class="mh">0x0A</span>
+    <span class="n">REQUEST_EEPROM</span> <span class="o">=</span> <span class="mh">0x0B</span>
+    <span class="n">GPO</span> <span class="o">=</span> <span class="mh">0x0C</span>
+    <span class="n">SET_CONTROLLER_GAIN</span> <span class="o">=</span> <span class="mh">0x0D</span>
+    <span class="n">GET_CONTROLLER_GAIN</span> <span class="o">=</span> <span class="mh">0x0E</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">toInt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EnumKobuki2FeedbackIdentifier"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.EnumKobuki2FeedbackIdentifier">[docs]</a><span class="nd">@unique</span>
+<span class="k">class</span> <span class="nc">EnumKobuki2FeedbackIdentifier</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="n">CORE_SENSORS</span> <span class="o">=</span> <span class="mh">0x01</span>
+    <span class="n">DOCK_INFRARED</span> <span class="o">=</span> <span class="mh">0x03</span>
+    <span class="n">INERTIAL_SENSOR</span> <span class="o">=</span> <span class="mh">0x04</span>
+    <span class="n">CLIFF</span> <span class="o">=</span> <span class="mh">0x05</span>
+    <span class="n">CURRENT</span> <span class="o">=</span> <span class="mh">0x06</span>
+    <span class="n">HW_VERSION</span> <span class="o">=</span> <span class="mh">0x0A</span>
+    <span class="n">FW_VERSION</span> <span class="o">=</span> <span class="mh">0x0B</span>
+    <span class="n">GYRO</span> <span class="o">=</span> <span class="mh">0x0D</span>
+    <span class="n">GPI</span> <span class="o">=</span> <span class="mh">0x10</span>
+    <span class="n">UDID</span> <span class="o">=</span> <span class="mh">0x13</span>
+    <span class="n">CONTROLLER_INFO</span> <span class="o">=</span> <span class="mh">0x15</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">toInt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EnumKobuki2SoundSequence"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.EnumKobuki2SoundSequence">[docs]</a><span class="nd">@unique</span>
+<span class="k">class</span> <span class="nc">EnumKobuki2SoundSequence</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="n">ON</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">OFF</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">RECHARGE</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">BUTTON</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">ERROR</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">CLEANINGSTART</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">CLEANINGEND</span> <span class="o">=</span> <span class="mi">6</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">toInt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EnumKobuki2ExtraData"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.EnumKobuki2ExtraData">[docs]</a><span class="nd">@unique</span>
+<span class="k">class</span> <span class="nc">EnumKobuki2ExtraData</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="n">HW_VERSION</span> <span class="o">=</span> <span class="mh">0x01</span>
+    <span class="n">FW_VERSION</span> <span class="o">=</span> <span class="mh">0x02</span>
+    <span class="n">UDID</span> <span class="o">=</span> <span class="mh">0x08</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">toInt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CTMRKobuki2"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2">[docs]</a><span class="k">class</span> <span class="nc">CTMRKobuki2</span><span class="p">(</span><span class="n">CTMRDiff</span><span class="p">):</span>
+    <span class="n">_serial</span><span class="p">:</span> <span class="n">CSerialPort</span>
+    <span class="n">btaSerialBuff</span><span class="p">:</span> <span class="nb">bytearray</span>
+    <span class="n">strSerialPort</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">nSerialBaud</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">nSerialByteSize</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">strSerialParity</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">fSerialStopBits</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">fRadiusLimit</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">fPrevTime</span><span class="p">:</span> <span class="nb">float</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">adictConfig</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">adictConfig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># this is according to the kobuki parameters</span>
+            <span class="c1"># refer to: https://yujinrobot.github.io/kobuki/enAppendixKobukiParameters.html</span>
+            <span class="c1"># and https://www.roscomponents.com/en/index.php?controller=attachment&amp;id_attachment=347</span>
+            <span class="n">fWheelBase</span> <span class="o">=</span> <span class="mf">0.23</span>
+            <span class="n">fWheelRadius</span> <span class="o">=</span> <span class="mf">0.035</span>
+            <span class="n">nEncoderRes</span> <span class="o">=</span> <span class="mi">52</span>  <span class="c1"># PPR = 13</span>
+            <span class="n">fGearRatio</span> <span class="o">=</span> <span class="mf">49.5833</span>
+            <span class="n">fMaxVel</span> <span class="o">=</span> <span class="mf">0.7</span>
+            <span class="n">fMaxAcc</span> <span class="o">=</span> <span class="mf">0.4</span>  <span class="c1"># arbitrary, cannot find anywhere</span>
+            <span class="n">fMaxJerk</span> <span class="o">=</span> <span class="mf">0.2</span>  <span class="c1"># arbitrary, cannot find anywhere</span>
+            <span class="n">fMaxYaw</span> <span class="o">=</span> <span class="mf">1.9199</span>  <span class="c1"># 180 deg/s (&gt;110 deg/s : gyro performance will degrade)</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">CTMRKobuki2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">fWheelRadius</span><span class="p">,</span> <span class="n">fWheelBase</span><span class="p">,</span> <span class="n">fMaxVel</span><span class="p">,</span> <span class="n">fMaxAcc</span><span class="p">,</span> <span class="n">fMaxJerk</span><span class="p">,</span> <span class="n">fMaxYaw</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_wheel_spec</span><span class="p">(</span><span class="n">nEncoderRes</span><span class="p">,</span> <span class="n">fGearRatio</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># todo: add configuration file, preferably JSON</span>
+            <span class="k">pass</span>
+
+        <span class="c1"># Signals #</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_core_sensors</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_dock_ir</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_dock_inertial_sensor</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_cliff</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_current</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_get_hw_ver</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_gyro</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_gpi</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_udid</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_controller_info</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+
+        <span class="c1"># Serial Communication Specifications</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nSerialBaud</span> <span class="o">=</span> <span class="mi">115200</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nSerialByteSize</span> <span class="o">=</span> <span class="mi">8</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strSerialParity</span> <span class="o">=</span> <span class="s1">&#39;N&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fSerialStopBits</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># Serial Callbacks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btaSerialBuff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span> <span class="o">=</span> <span class="n">CSerialPort</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span><span class="o">.</span><span class="n">sig_connected</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_serial_connect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span><span class="o">.</span><span class="n">sig_disconnected</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_serial_disconnect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span><span class="o">.</span><span class="n">sig_serial_error</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_serial_error</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span><span class="o">.</span><span class="n">sig_send_data</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_serial_send</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span><span class="o">.</span><span class="n">sig_recv_data</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_serial_recv</span><span class="p">)</span>
+
+        <span class="c1"># Radius limit: Avoid 0 denominator when calculating the radius of curvature</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fRadiusLimit</span> <span class="o">=</span> <span class="mf">0.0001</span>
+
+        <span class="c1"># calculate time difference to calculate velocity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nPrevTimeStamp</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fPrevRadR</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fPrevRadL</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">IsSerial</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># serial robot</span>
+
+<div class="viewcode-block" id="CTMRKobuki2.release"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.release">[docs]</a>    <span class="k">def</span> <span class="nf">release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span></div>
+
+    <span class="c1">### Serial Communication ###</span>
+<div class="viewcode-block" id="CTMRKobuki2.connect"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strPort</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">strPort</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">is_system_win</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">strSerialPort</span> <span class="o">=</span> <span class="s2">&quot;COM1&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">strSerialPort</span> <span class="o">=</span> <span class="s2">&quot;/dev/ttyUSB0&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strSerialPort</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">strPort</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span><span class="o">.</span><span class="n">setParams</span><span class="p">(</span><span class="n">port</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">strSerialPort</span><span class="p">,</span> <span class="n">baudrate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nSerialBaud</span><span class="p">,</span> <span class="n">bytesize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nSerialByteSize</span><span class="p">,</span>
+                               <span class="n">parity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">strSerialParity</span><span class="p">,</span> <span class="n">stopbits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fSerialStopBits</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CTMRKobuki2.is_connected"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.is_connected">[docs]</a>    <span class="k">def</span> <span class="nf">is_connected</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span><span class="o">.</span><span class="n">is_connected</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CTMRKobuki2.disconnect"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_connected</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span></div>
+
+    <span class="c1">### CALLBACKS ###</span>
+<div class="viewcode-block" id="CTMRKobuki2.on_serial_connect"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.on_serial_connect">[docs]</a>    <span class="k">def</span> <span class="nf">on_serial_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_connected</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_curr_pos</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request_extra_data</span><span class="p">(</span><span class="n">EnumKobuki2ExtraData</span><span class="o">.</span><span class="n">FW_VERSION</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CTMRKobuki2.on_serial_disconnect"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.on_serial_disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">on_serial_disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_disconnected</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CTMRKobuki2.on_serial_error"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.on_serial_error">[docs]</a>    <span class="k">def</span> <span class="nf">on_serial_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_comm_error</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CTMRKobuki2.on_serial_send"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.on_serial_send">[docs]</a>    <span class="k">def</span> <span class="nf">on_serial_send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abtData</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="CTMRKobuki2.on_serial_recv"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.on_serial_recv">[docs]</a>    <span class="k">def</span> <span class="nf">on_serial_recv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abtData</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btaSerialBuff</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">MAX_SERIAL_BUFFER</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">btaSerialBuff</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">btaSerialBuff</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">(</span><span class="n">abtData</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">deserialize_packet</span><span class="p">()</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">btaSerialBuff</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CTMRKobuki2.deserialize_packet"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.deserialize_packet">[docs]</a>    <span class="k">def</span> <span class="nf">deserialize_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">bta_stx</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xAA</span><span class="p">,</span> <span class="mh">0x55</span><span class="p">])</span>  <span class="c1"># STX</span>
+        <span class="n">n_next_packet_idx</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">n_idx</span> <span class="o">=</span> <span class="n">search_pattern</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btaSerialBuff</span><span class="p">,</span> <span class="n">bta_stx</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># length of the whole packet</span>
+            <span class="c1"># header: 2 bytes, # length: 1 byte, minimum payload : 3 bytes, checksum: 1 byte</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btaSerialBuff</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">n_idx</span> <span class="o">+</span> <span class="mi">7</span><span class="p">:</span>
+                <span class="c1"># length of the payload</span>
+                <span class="n">n_payload_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btaSerialBuff</span><span class="p">[</span><span class="n">n_idx</span> <span class="o">+</span> <span class="mi">2</span><span class="p">])</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btaSerialBuff</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">n_idx</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">+</span> <span class="n">n_payload_length</span><span class="p">:</span>
+                    <span class="n">n_next_packet_idx</span> <span class="o">=</span> <span class="n">n_idx</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">+</span> <span class="n">n_payload_length</span>
+                    <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">btaSerialBuff</span><span class="p">[</span><span class="n">n_idx</span> <span class="o">+</span> <span class="mi">3</span><span class="p">:</span> <span class="n">n_next_packet_idx</span><span class="p">]</span>  <span class="c1"># start of payload</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">parse_payload_values</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btaSerialBuff</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">n_next_packet_idx</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">btaSerialBuff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">btaSerialBuff</span><span class="p">[</span><span class="n">n_next_packet_idx</span><span class="p">:]</span></div>
+
+<div class="viewcode-block" id="CTMRKobuki2.parse_payload_values"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.parse_payload_values">[docs]</a>    <span class="k">def</span> <span class="nf">parse_payload_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abtPayload</span><span class="p">):</span>
+
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">abtPayload</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">EnumKobuki2FeedbackIdentifier</span><span class="o">.</span><span class="n">CORE_SENSORS</span><span class="p">:</span>
+                <span class="n">length</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">dict_core_sensors</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">timestamp</span> <span class="o">=</span> <span class="n">convert_bytearray_to_int_le</span><span class="p">(</span><span class="n">abtPayload</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">])</span>
+                <span class="n">bumper</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+                <span class="n">wheel_drop</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+                <span class="n">cliff</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+                <span class="n">left_encoder</span> <span class="o">=</span> <span class="n">convert_bytearray_to_int_le</span><span class="p">(</span><span class="n">abtPayload</span><span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">9</span><span class="p">])</span>
+                <span class="n">right_encoder</span> <span class="o">=</span> <span class="n">convert_bytearray_to_int_le</span><span class="p">(</span><span class="n">abtPayload</span><span class="p">[</span><span class="mi">9</span><span class="p">:</span><span class="mi">11</span><span class="p">])</span>
+                <span class="n">left_pwm</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span>
+                <span class="n">right_pwm</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span>
+                <span class="n">button</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span>
+                <span class="n">charger</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span>
+                <span class="n">battery</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">15</span><span class="p">]</span>
+                <span class="n">overcurrent</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">16</span><span class="p">]</span>
+
+                <span class="n">dict_core_sensors</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">timestamp</span>
+                <span class="n">dict_core_sensors</span><span class="p">[</span><span class="s1">&#39;bumper&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bumper</span>
+                <span class="n">dict_core_sensors</span><span class="p">[</span><span class="s1">&#39;wheel_drop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wheel_drop</span>
+                <span class="n">dict_core_sensors</span><span class="p">[</span><span class="s1">&#39;cliff&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cliff</span>
+                <span class="n">dict_core_sensors</span><span class="p">[</span><span class="s1">&#39;left_pwm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">left_pwm</span>
+                <span class="n">dict_core_sensors</span><span class="p">[</span><span class="s1">&#39;right_pwm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">right_pwm</span>
+                <span class="n">dict_core_sensors</span><span class="p">[</span><span class="s1">&#39;button&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">button</span>
+                <span class="n">dict_core_sensors</span><span class="p">[</span><span class="s1">&#39;charger&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">charger</span>
+                <span class="n">dict_core_sensors</span><span class="p">[</span><span class="s1">&#39;battery&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">battery</span>
+                <span class="n">dict_core_sensors</span><span class="p">[</span><span class="s1">&#39;overcurrent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">overcurrent</span>
+
+                <span class="c1"># calculate position</span>
+                <span class="n">f_dt</span> <span class="o">=</span> <span class="p">(</span><span class="n">timestamp</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">nPrevTimeStamp</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1000.</span>
+                <span class="n">f_rad_r</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">right_encoder</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nEncRes</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">GearRatio</span><span class="p">)</span>
+                <span class="n">f_rad_l</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">left_encoder</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nEncRes</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">GearRatio</span><span class="p">)</span>
+                <span class="n">f_rads_r</span> <span class="o">=</span> <span class="p">(</span><span class="n">f_rad_r</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">fPrevRadR</span><span class="p">)</span> <span class="o">/</span> <span class="n">f_dt</span>
+                <span class="n">f_rads_l</span> <span class="o">=</span> <span class="p">(</span><span class="n">f_rad_l</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">fPrevRadL</span><span class="p">)</span> <span class="o">/</span> <span class="n">f_dt</span>
+                <span class="n">stCurrPos</span><span class="p">,</span> <span class="n">f_vel_c</span><span class="p">,</span> <span class="n">f_omega_c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_pose</span><span class="p">((</span><span class="n">f_rads_r</span><span class="p">,</span> <span class="n">f_rads_l</span><span class="p">),</span> <span class="n">f_dt</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">nPrevTimeStamp</span> <span class="o">=</span> <span class="n">timestamp</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fPrevRadR</span> <span class="o">=</span> <span class="n">f_rad_r</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fPrevRadL</span> <span class="o">=</span> <span class="n">f_rad_l</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_core_sensors</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">dict_core_sensors</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_get_enc</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">right_encoder</span><span class="p">,</span> <span class="n">left_encoder</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_get_vel</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">f_rads_r</span><span class="p">,</span> <span class="n">f_rads_l</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_get_pos</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">stCurrPos</span><span class="o">.</span><span class="n">X_POS</span><span class="p">,</span> <span class="n">stCurrPos</span><span class="o">.</span><span class="n">Y_POS</span><span class="p">,</span> <span class="n">stCurrPos</span><span class="o">.</span><span class="n">THETA</span><span class="p">)</span>
+                <span class="k">del</span> <span class="n">abtPayload</span><span class="p">[:</span><span class="n">length</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>  <span class="c1"># actual length + headers (ID/length)</span>
+
+            <span class="k">elif</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">EnumKobuki2FeedbackIdentifier</span><span class="o">.</span><span class="n">DOCK_INFRARED</span><span class="p">:</span>
+                <span class="n">length</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">right_signal</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">central_signal</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+                <span class="n">left_signal</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_dock_ir</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">right_signal</span><span class="p">,</span> <span class="n">central_signal</span><span class="p">,</span> <span class="n">left_signal</span><span class="p">)</span>
+                <span class="k">del</span> <span class="n">abtPayload</span><span class="p">[:</span><span class="n">length</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>  <span class="c1"># actual length + headers (ID/length)</span>
+
+            <span class="k">elif</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">EnumKobuki2FeedbackIdentifier</span><span class="o">.</span><span class="n">INERTIAL_SENSOR</span><span class="p">:</span>
+                <span class="n">length</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">angle</span> <span class="o">=</span> <span class="n">convert_bytearray_to_int_le</span><span class="p">(</span><span class="n">abtPayload</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span> <span class="n">abIsSigned</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">angle_rate</span> <span class="o">=</span> <span class="n">convert_bytearray_to_int_le</span><span class="p">(</span><span class="n">abtPayload</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="n">abIsSigned</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_dock_inertial_sensor</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">angle</span><span class="p">,</span> <span class="n">angle_rate</span><span class="p">)</span>
+                <span class="k">del</span> <span class="n">abtPayload</span><span class="p">[:</span><span class="n">length</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>  <span class="c1"># actual length + headers (ID/length)</span>
+
+            <span class="k">elif</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">EnumKobuki2FeedbackIdentifier</span><span class="o">.</span><span class="n">CLIFF</span><span class="p">:</span>
+                <span class="n">length</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">right_cliff</span> <span class="o">=</span> <span class="n">convert_bytearray_to_int_le</span><span class="p">(</span><span class="n">abtPayload</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">])</span>
+                <span class="n">central_cliff</span> <span class="o">=</span> <span class="n">convert_bytearray_to_int_le</span><span class="p">(</span><span class="n">abtPayload</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">])</span>
+                <span class="n">left_cliff</span> <span class="o">=</span> <span class="n">convert_bytearray_to_int_le</span><span class="p">(</span><span class="n">abtPayload</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_cliff</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">right_cliff</span><span class="p">,</span> <span class="n">central_cliff</span><span class="p">,</span> <span class="n">left_cliff</span><span class="p">)</span>
+                <span class="k">del</span> <span class="n">abtPayload</span><span class="p">[:</span><span class="n">length</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>  <span class="c1"># actual length + headers (ID/length)</span>
+
+            <span class="k">elif</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">EnumKobuki2FeedbackIdentifier</span><span class="o">.</span><span class="n">CURRENT</span><span class="p">:</span>
+                <span class="n">length</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">left_motor</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">right_motor</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_current</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">right_motor</span><span class="p">,</span> <span class="n">left_motor</span><span class="p">)</span>
+                <span class="k">del</span> <span class="n">abtPayload</span><span class="p">[:</span><span class="n">length</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>  <span class="c1"># actual length + headers (ID/length)</span>
+
+            <span class="k">elif</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">EnumKobuki2FeedbackIdentifier</span><span class="o">.</span><span class="n">HW_VERSION</span><span class="p">:</span>
+                <span class="n">length</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">patch</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">minor</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+                <span class="n">major</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+                <span class="n">hw_ver</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">major</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">minor</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_get_hw_ver</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">hw_ver</span><span class="p">)</span>
+                <span class="k">del</span> <span class="n">abtPayload</span><span class="p">[:</span><span class="n">length</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>  <span class="c1"># actual length + headers (ID/length)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">request_extra_data</span><span class="p">(</span><span class="n">EnumKobuki2ExtraData</span><span class="o">.</span><span class="n">FW_VERSION</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">EnumKobuki2FeedbackIdentifier</span><span class="o">.</span><span class="n">FW_VERSION</span><span class="p">:</span>
+                <span class="n">length</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">patch</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">minor</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+                <span class="n">major</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+                <span class="n">fw_ver</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">major</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">minor</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_get_ver</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">fw_ver</span><span class="p">)</span>
+                <span class="k">del</span> <span class="n">abtPayload</span><span class="p">[:</span><span class="n">length</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>  <span class="c1"># actual length + headers (ID/length)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">request_extra_data</span><span class="p">(</span><span class="n">EnumKobuki2ExtraData</span><span class="o">.</span><span class="n">HW_VERSION</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">EnumKobuki2FeedbackIdentifier</span><span class="o">.</span><span class="n">GYRO</span><span class="p">:</span>
+                <span class="n">length</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">frame_id</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">data_length</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+                <span class="n">list_x</span><span class="p">,</span> <span class="n">list_y</span><span class="p">,</span> <span class="n">list_z</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+                <span class="n">list_ang_vel_x</span><span class="p">,</span> <span class="n">list_ang_vel_y</span><span class="p">,</span> <span class="n">list_ang_vel_z</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">data_length</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)):</span>
+                    <span class="n">x_axis</span> <span class="o">=</span> <span class="n">convert_bytearray_to_int_le</span><span class="p">(</span><span class="n">abtPayload</span><span class="p">[</span><span class="mi">4</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">6</span><span class="p">:</span><span class="mi">6</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">6</span><span class="p">])</span>
+                    <span class="n">y_axis</span> <span class="o">=</span> <span class="n">convert_bytearray_to_int_le</span><span class="p">(</span><span class="n">abtPayload</span><span class="p">[</span><span class="mi">6</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">6</span><span class="p">:</span><span class="mi">8</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">6</span><span class="p">])</span>
+                    <span class="n">z_axis</span> <span class="o">=</span> <span class="n">convert_bytearray_to_int_le</span><span class="p">(</span><span class="n">abtPayload</span><span class="p">[</span><span class="mi">8</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">6</span><span class="p">:</span><span class="mi">10</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">6</span><span class="p">])</span>
+                    <span class="n">list_x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x_axis</span><span class="p">)</span>
+                    <span class="n">list_y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_axis</span><span class="p">)</span>
+                    <span class="n">list_z</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z_axis</span><span class="p">)</span>
+                    <span class="c1">#  deg/s ratio is 0.00875</span>
+                    <span class="c1">#  rotated 90 degree counterclockwise about z-axis</span>
+                    <span class="n">f_ang_vel_x</span> <span class="o">=</span> <span class="mf">0.00875</span> <span class="o">*</span> <span class="n">y_axis</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span>
+                    <span class="n">f_ang_vel_y</span> <span class="o">=</span> <span class="mf">0.00875</span> <span class="o">*</span> <span class="n">x_axis</span>
+                    <span class="n">f_ang_vel_z</span> <span class="o">=</span> <span class="mf">0.00875</span> <span class="o">*</span> <span class="n">z_axis</span>
+                    <span class="n">list_ang_vel_x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f_ang_vel_x</span><span class="p">)</span>
+                    <span class="n">list_ang_vel_y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f_ang_vel_y</span><span class="p">)</span>
+                    <span class="n">list_ang_vel_z</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f_ang_vel_z</span><span class="p">)</span>
+
+                <span class="n">tuple_raw</span> <span class="o">=</span> <span class="p">(</span><span class="n">list_x</span><span class="p">,</span> <span class="n">list_y</span><span class="p">,</span> <span class="n">list_z</span><span class="p">)</span>
+                <span class="n">tuple_ang_vel</span> <span class="o">=</span> <span class="p">(</span><span class="n">list_ang_vel_x</span><span class="p">,</span> <span class="n">list_ang_vel_y</span><span class="p">,</span> <span class="n">list_ang_vel_z</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_gyro</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">frame_id</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">data_length</span><span class="o">/</span><span class="mi">3</span><span class="p">),</span> <span class="n">tuple_raw</span><span class="p">,</span> <span class="n">tuple_ang_vel</span><span class="p">)</span>
+                <span class="k">del</span> <span class="n">abtPayload</span><span class="p">[:</span><span class="n">length</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>  <span class="c1"># actual length + headers (ID/length)</span>
+
+            <span class="k">elif</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">EnumKobuki2FeedbackIdentifier</span><span class="o">.</span><span class="n">GPI</span><span class="p">:</span>
+                <span class="n">length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">abtPayload</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">digital_input</span> <span class="o">=</span> <span class="n">convert_bytearray_to_int_le</span><span class="p">(</span><span class="n">abtPayload</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">])</span>
+                <span class="n">list_analog_input</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+                    <span class="n">list_analog_input</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">convert_bytearray_to_int_le</span><span class="p">(</span><span class="n">abtPayload</span><span class="p">[</span><span class="mi">4</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">2</span><span class="p">:</span><span class="mi">6</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]))</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_gpi</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">digital_input</span><span class="p">,</span> <span class="n">list_analog_input</span><span class="p">)</span>
+                <span class="k">del</span> <span class="n">abtPayload</span><span class="p">[:</span><span class="n">length</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>  <span class="c1"># actual length + headers (ID/length)</span>
+
+            <span class="k">elif</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">EnumKobuki2FeedbackIdentifier</span><span class="o">.</span><span class="n">UDID</span><span class="p">:</span>
+                <span class="n">length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">abtPayload</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">list_udid</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+                    <span class="n">list_udid</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">convert_bytearray_to_int_le</span><span class="p">(</span><span class="n">abtPayload</span><span class="p">[</span><span class="mi">2</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">:</span><span class="mi">6</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">]))</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_udid</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">list_udid</span><span class="p">)</span>
+                <span class="k">del</span> <span class="n">abtPayload</span><span class="p">[:</span><span class="n">length</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>  <span class="c1"># actual length + headers (ID/length)</span>
+
+            <span class="k">elif</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">EnumKobuki2FeedbackIdentifier</span><span class="o">.</span><span class="n">CONTROLLER_INFO</span><span class="p">:</span>
+                <span class="n">length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">abtPayload</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="nb">type</span> <span class="o">=</span> <span class="n">abtPayload</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">p_gain</span> <span class="o">=</span> <span class="n">convert_bytearray_to_int_le</span><span class="p">(</span><span class="n">abtPayload</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">7</span><span class="p">])</span>
+                <span class="n">i_gain</span> <span class="o">=</span> <span class="n">convert_bytearray_to_int_le</span><span class="p">(</span><span class="n">abtPayload</span><span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">11</span><span class="p">])</span>
+                <span class="n">d_gain</span> <span class="o">=</span> <span class="n">convert_bytearray_to_int_le</span><span class="p">(</span><span class="n">abtPayload</span><span class="p">[</span><span class="mi">11</span><span class="p">:</span><span class="mi">15</span><span class="p">])</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_controller_info</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="n">p_gain</span><span class="p">,</span> <span class="n">i_gain</span><span class="p">,</span> <span class="n">d_gain</span><span class="p">)</span>
+                <span class="k">del</span> <span class="n">abtPayload</span><span class="p">[:</span><span class="n">length</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>  <span class="c1"># actual length + headers (ID/length)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">abtPayload</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span></div>
+
+    <span class="c1">### COMMANDS ###</span>
+<div class="viewcode-block" id="CTMRKobuki2.set_velocity_control"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.set_velocity_control">[docs]</a>    <span class="k">def</span> <span class="nf">set_velocity_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">afVel</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">afYawRate</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="n">bta_payload</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([])</span>
+
+        <span class="c1"># avoid zero denominator (undefined radius)</span>
+        <span class="c1"># translation motion only</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">afYawRate</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">fRadiusLimit</span><span class="p">:</span>
+            <span class="n">f_radius</span> <span class="o">=</span> <span class="mf">0.</span>
+            <span class="n">f_vel</span> <span class="o">=</span> <span class="n">afVel</span> <span class="o">*</span> <span class="mf">1000.</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">f_radius</span> <span class="o">=</span> <span class="n">afVel</span> <span class="o">*</span> <span class="mf">1000.</span> <span class="o">/</span> <span class="n">afYawRate</span>
+
+            <span class="c1"># rotation only</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">afVel</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">fRadiusLimit</span> <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">f_radius</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">1.</span><span class="p">:</span>
+                <span class="n">f_vel</span> <span class="o">=</span> <span class="mf">1000.</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">WheelBase</span> <span class="o">*</span> <span class="n">afYawRate</span> <span class="o">/</span> <span class="mf">2.</span>
+                <span class="n">f_radius</span> <span class="o">=</span> <span class="mf">1.</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">f_radius</span> <span class="o">&gt;</span> <span class="mf">0.</span><span class="p">:</span>
+                    <span class="n">f_vel</span> <span class="o">=</span> <span class="p">(</span><span class="n">f_radius</span> <span class="o">+</span> <span class="mf">1000.</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">WheelBase</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">*</span> <span class="n">afYawRate</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">f_vel</span> <span class="o">=</span> <span class="p">(</span><span class="n">f_radius</span> <span class="o">-</span> <span class="mf">1000.</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">WheelBase</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">*</span> <span class="n">afYawRate</span>
+
+        <span class="n">bta_payload</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">convert_s16_to_bytearray_le</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">f_vel</span><span class="p">)))</span>
+        <span class="n">bta_payload</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">convert_s16_to_bytearray_le</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">f_radius</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_packet</span><span class="p">(</span><span class="n">EnumKobuki2CmdIdentifier</span><span class="o">.</span><span class="n">BASE_CONTROL</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">bta_payload</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CTMRKobuki2.move_joint_space"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.move_joint_space">[docs]</a>    <span class="k">def</span> <span class="nf">move_joint_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">afRight</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">afLeft</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="n">vel_c</span><span class="p">,</span> <span class="n">omega_c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_center_vel</span><span class="p">((</span><span class="n">afRight</span><span class="p">,</span> <span class="n">afLeft</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_velocity_control</span><span class="p">(</span><span class="n">vel_c</span><span class="p">,</span> <span class="n">omega_c</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CTMRKobuki2.move_stop"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.move_stop">[docs]</a>    <span class="k">def</span> <span class="nf">move_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_velocity_control</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CTMRKobuki2.play_custom_sound"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.play_custom_sound">[docs]</a>    <span class="k">def</span> <span class="nf">play_custom_sound</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anFreqHz</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">anDurationMs</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">bta_payload</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([])</span>
+        <span class="n">f_alpha</span> <span class="o">=</span> <span class="mf">0.00000275</span>
+
+        <span class="k">if</span> <span class="n">anDurationMs</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">anDurationMs</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="n">anDurationMs</span> <span class="o">&gt;</span> <span class="mi">255</span><span class="p">:</span>
+            <span class="n">anDurationMs</span> <span class="o">=</span> <span class="mi">255</span>
+
+        <span class="n">n_note</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">anFreqHz</span> <span class="o">*</span> <span class="n">f_alpha</span><span class="p">))</span>
+        <span class="n">bta_payload</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">convert_u16_to_bytearray_le</span><span class="p">(</span><span class="n">n_note</span><span class="p">))</span>
+        <span class="n">bta_payload</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">anDurationMs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_packet</span><span class="p">(</span><span class="n">EnumKobuki2CmdIdentifier</span><span class="o">.</span><span class="n">SOUND</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">bta_payload</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CTMRKobuki2.play_sound_sequence"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.play_sound_sequence">[docs]</a>    <span class="k">def</span> <span class="nf">play_sound_sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anSequenceNo</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">bta_payload</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([])</span>
+
+        <span class="k">if</span> <span class="n">anSequenceNo</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">anSequenceNo</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="n">anSequenceNo</span> <span class="o">&gt;</span> <span class="mi">6</span><span class="p">:</span>
+            <span class="n">anSequenceNo</span> <span class="o">=</span> <span class="mi">6</span>
+
+        <span class="n">bta_payload</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">anSequenceNo</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_packet</span><span class="p">(</span><span class="n">EnumKobuki2CmdIdentifier</span><span class="o">.</span><span class="n">SOUND_SEQUENCE</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">bta_payload</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CTMRKobuki2.request_extra_data"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.request_extra_data">[docs]</a>    <span class="k">def</span> <span class="nf">request_extra_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aenumExtra</span><span class="p">:</span> <span class="n">EnumKobuki2ExtraData</span> <span class="o">=</span> <span class="n">EnumKobuki2ExtraData</span><span class="o">.</span><span class="n">UDID</span><span class="p">):</span>
+        <span class="n">bta_payload</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([])</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">en_data</span> <span class="o">=</span> <span class="n">EnumKobuki2ExtraData</span><span class="p">(</span><span class="n">aenumExtra</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">en_data</span> <span class="o">=</span> <span class="n">EnumKobuki2ExtraData</span><span class="o">.</span><span class="n">UDID</span>
+
+        <span class="n">bta_payload</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">convert_u16_to_bytearray_le</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">en_data</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_packet</span><span class="p">(</span><span class="n">EnumKobuki2CmdIdentifier</span><span class="o">.</span><span class="n">REQUEST_EXTRA</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">bta_payload</span><span class="p">)</span></div>
+
+    <span class="c1"># todo: add this feature</span>
+<div class="viewcode-block" id="CTMRKobuki2.set_gpio"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.set_gpio">[docs]</a>    <span class="k">def</span> <span class="nf">set_gpio</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="CTMRKobuki2.set_controller_gain"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.set_controller_gain">[docs]</a>    <span class="k">def</span> <span class="nf">set_controller_gain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">afKp</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">afKi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">afKd</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="n">bta_payload</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([])</span>
+        <span class="n">n_type</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">afKp</span> <span class="o">==</span> <span class="mi">100</span> <span class="ow">and</span> <span class="n">afKi</span> <span class="o">==</span> <span class="mf">0.1</span> <span class="ow">and</span> <span class="n">afKd</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">n_type</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">n_Kp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">afKp</span> <span class="o">*</span> <span class="mf">1000.</span><span class="p">)</span>
+        <span class="n">n_Ki</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">afKi</span> <span class="o">*</span> <span class="mf">1000.</span><span class="p">)</span>
+        <span class="n">n_Kd</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">afKd</span> <span class="o">*</span> <span class="mf">1000.</span><span class="p">)</span>
+
+        <span class="n">bta_payload</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n_type</span><span class="p">)</span>
+        <span class="n">bta_payload</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">convert_u32_to_bytearray_le</span><span class="p">(</span><span class="n">n_Kp</span><span class="p">))</span>
+        <span class="n">bta_payload</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">convert_u32_to_bytearray_le</span><span class="p">(</span><span class="n">n_Ki</span><span class="p">))</span>
+        <span class="n">bta_payload</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">convert_u32_to_bytearray_le</span><span class="p">(</span><span class="n">n_Kd</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_packet</span><span class="p">(</span><span class="n">EnumKobuki2CmdIdentifier</span><span class="o">.</span><span class="n">SET_CONTROLLER_GAIN</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="n">bta_payload</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CTMRKobuki2.get_controller_gain"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.get_controller_gain">[docs]</a>    <span class="k">def</span> <span class="nf">get_controller_gain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">bta_payload</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([])</span>
+        <span class="n">bta_payload</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mh">0x01</span><span class="p">)</span>  <span class="c1"># dummy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_packet</span><span class="p">(</span><span class="n">EnumKobuki2CmdIdentifier</span><span class="o">.</span><span class="n">GET_CONTROLLER_GAIN</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">bta_payload</span><span class="p">)</span></div>
+
+    <span class="c1"># Serialize</span>
+<div class="viewcode-block" id="CTMRKobuki2.make_payload"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.make_payload">[docs]</a>    <span class="k">def</span> <span class="nf">make_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anCmd</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">anSize</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">abtaPayLoad</span><span class="p">:</span> <span class="nb">bytearray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytearray</span><span class="p">:</span>
+        <span class="n">buff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([])</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">anCmd</span><span class="p">)</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">anSize</span><span class="p">)</span>
+        <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">abtaPayLoad</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">buff</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">abtaPayLoad</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">buff</span></div>
+
+<div class="viewcode-block" id="CTMRKobuki2.make_packet"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.make_packet">[docs]</a>    <span class="k">def</span> <span class="nf">make_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abtaPayload</span><span class="p">:</span> <span class="nb">bytearray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytearray</span><span class="p">:</span>
+        <span class="n">buff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xAA</span><span class="p">,</span> <span class="mh">0x55</span><span class="p">])</span>  <span class="c1"># STX</span>
+        <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">abtaPayload</span><span class="p">))</span>
+        <span class="n">buff</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">abtaPayload</span><span class="p">)</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">buff</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>  <span class="c1"># remove STX for checksum calculation</span>
+        <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calculate_checksum</span><span class="p">(</span><span class="n">tmp</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">buff</span></div>
+
+<div class="viewcode-block" id="CTMRKobuki2.send_packet"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.send_packet">[docs]</a>    <span class="k">def</span> <span class="nf">send_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anCmd</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">anSize</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">abtaPayLoad</span><span class="p">:</span> <span class="nb">bytearray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">bta_payload</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_payload</span><span class="p">(</span><span class="n">anCmd</span><span class="p">,</span> <span class="n">anSize</span><span class="p">,</span> <span class="n">abtaPayLoad</span><span class="p">)</span>
+        <span class="n">bta_packet</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_packet</span><span class="p">(</span><span class="n">bta_payload</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span><span class="o">.</span><span class="n">is_connected</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span><span class="o">.</span><span class="n">sendData</span><span class="p">(</span><span class="n">bta_packet</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="CTMRKobuki2.calculate_checksum"><a class="viewcode-back" href="../Inc/MobileRobot/TMRKobuki2.html#TMRKobuki2.CTMRKobuki2.calculate_checksum">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_checksum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abtaPayload</span><span class="p">:</span> <span class="nb">bytearray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">abtaPayload</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">tmp</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">abtaPayload</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">^=</span> <span class="n">data</span>
+
+        <span class="k">return</span> <span class="n">tmp</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">CTMRKobuki2</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">get_curr_pos_t</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">set_velocity_control</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

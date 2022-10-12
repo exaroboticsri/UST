@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SerialConfiglWidget &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>SerialConfiglWidget</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for SerialConfiglWidget</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="c1"># File Name    : SerialConfiglWidget.py</span>
+<span class="c1"># Project Name : PySerialTerm</span>
+<span class="c1"># Author       : Raim.Delgado</span>
+<span class="c1"># Organization : SeoulTech</span>
+<span class="c1"># Description  :</span>
+<span class="c1"># [Revision History]</span>
+<span class="c1"># &gt;&gt; 2022.02.19 - First Commit</span>
+<span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">FILE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>  <span class="c1"># %PROJECT_ROOT%/Scripts</span>
+<span class="n">ROOT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">FILE_PATH</span><span class="p">))</span>
+<span class="n">RESOURCES_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Resources&quot;</span><span class="p">)</span>
+<span class="n">SCRIPTS_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Scripts&quot;</span><span class="p">)</span>
+<span class="n">WIDGETS_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">SCRIPTS_PATH</span><span class="p">,</span> <span class="s2">&quot;Widgets&quot;</span><span class="p">)</span>
+<span class="n">LIBRARY_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Library&quot;</span><span class="p">)</span>
+<span class="n">SERIAL_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">LIBRARY_PATH</span><span class="p">,</span> <span class="s2">&quot;Serial&quot;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">SCRIPTS_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">WIDGETS_PATH</span><span class="p">,</span> <span class="n">LIBRARY_PATH</span><span class="p">,</span> <span class="n">SERIAL_PATH</span><span class="p">])</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+
+<span class="k">del</span> <span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">SCRIPTS_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">WIDGETS_PATH</span><span class="p">,</span> <span class="n">LIBRARY_PATH</span><span class="p">,</span> <span class="n">SERIAL_PATH</span>
+
+<span class="kn">from</span> <span class="nn">UiCommon</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">Commons</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">SerialPort</span> <span class="k">import</span> <span class="n">get_serial_port_name_list</span><span class="p">,</span> <span class="n">get_serial_port_description</span><span class="p">,</span> <span class="n">get_serial_baud_list</span>
+
+
+<div class="viewcode-block" id="CWidgetSerialConfig"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialConfiglWidget.html#SerialConfiglWidget.CWidgetSerialConfig">[docs]</a><span class="k">class</span> <span class="nc">CWidgetSerialConfig</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CWidgetSerialConfig</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_serial_connect</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_serial_disconnect</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initUi</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_refresh</span><span class="p">()</span>
+
+<div class="viewcode-block" id="CWidgetSerialConfig.initUi"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialConfiglWidget.html#SerialConfiglWidget.CWidgetSerialConfig.initUi">[docs]</a>    <span class="k">def</span> <span class="nf">initUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">MainLayout</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># Serial Info</span>
+        <span class="n">HLayoutPort</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">lblPort</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">()</span>
+        <span class="n">lblPort</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;PORT&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmbSerialPort</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QComboBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmbSerialPort</span><span class="o">.</span><span class="n">currentTextChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_text_change_cmb_port</span><span class="p">)</span>
+        <span class="n">lblBaud</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">()</span>
+        <span class="n">lblBaud</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;BAUD&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmbSerialBaud</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QComboBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmbSerialBaud</span><span class="o">.</span><span class="n">addItems</span><span class="p">(</span><span class="n">baud</span> <span class="k">for</span> <span class="n">baud</span> <span class="ow">in</span> <span class="n">get_serial_baud_list</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmbSerialBaud</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>  <span class="c1"># 115200</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRefresh</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRefresh</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_refresh</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRefresh</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s2">&quot;reset.png&quot;</span><span class="p">))</span>
+        <span class="c1"># self.btnRefresh.setFlat(True)</span>
+        <span class="c1"># self.btnResetSerialPort.setIconSize(QtCore.QSize(mb_icon_size, mb_icon_size))</span>
+        <span class="c1"># self.btnResetSerialPort.setFixedSize(QtCore.QSize(mb_icon_size + 2, mb_icon_size + 2))</span>
+        <span class="n">HLayoutPort</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lblPort</span><span class="p">)</span>
+        <span class="n">HLayoutPort</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cmbSerialPort</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">HLayoutPort</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lblBaud</span><span class="p">)</span>
+        <span class="n">HLayoutPort</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cmbSerialBaud</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">HLayoutPort</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnRefresh</span><span class="p">)</span>
+
+        <span class="c1"># Serial Control</span>
+        <span class="n">HLayoutCtrl</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnConnect</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;CONNECT&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnConnect</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_connect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnDisConnect</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;DISCONNECT&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnDisConnect</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_disconnect</span><span class="p">)</span>
+        <span class="n">HLayoutCtrl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnConnect</span><span class="p">)</span>
+        <span class="n">HLayoutCtrl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnDisConnect</span><span class="p">)</span>
+
+        <span class="c1"># Serial Description</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txtSerialDesc</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLineEdit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txtSerialDesc</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">HLayoutPort</span><span class="p">)</span>
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">HLayoutCtrl</span><span class="p">)</span>
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">txtSerialDesc</span><span class="p">)</span>
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CWidgetSerialConfig.on_click_btn_disconnect"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialConfiglWidget.html#SerialConfiglWidget.CWidgetSerialConfig.on_click_btn_disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">on_click_btn_disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_serial_disconnect</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CWidgetSerialConfig.on_click_btn_connect"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialConfiglWidget.html#SerialConfiglWidget.CWidgetSerialConfig.on_click_btn_connect">[docs]</a>    <span class="k">def</span> <span class="nf">on_click_btn_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">port</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmbSerialPort</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+        <span class="n">baud</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cmbSerialBaud</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_serial_connect</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">baud</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CWidgetSerialConfig.on_text_change_cmb_port"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialConfiglWidget.html#SerialConfiglWidget.CWidgetSerialConfig.on_text_change_cmb_port">[docs]</a>    <span class="k">def</span> <span class="nf">on_text_change_cmb_port</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">desc</span> <span class="o">=</span> <span class="n">get_serial_port_description</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txtSerialDesc</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">desc</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CWidgetSerialConfig.on_click_btn_refresh"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialConfiglWidget.html#SerialConfiglWidget.CWidgetSerialConfig.on_click_btn_refresh">[docs]</a>    <span class="k">def</span> <span class="nf">on_click_btn_refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmbSerialPort</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmbSerialPort</span><span class="o">.</span><span class="n">addItems</span><span class="p">(</span><span class="n">com_port</span> <span class="k">for</span> <span class="n">com_port</span> <span class="ow">in</span> <span class="n">get_serial_port_name_list</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="CWidgetSerialConfig.on_serial_connected_state"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialConfiglWidget.html#SerialConfiglWidget.CWidgetSerialConfig.on_serial_connected_state">[docs]</a>    <span class="k">def</span> <span class="nf">on_serial_connected_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnDisConnect</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnConnect</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="ow">not</span> <span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRefresh</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="ow">not</span> <span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmbSerialPort</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="ow">not</span> <span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmbSerialBaud</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="ow">not</span> <span class="n">state</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CWidgetSerialConfig.release"><a class="viewcode-back" href="../Inc/SubWindow/SerialTerm/SerialConfiglWidget.html#SerialConfiglWidget.CWidgetSerialConfig.release">[docs]</a>    <span class="k">def</span> <span class="nf">release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

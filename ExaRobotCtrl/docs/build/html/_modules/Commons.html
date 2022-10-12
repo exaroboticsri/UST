@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Commons &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>Commons</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for Commons</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="c1"># File Name    : Commons.py</span>
+<span class="c1"># Project Name : MobileRobotTest</span>
+<span class="c1"># Author       : Raim.Delgado</span>
+<span class="c1"># Organization : SeoulTech</span>
+<span class="c1"># Description  :</span>
+<span class="c1"># [Revision History]</span>
+<span class="c1"># &gt;&gt; 2021.08.24 - First Commit</span>
+<span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">PySignal, 데이터 형변환, 로그, 시스템 체크 등 공통적으로 사용될수 있는 Function 기능이 구현되어 있는 모듈이다.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">psutil</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Union</span>
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">logging</span> <span class="k">import</span> <span class="n">handlers</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+
+<span class="n">FILE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>  <span class="c1"># %PROJECT_ROOT%/Include</span>
+<span class="n">ROOT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">FILE_PATH</span><span class="p">)</span>
+<span class="n">INCLUDE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Include&quot;</span><span class="p">)</span>
+<span class="n">RESOURCES_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Resources&quot;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">])</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+<span class="k">del</span> <span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span>
+
+<span class="n">MAX_SERIAL_BUFFER</span> <span class="o">=</span> <span class="mi">1024</span>  <span class="c1"># 1kb</span>
+<span class="n">MAX_SIZE</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span>
+<span class="n">glob_logger</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="set_cpu_affinity"><a class="viewcode-back" href="../Inc/Commons.html#Commons.set_cpu_affinity">[docs]</a><span class="k">def</span> <span class="nf">set_cpu_affinity</span><span class="p">(</span><span class="n">pid</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="n">affinity_mask</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">}):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">sched_setaffinity</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span><span class="n">affinity_mask</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="check_argument_type"><a class="viewcode-back" href="../Inc/Commons.html#Commons.check_argument_type">[docs]</a><span class="k">def</span> <span class="nf">check_argument_type</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">==</span> <span class="n">arg</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># TODO:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">arg</span> <span class="o">==</span> <span class="nb">object</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__bases__</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="is_ros_installed"><a class="viewcode-back" href="../Inc/Commons.html#Commons.is_ros_installed">[docs]</a><span class="k">def</span> <span class="nf">is_ros_installed</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">ros_requirements</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;rclpy&#39;</span><span class="p">,</span> <span class="s1">&#39;geometry_msgs&#39;</span><span class="p">}</span>
+    <span class="n">installed</span> <span class="o">=</span> <span class="p">{</span><span class="n">pkg</span><span class="o">.</span><span class="n">key</span> <span class="k">for</span> <span class="n">pkg</span> <span class="ow">in</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">working_set</span><span class="p">}</span>
+    <span class="n">missing</span> <span class="o">=</span> <span class="n">ros_requirements</span> <span class="o">-</span> <span class="n">installed</span>
+
+    <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="is_system_win"><a class="viewcode-back" href="../Inc/Commons.html#Commons.is_system_win">[docs]</a><span class="k">def</span> <span class="nf">is_system_win</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">platform</span>
+    <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;Windows&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="get_ip_addr_list"><a class="viewcode-back" href="../Inc/Commons.html#Commons.get_ip_addr_list">[docs]</a><span class="k">def</span> <span class="nf">get_ip_addr_list</span><span class="p">():</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">netlst</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">net_if_addrs</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">netlst</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="s1">&#39;loopback&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+            <span class="n">adap</span> <span class="o">=</span> <span class="n">key</span>
+            <span class="n">mac</span><span class="p">,</span> <span class="n">ipv4</span><span class="p">,</span> <span class="n">ipv6</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">sniclist</span> <span class="o">=</span> <span class="n">netlst</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">snic</span> <span class="ow">in</span> <span class="n">sniclist</span><span class="p">:</span>
+                <span class="n">family</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">snic</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">address</span> <span class="o">=</span> <span class="n">snic</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">family</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">family</span> <span class="o">==</span> <span class="mi">18</span><span class="p">:</span>
+                    <span class="n">mac</span> <span class="o">=</span> <span class="n">address</span>
+                <span class="k">elif</span> <span class="n">family</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">ipv4</span> <span class="o">=</span> <span class="n">address</span>
+                <span class="k">elif</span> <span class="n">family</span> <span class="o">==</span> <span class="mi">23</span> <span class="ow">or</span> <span class="n">family</span> <span class="o">==</span> <span class="mi">30</span><span class="p">:</span>
+                    <span class="n">ipv6</span> <span class="o">=</span> <span class="n">address</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">adap</span><span class="p">,</span> <span class="s1">&#39;mac&#39;</span><span class="p">:</span> <span class="n">mac</span><span class="p">,</span> <span class="s1">&#39;ipv4&#39;</span><span class="p">:</span> <span class="n">ipv4</span><span class="p">,</span> <span class="s1">&#39;ipv6&#39;</span><span class="p">:</span> <span class="n">ipv6</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="PySignal"><a class="viewcode-back" href="../Inc/Commons.html#Commons.PySignal">[docs]</a><span class="k">class</span> <span class="nc">PySignal</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">_args</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_callback</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_args</span> <span class="o">=</span> <span class="n">args</span>
+
+<div class="viewcode-block" id="PySignal.connect"><a class="viewcode-back" href="../Inc/Commons.html#Commons.PySignal.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_callback</span> <span class="o">=</span> <span class="n">callback</span></div>
+
+<div class="viewcode-block" id="PySignal.emit"><a class="viewcode-back" href="../Inc/Commons.html#Commons.PySignal.emit">[docs]</a>    <span class="k">def</span> <span class="nf">emit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_args</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Callback::Argument Length Mismatch&#39;</span><span class="p">)</span>
+        <span class="n">arglen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">arglen</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">validTypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">check_argument_type</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_args</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">arglen</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">validTypes</span><span class="p">)</span> <span class="o">!=</span> <span class="n">arglen</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Callback::Argument Type Mismatch (Definition: </span><span class="si">{}</span><span class="s1">, Call: </span><span class="si">{}</span><span class="s1">, Result: </span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_args</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">validTypes</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_callback</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="convert_u32_to_bytearray_be"><a class="viewcode-back" href="../Inc/Commons.html#Commons.convert_u32_to_bytearray_be">[docs]</a><span class="k">def</span> <span class="nf">convert_u32_to_bytearray_be</span><span class="p">(</span><span class="n">anVal</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytearray</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">anVal</span> <span class="o">&gt;</span> <span class="mi">4294967295</span><span class="p">:</span>
+        <span class="n">anVal</span> <span class="o">=</span> <span class="mi">4294967295</span>
+
+    <span class="k">if</span> <span class="n">anVal</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">anVal</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">buff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([])</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">anVal</span> <span class="o">&gt;&gt;</span> <span class="mi">24</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">anVal</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">anVal</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">anVal</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">buff</span></div>
+
+
+<div class="viewcode-block" id="convert_s32_to_bytearray_be"><a class="viewcode-back" href="../Inc/Commons.html#Commons.convert_s32_to_bytearray_be">[docs]</a><span class="k">def</span> <span class="nf">convert_s32_to_bytearray_be</span><span class="p">(</span><span class="n">anVal</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytearray</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">anVal</span> <span class="o">&gt;</span> <span class="mi">2147483647</span><span class="p">:</span>
+        <span class="n">anVal</span> <span class="o">=</span> <span class="mi">2147483647</span>
+
+    <span class="k">if</span> <span class="n">anVal</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">2147483648</span><span class="p">:</span>
+        <span class="n">anVal</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2147483648</span>
+
+    <span class="k">if</span> <span class="n">anVal</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">anVal</span> <span class="o">=</span> <span class="o">~</span><span class="p">(</span><span class="n">anVal</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># 2&#39;s complement</span>
+
+    <span class="n">buff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([])</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">anVal</span> <span class="o">&gt;&gt;</span> <span class="mi">24</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">anVal</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">anVal</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">anVal</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">buff</span></div>
+
+
+<div class="viewcode-block" id="convert_u16_to_bytearray_be"><a class="viewcode-back" href="../Inc/Commons.html#Commons.convert_u16_to_bytearray_be">[docs]</a><span class="k">def</span> <span class="nf">convert_u16_to_bytearray_be</span><span class="p">(</span><span class="n">anVal</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytearray</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">anVal</span> <span class="o">&gt;</span> <span class="mi">65535</span><span class="p">:</span>
+        <span class="n">anVal</span> <span class="o">=</span> <span class="mi">65535</span>
+
+    <span class="k">if</span> <span class="n">anVal</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">anVal</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">buff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([])</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">anVal</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">anVal</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">buff</span></div>
+
+
+<div class="viewcode-block" id="convert_s16_to_bytearray_be"><a class="viewcode-back" href="../Inc/Commons.html#Commons.convert_s16_to_bytearray_be">[docs]</a><span class="k">def</span> <span class="nf">convert_s16_to_bytearray_be</span><span class="p">(</span><span class="n">anVal</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytearray</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">anVal</span> <span class="o">&gt;</span> <span class="mi">32767</span><span class="p">:</span>
+        <span class="n">anVal</span> <span class="o">=</span> <span class="mi">32767</span>
+
+    <span class="k">if</span> <span class="n">anVal</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">32768</span><span class="p">:</span>
+        <span class="n">anVal</span> <span class="o">=</span> <span class="o">-</span><span class="mi">32768</span>
+
+    <span class="k">if</span> <span class="n">anVal</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">anVal</span> <span class="o">=</span> <span class="o">~</span><span class="p">(</span><span class="n">anVal</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># 2&#39;s complement</span>
+
+    <span class="n">buff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([])</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">anVal</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">anVal</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">buff</span></div>
+
+
+<div class="viewcode-block" id="convert_u32_to_bytearray_le"><a class="viewcode-back" href="../Inc/Commons.html#Commons.convert_u32_to_bytearray_le">[docs]</a><span class="k">def</span> <span class="nf">convert_u32_to_bytearray_le</span><span class="p">(</span><span class="n">anVal</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytearray</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">anVal</span> <span class="o">&gt;</span> <span class="mi">4294967295</span><span class="p">:</span>
+        <span class="n">anVal</span> <span class="o">=</span> <span class="mi">4294967295</span>
+
+    <span class="k">if</span> <span class="n">anVal</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">anVal</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">buff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([])</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">anVal</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">anVal</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">anVal</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">anVal</span> <span class="o">&gt;&gt;</span> <span class="mi">24</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">buff</span></div>
+
+
+<div class="viewcode-block" id="convert_s32_to_bytearray_le"><a class="viewcode-back" href="../Inc/Commons.html#Commons.convert_s32_to_bytearray_le">[docs]</a><span class="k">def</span> <span class="nf">convert_s32_to_bytearray_le</span><span class="p">(</span><span class="n">anVal</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytearray</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">anVal</span> <span class="o">&gt;</span> <span class="mi">2147483647</span><span class="p">:</span>
+        <span class="n">anVal</span> <span class="o">=</span> <span class="mi">2147483647</span>
+
+    <span class="k">if</span> <span class="n">anVal</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">2147483648</span><span class="p">:</span>
+        <span class="n">anVal</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2147483648</span>
+
+    <span class="k">if</span> <span class="n">anVal</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">anVal</span> <span class="o">=</span> <span class="o">~</span><span class="p">(</span><span class="n">anVal</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># 2&#39;s complement</span>
+
+    <span class="n">buff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([])</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">anVal</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">anVal</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">anVal</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">anVal</span> <span class="o">&gt;&gt;</span> <span class="mi">24</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">buff</span></div>
+
+
+<div class="viewcode-block" id="convert_u16_to_bytearray_le"><a class="viewcode-back" href="../Inc/Commons.html#Commons.convert_u16_to_bytearray_le">[docs]</a><span class="k">def</span> <span class="nf">convert_u16_to_bytearray_le</span><span class="p">(</span><span class="n">anVal</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytearray</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">anVal</span> <span class="o">&gt;</span> <span class="mi">65535</span><span class="p">:</span>
+        <span class="n">anVal</span> <span class="o">=</span> <span class="mi">65535</span>
+
+    <span class="k">if</span> <span class="n">anVal</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">anVal</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">buff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([])</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">anVal</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">anVal</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">buff</span></div>
+
+
+<div class="viewcode-block" id="convert_s16_to_bytearray_le"><a class="viewcode-back" href="../Inc/Commons.html#Commons.convert_s16_to_bytearray_le">[docs]</a><span class="k">def</span> <span class="nf">convert_s16_to_bytearray_le</span><span class="p">(</span><span class="n">anVal</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytearray</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">anVal</span> <span class="o">&gt;</span> <span class="mi">32767</span><span class="p">:</span>
+        <span class="n">anVal</span> <span class="o">=</span> <span class="mi">32767</span>
+
+    <span class="k">if</span> <span class="n">anVal</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">32768</span><span class="p">:</span>
+        <span class="n">anVal</span> <span class="o">=</span> <span class="o">-</span><span class="mi">32768</span>
+
+    <span class="k">if</span> <span class="n">anVal</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">anVal</span> <span class="o">=</span> <span class="o">~</span><span class="p">(</span><span class="n">anVal</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># 2&#39;s complement</span>
+
+    <span class="n">buff</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([])</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">anVal</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="n">buff</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">anVal</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">buff</span></div>
+
+
+<div class="viewcode-block" id="convert_bytearray_to_int_be"><a class="viewcode-back" href="../Inc/Commons.html#Commons.convert_bytearray_to_int_be">[docs]</a><span class="k">def</span> <span class="nf">convert_bytearray_to_int_be</span><span class="p">(</span><span class="n">abtaData</span><span class="p">:</span> <span class="nb">bytearray</span><span class="p">,</span> <span class="n">abIsSigned</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">abtaData</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">abtaData</span><span class="p">)</span>
+
+    <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">abtaData</span><span class="p">:</span>
+        <span class="n">num</span> <span class="o">&lt;&lt;=</span> <span class="mi">8</span>
+        <span class="n">num</span> <span class="o">|=</span> <span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0XFF</span>
+
+    <span class="k">if</span> <span class="n">abIsSigned</span><span class="p">:</span>
+        <span class="n">int_max</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">abtaData</span><span class="p">))</span>
+        <span class="n">upper_limit</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">int_max</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">num</span> <span class="o">&gt;</span> <span class="n">upper_limit</span><span class="p">:</span>
+            <span class="n">num</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">int_max</span> <span class="o">-</span> <span class="n">num</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">num</span></div>
+
+
+<div class="viewcode-block" id="convert_bytearray_to_int_le"><a class="viewcode-back" href="../Inc/Commons.html#Commons.convert_bytearray_to_int_le">[docs]</a><span class="k">def</span> <span class="nf">convert_bytearray_to_int_le</span><span class="p">(</span><span class="n">abtaData</span><span class="p">:</span> <span class="nb">bytearray</span><span class="p">,</span> <span class="n">abIsSigned</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">abtaData</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">abtaData</span><span class="p">)</span>
+
+    <span class="n">abtaData</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">convert_bytearray_to_int_be</span><span class="p">(</span><span class="n">abtaData</span><span class="p">,</span> <span class="n">abIsSigned</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="search_pattern"><a class="viewcode-back" href="../Inc/Commons.html#Commons.search_pattern">[docs]</a><span class="k">def</span> <span class="nf">search_pattern</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="n">nRange</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">src</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nRange</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">src</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">pattern</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">continue</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">src</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">])</span> <span class="o">!=</span> <span class="n">pattern</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                <span class="k">break</span>
+
+            <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">i</span>
+
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="convert_str_to_bytearray"><a class="viewcode-back" href="../Inc/Commons.html#Commons.convert_str_to_bytearray">[docs]</a><span class="k">def</span> <span class="nf">convert_str_to_bytearray</span><span class="p">(</span><span class="n">strData</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytearray</span><span class="p">:</span>
+    <span class="n">sData</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([</span><span class="mh">0x00</span><span class="p">])</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">strData</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># String to Bytes: Ascii</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        <span class="n">tmp</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="n">strData</span><span class="p">))</span>
+        <span class="n">sData</span> <span class="o">=</span> <span class="n">tmp</span>
+
+    <span class="k">return</span> <span class="n">sData</span></div>
+
+
+<div class="viewcode-block" id="timestamp_to_string"><a class="viewcode-back" href="../Inc/Commons.html#Commons.timestamp_to_string">[docs]</a><span class="k">def</span> <span class="nf">timestamp_to_string</span><span class="p">(</span><span class="n">timestamp</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">):</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">timestamp</span><span class="o">.</span><span class="n">hour</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">timestamp</span><span class="o">.</span><span class="n">minute</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">timestamp</span><span class="o">.</span><span class="n">second</span>
+    <span class="c1"># ms = timestamp.microsecond // 1000</span>
+    <span class="n">us</span> <span class="o">=</span> <span class="n">timestamp</span><span class="o">.</span><span class="n">microsecond</span>
+    <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%02d</span><span class="s1">:</span><span class="si">%02d</span><span class="s1">:</span><span class="si">%02d</span><span class="s1">.</span><span class="si">%06d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">us</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_curr_time"><a class="viewcode-back" href="../Inc/Commons.html#Commons.get_curr_time">[docs]</a><span class="k">def</span> <span class="nf">get_curr_time</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">%s</span><span class="s1">&gt;&#39;</span> <span class="o">%</span> <span class="n">timestamp_to_string</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="write_log"><a class="viewcode-back" href="../Inc/Commons.html#Commons.write_log">[docs]</a><span class="k">def</span> <span class="nf">write_log</span><span class="p">(</span><span class="n">strMsg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="nb">object</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">logfile</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">glob_logger</span>
+    <span class="k">if</span> <span class="n">glob_logger</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">curpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+        <span class="n">dirpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">curpath</span><span class="p">)</span>
+        <span class="n">logpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="s1">&#39;Log&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">logpath</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">logpath</span><span class="p">)</span>
+        <span class="n">logfilepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">logpath</span><span class="p">,</span> <span class="s1">&#39;Console.log&#39;</span><span class="p">)</span>
+        <span class="n">glob_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;console&#39;</span><span class="p">)</span>
+        <span class="n">fh</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">RotatingFileHandler</span><span class="p">(</span><span class="n">logfilepath</span><span class="p">,</span> <span class="n">maxBytes</span><span class="o">=</span><span class="n">MAX_SIZE</span><span class="p">,</span> <span class="n">backupCount</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;[</span><span class="si">%(asctime)s</span><span class="s1">]</span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">fh</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+        <span class="n">glob_logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
+        <span class="n">glob_logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+
+    <span class="n">strTime</span> <span class="o">=</span> <span class="n">get_curr_time</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">ident</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">strObj</span> <span class="o">=</span> <span class="s1">&#39; [</span><span class="si">%s</span><span class="s1">][Thread ID:0x</span><span class="si">%x</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">ident</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">strObj</span> <span class="o">=</span> <span class="s1">&#39; [</span><span class="si">%s</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">strObj</span> <span class="o">=</span> <span class="s1">&#39; [</span><span class="si">%s</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">strObj</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">strTime</span> <span class="o">+</span> <span class="n">strObj</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">strMsg</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">logfile</span><span class="p">:</span>
+        <span class="n">glob_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">strObj</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">strMsg</span><span class="p">)</span></div>
+        
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

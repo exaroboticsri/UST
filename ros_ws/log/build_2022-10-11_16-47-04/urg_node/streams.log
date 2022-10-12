@@ -1,0 +1,56 @@
+[0.325s] Invoking command in '/home/jw/robot/ros_ws/build/urg_node': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/jw/robot/ros_ws/build/urg_node -- -j12 -l12
+[0.370s] [35m[1mScanning dependencies of target urg_node_driver[0m
+[0.370s] [35m[1mScanning dependencies of target urg_node[0m
+[0.466s] [ 14%] [32mBuilding CXX object CMakeFiles/urg_node_driver.dir/rclcpp_components/node_main_urg_node_driver.cpp.o[0m
+[0.485s] [ 28%] [32mBuilding CXX object CMakeFiles/urg_node.dir/src/urg_c_wrapper.cpp.o[0m
+[0.486s] [ 42%] [32mBuilding CXX object CMakeFiles/urg_node.dir/src/urg_node.cpp.o[0m
+[4.988s] [ 57%] [32m[1mLinking CXX executable urg_node_driver[0m
+[5.334s] [ 57%] Built target urg_node_driver
+[14.849s] [ 71%] [32m[1mLinking CXX shared library liburg_node.so[0m
+[16.485s] [ 71%] Built target urg_node
+[16.586s] [35m[1mScanning dependencies of target getID[0m
+[16.713s] [ 85%] [32mBuilding CXX object CMakeFiles/getID.dir/src/get_id.cpp.o[0m
+[23.361s] [100%] [32m[1mLinking CXX executable getID[0m
+[23.963s] [100%] Built target getID
+[23.986s] Invoked command in '/home/jw/robot/ros_ws/build/urg_node' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/jw/robot/ros_ws/build/urg_node -- -j12 -l12
+[24.078s] Invoking command in '/home/jw/robot/ros_ws/build/urg_node': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/jw/robot/ros_ws/build/urg_node
+[24.111s] -- Install configuration: ""
+[24.112s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/lib/urg_node/urg_node_driver
+[24.113s] -- Set runtime path of "/home/jw/robot/ros_ws/install/urg_node/lib/urg_node/urg_node_driver" to ""
+[24.113s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/lib/liburg_node.so
+[24.121s] -- Set runtime path of "/home/jw/robot/ros_ws/install/urg_node/lib/liburg_node.so" to ""
+[24.121s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/lib/urg_node/getID
+[24.122s] -- Set runtime path of "/home/jw/robot/ros_ws/install/urg_node/lib/urg_node/getID" to ""
+[24.122s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/include
+[24.123s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/include/urg_node
+[24.123s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/include/urg_node/urg_node.hpp
+[24.123s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/include/urg_node/urg_c_wrapper.hpp
+[24.123s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/lib/urg_node/set_urg_ip.py
+[24.123s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/urg_node/launch
+[24.124s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/urg_node/launch/hokuyo_laser.urdf
+[24.125s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/urg_node/launch/urg_node_serial.yaml
+[24.126s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/urg_node/launch/urg_node_launch.py
+[24.126s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/urg_node/launch/urg_lidar.launch
+[24.126s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/urg_node/launch/urg_node_ethernet.yaml
+[24.127s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/urg_node/environment/library_path.sh
+[24.127s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/urg_node/environment/library_path.dsv
+[24.128s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/ament_index/resource_index/package_run_dependencies/urg_node
+[24.128s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/ament_index/resource_index/parent_prefix_path/urg_node
+[24.129s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/urg_node/environment/ament_prefix_path.sh
+[24.129s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/urg_node/environment/ament_prefix_path.dsv
+[24.129s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/urg_node/environment/path.sh
+[24.130s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/urg_node/environment/path.dsv
+[24.130s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/urg_node/local_setup.bash
+[24.130s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/urg_node/local_setup.sh
+[24.131s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/urg_node/local_setup.zsh
+[24.131s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/urg_node/local_setup.dsv
+[24.131s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/urg_node/package.dsv
+[24.132s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/ament_index/resource_index/packages/urg_node
+[24.132s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/ament_index/resource_index/rclcpp_components/urg_node
+[24.133s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/urg_node/cmake/ament_cmake_export_dependencies-extras.cmake
+[24.133s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/urg_node/cmake/ament_cmake_export_include_directories-extras.cmake
+[24.133s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/urg_node/cmake/ament_cmake_export_libraries-extras.cmake
+[24.134s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/urg_node/cmake/urg_nodeConfig.cmake
+[24.134s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/urg_node/cmake/urg_nodeConfig-version.cmake
+[24.134s] -- Installing: /home/jw/robot/ros_ws/install/urg_node/share/urg_node/package.xml
+[24.147s] Invoked command in '/home/jw/robot/ros_ws/build/urg_node' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/jw/robot/ros_ws/build/urg_node

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SocketCommon module &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="sampleClient module" href="sampleClient.html" />
+    <link rel="prev" title="Socket" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../apis.html">Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Include.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../apis.html#include">Include</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../apis.html#library">Library</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../Devices/Camera/modules.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Serial/modules.html">Serial</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="modules.html">Socket</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">SocketCommon module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sampleClient.html">sampleClient module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../apis.html">Modules</a> &raquo;</li>
+          <li><a href="modules.html">Socket</a> &raquo;</li>
+      <li>SocketCommon module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/Lib/Socket/SocketCommon.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-SocketCommon">
+<span id="socketcommon-module"></span><h1>SocketCommon module<a class="headerlink" href="#module-SocketCommon" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="SocketCommon.ClientAcceptThread">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SocketCommon.</span></span><span class="sig-name descname"><span class="pre">ClientAcceptThread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">server</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#SocketCommon.EmbdTcpServer" title="SocketCommon.EmbdTcpServer"><span class="pre">EmbdTcpServer</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#ClientAcceptThread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.ClientAcceptThread" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Thread</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.ClientAcceptThread.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/SocketCommon.html#ClientAcceptThread.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.ClientAcceptThread.run" title="Permalink to this definition"></a></dt>
+<dd><p>Method representing the thread’s activity.</p>
+<p>You may override this method in a subclass. The standard run() method
+invokes the callable object passed to the object’s constructor as the
+target argument, if any, with sequential and keyword arguments taken
+from the args and kwargs arguments, respectively.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.ClientAcceptThread.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#ClientAcceptThread.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.ClientAcceptThread.stop" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="SocketCommon.ClientKillerThread">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SocketCommon.</span></span><span class="sig-name descname"><span class="pre">ClientKillerThread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">server</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#SocketCommon.EmbdTcpServer" title="SocketCommon.EmbdTcpServer"><span class="pre">EmbdTcpServer</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#ClientKillerThread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.ClientKillerThread" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Thread</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.ClientKillerThread.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/SocketCommon.html#ClientKillerThread.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.ClientKillerThread.run" title="Permalink to this definition"></a></dt>
+<dd><p>Method representing the thread’s activity.</p>
+<p>You may override this method in a subclass. The standard run() method
+invokes the callable object passed to the object’s constructor as the
+target argument, if any, with sequential and keyword arguments taken
+from the args and kwargs arguments, respectively.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.ClientKillerThread.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#ClientKillerThread.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.ClientKillerThread.stop" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="SocketCommon.EmbdSocket">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SocketCommon.</span></span><span class="sig-name descname"><span class="pre">EmbdSocket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">afTimeOut</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdSocket"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdSocket" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdSocket.accept_client">
+<span class="sig-name descname"><span class="pre">accept_client</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdSocket.accept_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdSocket.accept_client" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdSocket.bind_address">
+<span class="sig-name descname"><span class="pre">bind_address</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anPort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strAddress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdSocket.bind_address"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdSocket.bind_address" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdSocket.close_socket">
+<span class="sig-name descname"><span class="pre">close_socket</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdSocket.close_socket"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdSocket.close_socket" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdSocket.connect_to_server">
+<span class="sig-name descname"><span class="pre">connect_to_server</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strAddr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nPort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">afTimeOut</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdSocket.connect_to_server"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdSocket.connect_to_server" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdSocket.get_buff_size">
+<span class="sig-name descname"><span class="pre">get_buff_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdSocket.get_buff_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdSocket.get_buff_size" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdSocket.get_socket">
+<span class="sig-name descname"><span class="pre">get_socket</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdSocket.get_socket"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdSocket.get_socket" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdSocket.init_socket">
+<span class="sig-name descname"><span class="pre">init_socket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bIsTcp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdSocket.init_socket"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdSocket.init_socket" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdSocket.init_socket_with_server">
+<span class="sig-name descname"><span class="pre">init_socket_with_server</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aSocket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">socket</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdSocket.init_socket_with_server"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdSocket.init_socket_with_server" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdSocket.is_socket_init">
+<span class="sig-name descname"><span class="pre">is_socket_init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdSocket.is_socket_init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdSocket.is_socket_init" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdSocket.is_socket_tcp">
+<span class="sig-name descname"><span class="pre">is_socket_tcp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdSocket.is_socket_tcp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdSocket.is_socket_tcp" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdSocket.listen_socket">
+<span class="sig-name descname"><span class="pre">listen_socket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anBackLog</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdSocket.listen_socket"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdSocket.listen_socket" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdSocket.set_blocking">
+<span class="sig-name descname"><span class="pre">set_blocking</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bIsBlocking</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdSocket.set_blocking"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdSocket.set_blocking" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdSocket.shutdown_socket">
+<span class="sig-name descname"><span class="pre">shutdown_socket</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdSocket.shutdown_socket"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdSocket.shutdown_socket" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpClient">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SocketCommon.</span></span><span class="sig-name descname"><span class="pre">EmbdTcpClient</span></span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpClient" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpClient.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpClient.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpClient.close" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpClient.connect_to_server">
+<span class="sig-name descname"><span class="pre">connect_to_server</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strAddress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nPort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpClient.connect_to_server"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpClient.connect_to_server" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpClient.init_with_server">
+<span class="sig-name descname"><span class="pre">init_with_server</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aSocket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">socket</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tplAddPort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpClient.init_with_server"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpClient.init_with_server" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpClient.is_connected">
+<span class="sig-name descname"><span class="pre">is_connected</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpClient.is_connected"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpClient.is_connected" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpClient.on_recv_recv_thread">
+<span class="sig-name descname"><span class="pre">on_recv_recv_thread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abData</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpClient.on_recv_recv_thread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpClient.on_recv_recv_thread" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpClient.on_send_send_thread">
+<span class="sig-name descname"><span class="pre">on_send_send_thread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abData</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpClient.on_send_send_thread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpClient.on_send_send_thread" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpClient.on_terminated_recv_thread">
+<span class="sig-name descname"><span class="pre">on_terminated_recv_thread</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpClient.on_terminated_recv_thread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpClient.on_terminated_recv_thread" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpClient.on_terminated_send_thread">
+<span class="sig-name descname"><span class="pre">on_terminated_send_thread</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpClient.on_terminated_send_thread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpClient.on_terminated_send_thread" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpClient.sendData">
+<span class="sig-name descname"><span class="pre">sendData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpClient.sendData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpClient.sendData" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpClient.start_listening">
+<span class="sig-name descname"><span class="pre">start_listening</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpClient.start_listening"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpClient.start_listening" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpClient.start_recv_thread">
+<span class="sig-name descname"><span class="pre">start_recv_thread</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpClient.start_recv_thread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpClient.start_recv_thread" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpClient.start_send_thread">
+<span class="sig-name descname"><span class="pre">start_send_thread</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpClient.start_send_thread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpClient.start_send_thread" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpClient.stop_recv_thread">
+<span class="sig-name descname"><span class="pre">stop_recv_thread</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpClient.stop_recv_thread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpClient.stop_recv_thread" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpClient.stop_send_thread">
+<span class="sig-name descname"><span class="pre">stop_send_thread</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpClient.stop_send_thread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpClient.stop_send_thread" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpServer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SocketCommon.</span></span><span class="sig-name descname"><span class="pre">EmbdTcpServer</span></span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpServer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpServer" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpServer.accept_client">
+<span class="sig-name descname"><span class="pre">accept_client</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpServer.accept_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpServer.accept_client" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpServer.add_client">
+<span class="sig-name descname"><span class="pre">add_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aClient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#SocketCommon.EmbdTcpClient" title="SocketCommon.EmbdTcpClient"><span class="pre">EmbdTcpClient</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpServer.add_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpServer.add_client" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpServer.get_clients">
+<span class="sig-name descname"><span class="pre">get_clients</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpServer.get_clients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpServer.get_clients" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpServer.is_connected">
+<span class="sig-name descname"><span class="pre">is_connected</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpServer.is_connected"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpServer.is_connected" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpServer.on_accept_client">
+<span class="sig-name descname"><span class="pre">on_accept_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tplAddPort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpServer.on_accept_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpServer.on_accept_client" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpServer.on_client_recv">
+<span class="sig-name descname"><span class="pre">on_client_recv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abData</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpServer.on_client_recv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpServer.on_client_recv" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpServer.on_client_send">
+<span class="sig-name descname"><span class="pre">on_client_send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abData</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpServer.on_client_send"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpServer.on_client_send" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpServer.on_disconnect_client">
+<span class="sig-name descname"><span class="pre">on_disconnect_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tplAddPort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpServer.on_disconnect_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpServer.on_disconnect_client" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpServer.on_terminate_client_accept_thread">
+<span class="sig-name descname"><span class="pre">on_terminate_client_accept_thread</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpServer.on_terminate_client_accept_thread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpServer.on_terminate_client_accept_thread" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpServer.on_terminate_client_killer_thread">
+<span class="sig-name descname"><span class="pre">on_terminate_client_killer_thread</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpServer.on_terminate_client_killer_thread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpServer.on_terminate_client_killer_thread" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpServer.remove_client">
+<span class="sig-name descname"><span class="pre">remove_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aClient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#SocketCommon.EmbdTcpClient" title="SocketCommon.EmbdTcpClient"><span class="pre">EmbdTcpClient</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpServer.remove_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpServer.remove_client" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpServer.remove_client_by_address">
+<span class="sig-name descname"><span class="pre">remove_client_by_address</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tplAddrPort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpServer.remove_client_by_address"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpServer.remove_client_by_address" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpServer.send_to_clients">
+<span class="sig-name descname"><span class="pre">send_to_clients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpServer.send_to_clients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpServer.send_to_clients" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpServer.start_client_accept_thread">
+<span class="sig-name descname"><span class="pre">start_client_accept_thread</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpServer.start_client_accept_thread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpServer.start_client_accept_thread" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpServer.start_client_killer_thread">
+<span class="sig-name descname"><span class="pre">start_client_killer_thread</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpServer.start_client_killer_thread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpServer.start_client_killer_thread" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpServer.start_server">
+<span class="sig-name descname"><span class="pre">start_server</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anPort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strIPAddr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anBackLog</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abIsNonBlocking</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpServer.start_server"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpServer.start_server" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpServer.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpServer.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpServer.stop" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpServer.stop_client_accept_thread">
+<span class="sig-name descname"><span class="pre">stop_client_accept_thread</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpServer.stop_client_accept_thread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpServer.stop_client_accept_thread" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.EmbdTcpServer.stop_client_killer_thread">
+<span class="sig-name descname"><span class="pre">stop_client_killer_thread</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#EmbdTcpServer.stop_client_killer_thread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.EmbdTcpServer.stop_client_killer_thread" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="SocketCommon.TcpClientRcvThread">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SocketCommon.</span></span><span class="sig-name descname"><span class="pre">TcpClientRcvThread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asSocket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#SocketCommon.EmbdSocket" title="SocketCommon.EmbdSocket"><span class="pre">EmbdSocket</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#TcpClientRcvThread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.TcpClientRcvThread" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Thread</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SocketCommon.TcpClientRcvThread.keepAlive">
+<span class="sig-name descname"><span class="pre">keepAlive</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#SocketCommon.TcpClientRcvThread.keepAlive" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.TcpClientRcvThread.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/SocketCommon.html#TcpClientRcvThread.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.TcpClientRcvThread.run" title="Permalink to this definition"></a></dt>
+<dd><p>Method representing the thread’s activity.</p>
+<p>You may override this method in a subclass. The standard run() method
+invokes the callable object passed to the object’s constructor as the
+target argument, if any, with sequential and keyword arguments taken
+from the args and kwargs arguments, respectively.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.TcpClientRcvThread.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#TcpClientRcvThread.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.TcpClientRcvThread.stop" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="SocketCommon.TcpClientSendThread">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SocketCommon.</span></span><span class="sig-name descname"><span class="pre">TcpClientSendThread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asSocket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#SocketCommon.EmbdSocket" title="SocketCommon.EmbdSocket"><span class="pre">EmbdSocket</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Queue</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#TcpClientSendThread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.TcpClientSendThread" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Thread</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SocketCommon.TcpClientSendThread.keepAlive">
+<span class="sig-name descname"><span class="pre">keepAlive</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#SocketCommon.TcpClientSendThread.keepAlive" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.TcpClientSendThread.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/SocketCommon.html#TcpClientSendThread.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.TcpClientSendThread.run" title="Permalink to this definition"></a></dt>
+<dd><p>Method representing the thread’s activity.</p>
+<p>You may override this method in a subclass. The standard run() method
+invokes the callable object passed to the object’s constructor as the
+target argument, if any, with sequential and keyword arguments taken
+from the args and kwargs arguments, respectively.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SocketCommon.TcpClientSendThread.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SocketCommon.html#TcpClientSendThread.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SocketCommon.TcpClientSendThread.stop" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="Socket" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sampleClient.html" class="btn btn-neutral float-right" title="sampleClient module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

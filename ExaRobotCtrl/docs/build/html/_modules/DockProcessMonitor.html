@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DockProcessMonitor &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>DockProcessMonitor</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for DockProcessMonitor</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="c1"># File Name    : DockStellaB2Ctrl.py</span>
+<span class="c1"># Project Name : ExaRobotCtrl</span>
+<span class="c1"># Author       : Raim.Delgado</span>
+<span class="c1"># Organization : SeoulTech</span>
+<span class="c1"># Description  :</span>
+<span class="c1"># [Revision History]</span>
+<span class="c1"># &gt;&gt; 2022.02.03 - First Commit</span>
+<span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">queue</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">psutil</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">logging</span> <span class="k">import</span> <span class="n">handlers</span>
+
+
+<span class="n">FILE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>  <span class="c1"># %PROJECT_ROOT%/Include/DOckWidgets</span>
+<span class="n">ROOT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">FILE_PATH</span><span class="p">))</span>
+<span class="n">INCLUDE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Include&quot;</span><span class="p">)</span>
+<span class="n">LIBRARY_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Library&quot;</span><span class="p">)</span>
+<span class="n">SERIAL_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">LIBRARY_PATH</span><span class="p">,</span> <span class="s2">&quot;Serial&quot;</span><span class="p">)</span>
+<span class="n">MDI_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;MdiBackground&quot;</span><span class="p">)</span>
+<span class="n">MISC_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Misc&quot;</span><span class="p">)</span>
+<span class="n">RESOURCES_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Resources&quot;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">])</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+<span class="k">del</span> <span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">LIBRARY_PATH</span><span class="p">,</span> <span class="n">SERIAL_PATH</span>
+
+<span class="kn">from</span> <span class="nn">UiCommon</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">Commons</span> <span class="k">import</span> <span class="o">*</span>
+<span class="n">glob_logger2</span> <span class="o">=</span> <span class="kc">None</span>
+<div class="viewcode-block" id="DockProcessMonitor"><a class="viewcode-back" href="../Inc/DockWidgets/DockProcessMonitor.html#DockProcessMonitor.DockProcessMonitor">[docs]</a><span class="k">class</span> <span class="nc">DockProcessMonitor</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDockWidget</span><span class="p">):</span>
+    <span class="n">sig_close</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
+    <span class="n">sig_btn_refresh</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
+    <span class="n">tableProcInfo</span><span class="p">:</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTableWidget</span>
+    <span class="n">_timer</span><span class="p">:</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QTimer</span>
+    <span class="n">_threadUpdateTable</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_queueTable</span><span class="p">:</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span>
+    
+<div class="viewcode-block" id="DockProcessMonitor.closeEvent"><a class="viewcode-back" href="../Inc/DockWidgets/DockProcessMonitor.html#DockProcessMonitor.DockProcessMonitor.closeEvent">[docs]</a>    <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">closeEvent</span><span class="p">:</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QCloseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_close</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DockProcessMonitor</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;Process Monitor&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_queueTable</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_thread_update_table</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QTimer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="o">.</span><span class="n">timeout</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sig_btn_refresh</span><span class="o">.</span><span class="n">emit</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initUI</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="DockProcessMonitor.initUI"><a class="viewcode-back" href="../Inc/DockWidgets/DockProcessMonitor.html#DockProcessMonitor.DockProcessMonitor.initUI">[docs]</a>    <span class="k">def</span> <span class="nf">initUI</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">centralWidget</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">MainLayout</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">centralWidget</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWidget</span><span class="p">(</span><span class="n">centralWidget</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">initTable</span><span class="p">()</span>
+        <span class="n">HLayoutBtn</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRefresh</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;REFRESH&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRefresh</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s2">&quot;reset.png&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRefresh</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sig_btn_refresh</span><span class="o">.</span><span class="n">emit</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinAutoRefresh</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinAutoRefresh</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinAutoRefresh</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinAutoRefresh</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinAutoRefresh</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+        <span class="n">lblMS</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">()</span>
+        <span class="n">lblMS</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;[ms]&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbAutoRefresh</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QCheckBox</span><span class="p">(</span><span class="s1">&#39;AUTO&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbAutoRefresh</span><span class="o">.</span><span class="n">stateChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_change_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbAutoRefresh</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">HLayoutBtn</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnRefresh</span><span class="p">)</span>
+        <span class="n">HLayoutBtn</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cbAutoRefresh</span><span class="p">)</span>
+        <span class="n">HLayoutBtn</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spinAutoRefresh</span><span class="p">)</span>
+        <span class="n">HLayoutBtn</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lblMS</span><span class="p">)</span>
+        <span class="c1"># HLayoutBtn.addStretch(1)</span>
+
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tableProcInfo</span><span class="p">)</span>
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">HLayoutBtn</span><span class="p">)</span>
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">addStretch</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockProcessMonitor.initTable"><a class="viewcode-back" href="../Inc/DockWidgets/DockProcessMonitor.html#DockProcessMonitor.DockProcessMonitor.initTable">[docs]</a>    <span class="k">def</span> <span class="nf">initTable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">is_system_win</span><span class="p">():</span>
+            <span class="n">listTableHHheader</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;PID&quot;</span><span class="p">,</span> <span class="s2">&quot;STATUS&quot;</span><span class="p">,</span> <span class="s2">&quot;CPU %&quot;</span><span class="p">,</span> <span class="s2">&quot;NICE&quot;</span><span class="p">,</span> <span class="s2">&quot;# of Threads&quot;</span><span class="p">,</span> <span class="s2">&quot;CTX&quot;</span><span class="p">,</span> <span class="s2">&quot;CREATE TIME&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">listTableHHheader</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;PID&quot;</span><span class="p">,</span> <span class="s2">&quot;STATUS&quot;</span><span class="p">,</span> <span class="s2">&quot;CPU %&quot;</span><span class="p">,</span> <span class="s2">&quot;CPU #&quot;</span><span class="p">,</span> <span class="s2">&quot;NICE&quot;</span><span class="p">,</span> <span class="s2">&quot;# of Threads&quot;</span><span class="p">,</span> <span class="s2">&quot;CTX-V&quot;</span><span class="p">,</span> <span class="s2">&quot;CTX-I&quot;</span><span class="p">,</span>
+                                 <span class="s2">&quot;CREATE TIME&quot;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tableProcInfo</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTableWidget</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tableProcInfo</span><span class="o">.</span><span class="n">setColumnCount</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">listTableHHheader</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tableProcInfo</span><span class="o">.</span><span class="n">setHorizontalHeaderLabels</span><span class="p">(</span><span class="n">listTableHHheader</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tableProcInfo</span><span class="o">.</span><span class="n">horizontalHeader</span><span class="p">()</span><span class="o">.</span><span class="n">setSectionResizeMode</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHeaderView</span><span class="o">.</span><span class="n">ResizeToContents</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockProcessMonitor.on_change_state"><a class="viewcode-back" href="../Inc/DockWidgets/DockProcessMonitor.html#DockProcessMonitor.DockProcessMonitor.on_change_state">[docs]</a>    <span class="k">def</span> <span class="nf">on_change_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">state</span> <span class="o">==</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">Checked</span><span class="p">:</span>
+            <span class="n">period</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spinAutoRefresh</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadUpdateTable</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_threadUpdateTable</span><span class="o">.</span><span class="n">set_cpu_get_period</span><span class="p">(</span><span class="n">period</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">period</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queueTable</span><span class="o">.</span><span class="n">mutex</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_queueTable</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DockProcessMonitor.on_update_dict"><a class="viewcode-back" href="../Inc/DockWidgets/DockProcessMonitor.html#DockProcessMonitor.DockProcessMonitor.on_update_dict">[docs]</a>    <span class="k">def</span> <span class="nf">on_update_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dict_proc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_queueTable</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">dict_proc</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockProcessMonitor.start_thread_update_table"><a class="viewcode-back" href="../Inc/DockWidgets/DockProcessMonitor.html#DockProcessMonitor.DockProcessMonitor.start_thread_update_table">[docs]</a>    <span class="k">def</span> <span class="nf">start_thread_update_table</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadUpdateTable</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadUpdateTable</span> <span class="o">=</span> <span class="n">ThreadUpdateTable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queueTable</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadUpdateTable</span><span class="o">.</span><span class="n">sig_terminated</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_terminated_thread_update_table</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadUpdateTable</span><span class="o">.</span><span class="n">sig_update_list</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_update_list_update_table</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadUpdateTable</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DockProcessMonitor.on_update_list_update_table"><a class="viewcode-back" href="../Inc/DockWidgets/DockProcessMonitor.html#DockProcessMonitor.DockProcessMonitor.on_update_list_update_table">[docs]</a>    <span class="k">def</span> <span class="nf">on_update_list_update_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dictContents</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">list_proc_name</span> <span class="o">=</span> <span class="n">dictContents</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tableProcInfo</span><span class="o">.</span><span class="n">setRowCount</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">list_proc_name</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tableProcInfo</span><span class="o">.</span><span class="n">setVerticalHeaderLabels</span><span class="p">(</span><span class="n">list_proc_name</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">proc_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">list_proc_name</span><span class="p">):</span>
+            <span class="n">dictResult</span> <span class="o">=</span> <span class="n">dictContents</span><span class="p">[</span><span class="n">proc_name</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tableProcInfo</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">dictResult</span><span class="p">[</span><span class="s2">&quot;PID&quot;</span><span class="p">],</span> <span class="kc">True</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tableProcInfo</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">dictResult</span><span class="p">[</span><span class="s2">&quot;STATUS&quot;</span><span class="p">],</span> <span class="kc">True</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tableProcInfo</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">dictResult</span><span class="p">[</span><span class="s2">&quot;CPU_USAGE&quot;</span><span class="p">],</span> <span class="kc">True</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">is_system_win</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tableProcInfo</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">dictResult</span><span class="p">[</span><span class="s2">&quot;NICE&quot;</span><span class="p">],</span> <span class="kc">True</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tableProcInfo</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">dictResult</span><span class="p">[</span><span class="s2">&quot;THREADS&quot;</span><span class="p">],</span> <span class="kc">True</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tableProcInfo</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">dictResult</span><span class="p">[</span><span class="s2">&quot;CTX&quot;</span><span class="p">],</span> <span class="kc">True</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tableProcInfo</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">dictResult</span><span class="p">[</span><span class="s2">&quot;CREATE_TM&quot;</span><span class="p">],</span> <span class="kc">True</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tableProcInfo</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">dictResult</span><span class="p">[</span><span class="s2">&quot;CPU_NO&quot;</span><span class="p">],</span> <span class="kc">True</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tableProcInfo</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">dictResult</span><span class="p">[</span><span class="s2">&quot;NICE&quot;</span><span class="p">],</span> <span class="kc">True</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tableProcInfo</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">dictResult</span><span class="p">[</span><span class="s2">&quot;THREADS&quot;</span><span class="p">],</span> <span class="kc">True</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tableProcInfo</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">dictResult</span><span class="p">[</span><span class="s2">&quot;CTX&quot;</span><span class="p">],</span> <span class="kc">True</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tableProcInfo</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">dictResult</span><span class="p">[</span><span class="s2">&quot;CTX_INV&quot;</span><span class="p">],</span> <span class="kc">True</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tableProcInfo</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="n">dictResult</span><span class="p">[</span><span class="s2">&quot;CREATE_TM&quot;</span><span class="p">],</span> <span class="kc">True</span><span class="p">))</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">tableProcInfo</span><span class="o">.</span><span class="n">viewport</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tableProcInfo</span><span class="o">.</span><span class="n">resizeRowsToContents</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DockProcessMonitor.on_terminated_thread_update_table"><a class="viewcode-back" href="../Inc/DockWidgets/DockProcessMonitor.html#DockProcessMonitor.DockProcessMonitor.on_terminated_thread_update_table">[docs]</a>    <span class="k">def</span> <span class="nf">on_terminated_thread_update_table</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadUpdateTable</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_threadUpdateTable</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="DockProcessMonitor.stop_thread_update_table"><a class="viewcode-back" href="../Inc/DockWidgets/DockProcessMonitor.html#DockProcessMonitor.DockProcessMonitor.stop_thread_update_table">[docs]</a>    <span class="k">def</span> <span class="nf">stop_thread_update_table</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadUpdateTable</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadUpdateTable</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="ThreadUpdateTable"><a class="viewcode-back" href="../Inc/DockWidgets/DockProcessMonitor.html#DockProcessMonitor.ThreadUpdateTable">[docs]</a><span class="k">class</span> <span class="nc">ThreadUpdateTable</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QThread</span><span class="p">):</span>
+    <span class="n">_keepAlive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">sig_terminated</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
+    <span class="n">sig_update_list</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ThreadUpdateTable.set_cpu_get_period"><a class="viewcode-back" href="../Inc/DockWidgets/DockProcessMonitor.html#DockProcessMonitor.ThreadUpdateTable.set_cpu_get_period">[docs]</a>    <span class="k">def</span> <span class="nf">set_cpu_get_period</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anInMs</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_period</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">anInMs</span><span class="o">/</span><span class="mf">1000.</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aDock</span><span class="p">:</span> <span class="n">DockProcessMonitor</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ThreadUpdateTable</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_period</span> <span class="o">=</span> <span class="mf">0.1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="n">aDock</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span> <span class="o">=</span> <span class="n">q</span>
+    <span class="c1"># @profile</span>
+<div class="viewcode-block" id="ThreadUpdateTable.run"><a class="viewcode-back" href="../Inc/DockWidgets/DockProcessMonitor.html#DockProcessMonitor.ThreadUpdateTable.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keepAlive</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">dict_proc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">dict_update</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+                <span class="n">list_proc_name</span> <span class="o">=</span> <span class="n">dict_proc</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+                <span class="k">for</span> <span class="n">proc_name</span> <span class="ow">in</span> <span class="n">list_proc_name</span><span class="p">:</span>
+                    <span class="n">pid_no</span> <span class="o">=</span> <span class="n">dict_proc</span><span class="p">[</span><span class="n">proc_name</span><span class="p">]</span>
+                    <span class="n">dict_result</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">pid_no</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">this_proc</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="n">pid_no</span><span class="p">)</span>
+                        <span class="n">pid_no</span> <span class="o">=</span> <span class="n">this_proc</span><span class="o">.</span><span class="n">pid</span>
+                        <span class="n">status</span> <span class="o">=</span> <span class="n">this_proc</span><span class="o">.</span><span class="n">status</span><span class="p">()</span>
+                        <span class="n">cpu_usage</span> <span class="o">=</span> <span class="n">this_proc</span><span class="o">.</span><span class="n">cpu_percent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_period</span><span class="p">)</span>
+                        <span class="n">niceness</span> <span class="o">=</span> <span class="n">this_proc</span><span class="o">.</span><span class="n">nice</span><span class="p">()</span>
+                        <span class="n">threads</span> <span class="o">=</span> <span class="n">this_proc</span><span class="o">.</span><span class="n">num_threads</span><span class="p">()</span>
+                        <span class="n">ctx_sw</span> <span class="o">=</span> <span class="n">this_proc</span><span class="o">.</span><span class="n">num_ctx_switches</span><span class="p">()</span><span class="o">.</span><span class="n">voluntary</span>
+                        <span class="n">create_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">this_proc</span><span class="o">.</span><span class="n">create_time</span><span class="p">())</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span>
+                            <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span>
+                        <span class="n">dict_result</span><span class="p">[</span><span class="s2">&quot;PID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pid_no</span>
+                        <span class="n">dict_result</span><span class="p">[</span><span class="s2">&quot;STATUS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">status</span>
+                        <span class="n">dict_result</span><span class="p">[</span><span class="s2">&quot;CPU_USAGE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cpu_usage</span>
+                        <span class="n">dict_result</span><span class="p">[</span><span class="s2">&quot;NICE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">niceness</span>
+                        <span class="n">dict_result</span><span class="p">[</span><span class="s2">&quot;THREADS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">threads</span>
+                        <span class="n">dict_result</span><span class="p">[</span><span class="s2">&quot;CTX&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ctx_sw</span>
+                        <span class="n">dict_result</span><span class="p">[</span><span class="s2">&quot;CREATE_TM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">create_time</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_system_win</span><span class="p">():</span>
+                            <span class="n">cpu_no</span> <span class="o">=</span> <span class="n">this_proc</span><span class="o">.</span><span class="n">cpu_num</span><span class="p">()</span>
+                            <span class="n">ctx_sw_inv</span> <span class="o">=</span> <span class="n">this_proc</span><span class="o">.</span><span class="n">num_ctx_switches</span><span class="p">()</span><span class="o">.</span><span class="n">involuntary</span>
+                            <span class="n">dict_result</span><span class="p">[</span><span class="s2">&quot;CPU_NO&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cpu_no</span>
+                            <span class="n">dict_result</span><span class="p">[</span><span class="s2">&quot;CTX_INV&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ctx_sw_inv</span>
+
+                        <span class="n">dict_update</span><span class="p">[</span><span class="n">proc_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">dict_result</span>
+                        
+                       
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_update_list</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">dict_update</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write_log_test</span><span class="p">(</span><span class="n">dict_update</span><span class="p">)</span>
+                
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">2e-2</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>  <span class="c1"># todo: add exception handler</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_terminated</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ThreadUpdateTable.stop"><a class="viewcode-back" href="../Inc/DockWidgets/DockProcessMonitor.html#DockProcessMonitor.ThreadUpdateTable.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_keepAlive</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="ThreadUpdateTable.write_log_test"><a class="viewcode-back" href="../Inc/DockWidgets/DockProcessMonitor.html#DockProcessMonitor.ThreadUpdateTable.write_log_test">[docs]</a>    <span class="k">def</span> <span class="nf">write_log_test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span><span class="n">logfile</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="k">global</span> <span class="n">glob_logger2</span>
+        <span class="k">if</span> <span class="n">glob_logger2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">curpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+            <span class="n">dirpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">curpath</span><span class="p">)</span>
+            <span class="n">_dirpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">dirpath</span><span class="p">)</span>
+            <span class="n">logpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_dirpath</span><span class="p">,</span> <span class="s1">&#39;Log&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">logpath</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">logpath</span><span class="p">)</span>
+            <span class="n">logfilepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">logpath</span><span class="p">,</span> <span class="s1">&#39;load.log&#39;</span><span class="p">)</span>
+            <span class="n">glob_logger2</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;load&#39;</span><span class="p">)</span>
+            <span class="n">fh</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">RotatingFileHandler</span><span class="p">(</span><span class="n">logfilepath</span><span class="p">,</span> <span class="n">maxBytes</span><span class="o">=</span><span class="n">MAX_SIZE</span><span class="p">,</span> <span class="n">backupCount</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+            <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;[</span><span class="si">%(asctime)s</span><span class="s1">]</span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">fh</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+            <span class="n">glob_logger2</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
+            <span class="n">glob_logger2</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">list_proc_name</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="n">dat</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">proc_name</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">info</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="n">proc_name</span><span class="p">]</span>
+                <span class="c1"># print(proc_name, info)</span>
+                
+                <span class="n">result</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span> <span class="p">(</span><span class="n">proc_name</span><span class="p">,</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;CPU_USAGE&quot;</span><span class="p">])</span>
+                <span class="n">dat</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+                <span class="c1"># print(result, dat)</span>
+                
+            <span class="n">strLog</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dat</span><span class="p">)</span>
+            <span class="c1"># print(strLog)</span>
+            <span class="k">if</span> <span class="n">logfile</span><span class="p">:</span>
+                <span class="n">glob_logger2</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">strLog</span><span class="p">)</span></div></div>
+            
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">app</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">app</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+
+    <span class="n">MainUI</span> <span class="o">=</span> <span class="n">DockProcessMonitor</span><span class="p">()</span>
+    <span class="n">MainUI</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

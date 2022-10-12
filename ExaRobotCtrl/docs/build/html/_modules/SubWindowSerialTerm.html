@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SubWindowSerialTerm &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>SubWindowSerialTerm</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for SubWindowSerialTerm</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="c1"># File Name    : MainWindow.py</span>
+<span class="c1"># Project Name : PySerialTerm</span>
+<span class="c1"># Author       : Raim.Delgado</span>
+<span class="c1"># Organization : SeoulTech</span>
+<span class="c1"># Description  :</span>
+<span class="c1"># [Revision History]</span>
+<span class="c1"># &gt;&gt; 2022.02.19 - First Commit</span>
+<span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="n">__appname__</span> <span class="o">=</span> <span class="s2">&quot;PySerialTerm&quot;</span>
+<span class="n">__author__</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;Raim.Delgado&quot;</span>
+<span class="n">__build__</span> <span class="o">=</span> <span class="s2">&quot;2022.02.19&quot;</span>
+<span class="n">__status__</span> <span class="o">=</span> <span class="s2">&quot;(Alpha)&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.0.1&quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">__status__</span>
+<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s2">&quot;Raim.Delgado&quot;</span>
+<span class="n">__email__</span> <span class="o">=</span> <span class="s2">&quot;raim223@seoultech.ac.kr&quot;</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">FILE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>  <span class="c1"># %PROJECT_ROOT%/Include/SubWindow</span>
+<span class="n">ROOT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">FILE_PATH</span><span class="p">))</span>
+<span class="n">RESOURCES_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Resources&quot;</span><span class="p">)</span>
+<span class="n">SCRIPTS_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Include&quot;</span><span class="p">)</span>
+<span class="n">SUBWIN_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">SCRIPTS_PATH</span><span class="p">,</span> <span class="s2">&quot;SubWindow&quot;</span><span class="p">)</span>
+<span class="n">WIDGETS_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">SUBWIN_PATH</span><span class="p">,</span> <span class="s2">&quot;SerialTerm&quot;</span><span class="p">)</span>
+<span class="n">MISC_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">SCRIPTS_PATH</span><span class="p">,</span> <span class="s2">&quot;Misc&quot;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">SCRIPTS_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">WIDGETS_PATH</span><span class="p">,</span> <span class="n">MISC_PATH</span><span class="p">])</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+<span class="k">del</span> <span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">SCRIPTS_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">WIDGETS_PATH</span><span class="p">,</span> <span class="n">MISC_PATH</span>
+
+<span class="kn">from</span> <span class="nn">UiCommon</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">Commons</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">SerialSendWidget</span> <span class="k">import</span> <span class="n">CWidgetSerialSend</span>
+<span class="kn">from</span> <span class="nn">SerialConfiglWidget</span> <span class="k">import</span> <span class="n">CWidgetSerialConfig</span>
+<span class="kn">from</span> <span class="nn">SerialLogWidget</span> <span class="k">import</span> <span class="n">CWidgetSerialLog</span>
+<span class="kn">from</span> <span class="nn">EmbdLed</span> <span class="k">import</span> <span class="n">EmbdLed</span>
+
+
+<div class="viewcode-block" id="SubWindowSerialTerm"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowSerialTerm.html#SubWindowSerialTerm.SubWindowSerialTerm">[docs]</a><span class="k">class</span> <span class="nc">SubWindowSerialTerm</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QMdiSubWindow</span><span class="p">):</span>
+    <span class="n">_widgetSerialConfig</span><span class="p">:</span> <span class="n">CWidgetSerialConfig</span>
+    <span class="n">_widgetSerialSend</span><span class="p">:</span> <span class="n">CWidgetSerialSend</span>
+    <span class="n">_widgetSerialLogTx</span><span class="p">:</span> <span class="n">CWidgetSerialLog</span>
+    <span class="n">_widgetSerialLogRx</span><span class="p">:</span> <span class="n">CWidgetSerialLog</span>
+    <span class="n">sig_close</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
+
+<div class="viewcode-block" id="SubWindowSerialTerm.closeEvent"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowSerialTerm.html#SubWindowSerialTerm.SubWindowSerialTerm.closeEvent">[docs]</a>    <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">closeEvent</span><span class="p">:</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QCloseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_close</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SubWindowSerialTerm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowIcon</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s2">&quot;serial_port_icon.svg&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;Serial Terminal&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initUI</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setMinimumWidth</span><span class="p">(</span><span class="mi">800</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setMinimumHeight</span><span class="p">(</span><span class="mi">630</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">630</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initSlots</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">on_serial_disconnected</span><span class="p">()</span>
+
+<div class="viewcode-block" id="SubWindowSerialTerm.initUI"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowSerialTerm.html#SubWindowSerialTerm.SubWindowSerialTerm.initUI">[docs]</a>    <span class="k">def</span> <span class="nf">initUI</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initSerialWidget</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initSerialLogger</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">initStatusBar</span><span class="p">()</span>
+        <span class="n">centralWidget</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">MainLayout</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">centralWidget</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWidget</span><span class="p">(</span><span class="n">centralWidget</span><span class="p">)</span>
+
+        <span class="n">VLayoutLeft</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="n">VLayoutRight</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="n">gBoxSerialConfig</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Serial Configuration&#39;</span><span class="p">)</span>
+        <span class="n">VLayoutConfig</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">gBoxSerialConfig</span><span class="p">)</span>
+        <span class="n">VLayoutConfig</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_widgetSerialConfig</span><span class="p">)</span>
+        <span class="n">VLayoutLeft</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gBoxSerialConfig</span><span class="p">)</span>
+        <span class="n">VLayoutLeft</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_widgetSerialSend</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">VLayoutRight</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_widgetSerialLogTx</span><span class="p">)</span>
+        <span class="n">VLayoutRight</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_widgetSerialLogRx</span><span class="p">)</span>
+        <span class="n">VLayoutRight</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">HLayoutLeftRight</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">HLayoutLeftRight</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">VLayoutLeft</span><span class="p">)</span>
+        <span class="n">HLayoutLeftRight</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">VLayoutRight</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">HLayoutLeftRight</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SubWindowSerialTerm.initSlots"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowSerialTerm.html#SubWindowSerialTerm.SubWindowSerialTerm.initSlots">[docs]</a>    <span class="k">def</span> <span class="nf">initSlots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+        <span class="c1"># self._core.serialPort.sig_connected.connect(self.on_serial_connected)</span>
+        <span class="c1"># self._core.serialPort.sig_disconnected.connect(self.on_serial_disconnected)</span>
+        <span class="c1"># self._core.serialPort.sig_send_data.connect(self.on_serial_send)</span>
+        <span class="c1"># self._core.serialPort.sig_recv_data.connect(self.on_serial_recv)</span>
+
+<div class="viewcode-block" id="SubWindowSerialTerm.initSerialWidget"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowSerialTerm.html#SubWindowSerialTerm.SubWindowSerialTerm.initSerialWidget">[docs]</a>    <span class="k">def</span> <span class="nf">initSerialWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetSerialConfig</span> <span class="o">=</span> <span class="n">CWidgetSerialConfig</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="c1"># self._widgetSerialConfig.sig_serial_connect.connect(self._core.connect_serial_comm)</span>
+        <span class="c1"># self._widgetSerialConfig.sig_serial_disconnect.connect(self._core.disconnect_serial_comm)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetSerialSend</span> <span class="o">=</span> <span class="n">CWidgetSerialSend</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetSerialSend</span><span class="o">.</span><span class="n">sig_send_serial_packet</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_click_btn_serial_packet_send</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SubWindowSerialTerm.initSerialLogger"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowSerialTerm.html#SubWindowSerialTerm.SubWindowSerialTerm.initSerialLogger">[docs]</a>    <span class="k">def</span> <span class="nf">initSerialLogger</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetSerialLogTx</span> <span class="o">=</span> <span class="n">CWidgetSerialLog</span><span class="p">(</span><span class="s1">&#39;TX&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetSerialLogRx</span> <span class="o">=</span> <span class="n">CWidgetSerialLog</span><span class="p">(</span><span class="s1">&#39;RX&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SubWindowSerialTerm.release"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowSerialTerm.html#SubWindowSerialTerm.SubWindowSerialTerm.release">[docs]</a>    <span class="k">def</span> <span class="nf">release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetSerialConfig</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetSerialLogRx</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SubWindowSerialTerm.initStatusBar"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowSerialTerm.html#SubWindowSerialTerm.SubWindowSerialTerm.initStatusBar">[docs]</a>    <span class="k">def</span> <span class="nf">initStatusBar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QStatusBar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s2">&quot;statusBar&quot;</span><span class="p">)</span>
+
+        <span class="n">WidgetLED</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">HLayoutLED</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">(</span><span class="n">WidgetLED</span><span class="p">)</span>
+
+        <span class="n">lblStatus</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">()</span>
+        <span class="n">lblStatus</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;Status:&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ledStatus</span> <span class="o">=</span> <span class="n">EmbdLed</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ledStatus</span><span class="o">.</span><span class="n">setLedSize</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+        <span class="n">lblTx</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">()</span>
+        <span class="n">lblTx</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;TX:&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ledTx</span> <span class="o">=</span> <span class="n">EmbdLed</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ledTx</span><span class="o">.</span><span class="n">setLedSize</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+        <span class="n">lblRx</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">()</span>
+        <span class="n">lblRx</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;RX:&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ledRx</span> <span class="o">=</span> <span class="n">EmbdLed</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ledRx</span><span class="o">.</span><span class="n">setLedSize</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+
+        <span class="c1"># HLayoutLED.addLayout(HLayoutStat)</span>
+        <span class="n">HLayoutLED</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lblStatus</span><span class="p">)</span>
+        <span class="n">HLayoutLED</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ledStatus</span><span class="p">)</span>
+        <span class="n">HLayoutLED</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lblTx</span><span class="p">)</span>
+        <span class="n">HLayoutLED</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ledTx</span><span class="p">)</span>
+        <span class="n">HLayoutLED</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lblRx</span><span class="p">)</span>
+        <span class="n">HLayoutLED</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ledRx</span><span class="p">)</span>
+        <span class="n">HLayoutLED</span><span class="o">.</span><span class="n">addStretch</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">HLayoutLED</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">WidgetLED</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lblCurrentDatetime</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lblCurrentDatetime</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span> <span class="o">|</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">addPermanentWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lblCurrentDatetime</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SubWindowSerialTerm.onThreadMonitorUpdateTime"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowSerialTerm.html#SubWindowSerialTerm.SubWindowSerialTerm.onThreadMonitorUpdateTime">[docs]</a>    <span class="k">def</span> <span class="nf">onThreadMonitorUpdateTime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cur_time</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lblCurrentDatetime</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">cur_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SubWindowSerialTerm.on_serial_connected"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowSerialTerm.html#SubWindowSerialTerm.SubWindowSerialTerm.on_serial_connected">[docs]</a>    <span class="k">def</span> <span class="nf">on_serial_connected</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ledStatus</span><span class="o">.</span><span class="n">TurnOnG</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetSerialConfig</span><span class="o">.</span><span class="n">on_serial_connected_state</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetSerialSend</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SubWindowSerialTerm.on_serial_disconnected"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowSerialTerm.html#SubWindowSerialTerm.SubWindowSerialTerm.on_serial_disconnected">[docs]</a>    <span class="k">def</span> <span class="nf">on_serial_disconnected</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ledStatus</span><span class="o">.</span><span class="n">TurnOff</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ledTx</span><span class="o">.</span><span class="n">TurnOff</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ledRx</span><span class="o">.</span><span class="n">TurnOff</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetSerialSend</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetSerialConfig</span><span class="o">.</span><span class="n">on_serial_connected_state</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SubWindowSerialTerm.on_serial_recv"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowSerialTerm.html#SubWindowSerialTerm.SubWindowSerialTerm.on_serial_recv">[docs]</a>    <span class="k">def</span> <span class="nf">on_serial_recv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="n">cur_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">str_time</span> <span class="o">=</span> <span class="n">cur_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:%M:%S&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ledRx</span><span class="o">.</span><span class="n">TurnOnR</span><span class="p">()</span>
+        <span class="n">btaData</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([])</span>
+        <span class="n">btaData</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetSerialLogRx</span><span class="o">.</span><span class="n">add_table_contents</span><span class="p">(</span><span class="n">str_time</span><span class="p">,</span> <span class="n">btaData</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ledRx</span><span class="o">.</span><span class="n">TurnOff</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SubWindowSerialTerm.on_serial_send"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowSerialTerm.html#SubWindowSerialTerm.SubWindowSerialTerm.on_serial_send">[docs]</a>    <span class="k">def</span> <span class="nf">on_serial_send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="n">cur_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">str_time</span> <span class="o">=</span> <span class="n">cur_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:%M:%S&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ledTx</span><span class="o">.</span><span class="n">TurnOnG</span><span class="p">()</span>
+        <span class="n">btaData</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([])</span>
+        <span class="n">btaData</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgetSerialLogTx</span><span class="o">.</span><span class="n">add_table_contents</span><span class="p">(</span><span class="n">str_time</span><span class="p">,</span> <span class="n">btaData</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ledTx</span><span class="o">.</span><span class="n">TurnOff</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SubWindowSerialTerm.on_click_btn_serial_packet_send"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowSerialTerm.html#SubWindowSerialTerm.SubWindowSerialTerm.on_click_btn_serial_packet_send">[docs]</a>    <span class="k">def</span> <span class="nf">on_click_btn_serial_packet_send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">bytearray</span><span class="p">):</span>
+        <span class="k">pass</span></div></div>
+        <span class="c1"># self._core.serialPort.sendData(msg)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">app</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">app</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+
+    <span class="n">MainUI</span> <span class="o">=</span> <span class="n">SubWindowSerialTerm</span><span class="p">()</span>
+    <span class="n">MainUI</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

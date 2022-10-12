@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>설계 &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ROS2 패키지" href="sw2.html" />
+    <link rel="prev" title="개요" href="abstract.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="abstract.html">개요</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">설계</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">고려사항</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">구조</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>설계</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/software/sw1.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="id1">
+<h1>설계<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
+<div class="section" id="id2">
+<h2>고려사항<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>다양한 장치의 손쉬운 통합</p></li>
+<li><p>확장 용이하고 다른 소프트웨어에 액세스 가능</p></li>
+<li><p>각 장치는 자체 컨텍스트에서 실행</p></li>
+<li><p>프로세스/스레드 간의 동기화</p></li>
+<li><p>프로세스/스레드 활동 모니터링</p></li>
+</ul>
+<p>서비스 로봇에서는 서비스 목적에 따라 카메라, 마이크, 로봇 등 다양한 장치를 사용한다.
+이러한 장치의 손쉬운 통합을 고려하여 각 장치는 모듈화하여 플랫폼 형식으로 소프트웨어 구조를 설계한다.
+새로운 목적의 서비스를 가진 로봇을 개발할 때 기존 로봇 소프트웨어 플랫폼을 적용하기 용이하고 개발 비용과 기간을 절약할 수 있는 장점을 가진다.
+확장이 용이하고 다른 소프트웨어에 액세스가 가능하도록 Python을 사용하여 소프트웨어 구조를 설계</p>
+<p>소프트웨어의 특징은 각 장치에 대한 모듈은 자체 컨텍스트로 실행하도록 설계한다.
+일반적 소프트웨어 구조에서는 멀티스레딩(multi-threading)의 형태를 통하여 여러 작업을 수행할 수 있도록 설계한다.
+하지만 Python의 경우 멀티 쓰레드 간의 교착 상태를 피하기 위해서 GIL(Global Interrupt Lock)을 사용한다.
+이러한 GIL은 프로세스에 대해서 하나의 스레드만 실행되도록 만든다. 이러한 이유로 Python에서는 단일 스레드가 멀티스레드보다 더 높은 성능을 가지며 특히 CPU-bound 스레드에서 더 높은 연산이 필요하다. 이러한 문제점을 해결하기 위해 개발하는 소프트웨어 구조에서는 Python에서 제공하는 멀티프로세싱(multi-processing) 패키지를 사용하여 설계한다.</p>
+</div>
+<div class="section" id="id3">
+<h2>구조<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
+<ul>
+<li><p>Class Diagram</p>
+  <!-- <img src="../image/classdiagram_rev3.png" width="1200px" height="800px" title="타이틀 ?" alt="realsense_add"></img> -->
+<p><img alt="classdiagram_rev3" src="../_images/classdiagram_rev3.png" />
+<strong>SSR(Seoultech Service Robot)은 고영 로봇틱스에서 제공한 EXA Robot 플랫폼을 의미함.</strong></p>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="text-center head"><p>프로세스</p></th>
+<th class="text-center head"><p>역할</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>procMobileRobotCtrl</p></td>
+<td class="text-center"><p>Kobuki 2, Stella b2, EXA-robot 등과 같은 로봇 제어 프로세스</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>procROSRobotNode</p></td>
+<td class="text-center"><p>로봇에 대한 전달받은 정보를 통해 Robot Node를 만드는 프로세스</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>procROSNodeVelpub</p></td>
+<td class="text-center"><p>cmd_vel topic을 생성하는 프로세스</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>procROSNavNode</p></td>
+<td class="text-center"><p>ROS2 nav2을 실행하는 프로세스</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>procROSRealsenseNode</p></td>
+<td class="text-center"><p>ROS2 Realsense을 실행하는 프로세스</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>procExternalComm</p></td>
+<td class="text-center"><p>외부 통신(TCP)과 관련된 프로세스</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>procFacerecogn</p></td>
+<td class="text-center"><p>Facerecognition을 실행하는 포로세스</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>procTextToSpeech</p></td>
+<td class="text-center"><p>TextToSpeech 실행하는 프로세스</p></td>
+</tr>
+</tbody>
+</table>
+<p>소프트웨어 구조는 2가지 주요 구성 요소인 ControlCore, MainWindow로 설계한다.
+ControlCore는 메인 컨트롤러로서 장치, 인터페이스 및 제어 소프트웨어를 다룬다.
+MainWindow는 GUI로서 사용자 인터페이스의 신호 및 슬롯을 다룬다.
+로봇 제어 시스템과 관련된 모든 객체 및 메소드는 GUI에서 분리한다.
+MainWindow와 ControlCore 간의 데이터 교환은 콜백 기능을 사용하여 구현한다.
+또한 StellaB2, Kobuki2, SSR(E) 다양한 서비스 로봇에 적용할 수 있는 구조를 가진다.</p>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="abstract.html" class="btn btn-neutral float-left" title="개요" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sw2.html" class="btn btn-neutral float-right" title="ROS2 패키지" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

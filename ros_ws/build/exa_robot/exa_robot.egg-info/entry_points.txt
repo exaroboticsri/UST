@@ -1,0 +1,3 @@
+[console_scripts]
+robot_node = exa_robot.exa_node:main
+

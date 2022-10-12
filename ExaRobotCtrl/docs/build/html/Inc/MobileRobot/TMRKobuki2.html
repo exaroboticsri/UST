@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TMRKobuki2 module &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="TMRStellaB2 module" href="TMRStellaB2.html" />
+    <link rel="prev" title="TMRExaRobot module" href="TMRExaRobot.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../apis.html">Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Include.html">Overview</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../apis.html#include">Include</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../modules.html">Include</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../AudioRecognition/modules.html">AudioRecognition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../SpeechSynthesis/modules.html">SpeechSynthesis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Dialog/modules.html">Dialog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../DockWidgets/modules.html">DockWidgets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ExternalComm/modules.html">ExternalComm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../MdiBackground/modules.html">MdiBackground</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Misc/modules.html">Misc</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="modules.html">MobileRobot</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="MobileRobotBase.html">MobileRobotBase module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TMRDiff.html">TMRDiff module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TMRExaRobot.html">TMRExaRobot module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">TMRKobuki2 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TMRStellaB2.html">TMRStellaB2 module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../MultiProcessing/modules.html">MultiProcessing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../PathPlanning/modules.html">PathPlanning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ROSIntegration/modules.html">ROSIntegration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../SubWindow/modules.html">SubWindow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../SubWindow/SerialTerm/modules.html">SerialTerm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../TrajectoryGenerator/modules.html">TrajectoryGenerator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../apis.html#library">Library</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../apis.html">Modules</a> &raquo;</li>
+          <li><a href="modules.html">MobileRobot</a> &raquo;</li>
+      <li>TMRKobuki2 module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/Inc/MobileRobot/TMRKobuki2.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-TMRKobuki2">
+<span id="tmrkobuki2-module"></span><h1>TMRKobuki2 module<a class="headerlink" href="#module-TMRKobuki2" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TMRKobuki2.</span></span><span class="sig-name descname"><span class="pre">CTMRKobuki2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adictConfig</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="TMRDiff.html#TMRDiff.CTMRDiff" title="TMRDiff.CTMRDiff"><code class="xref py py-class docutils literal notranslate"><span class="pre">CTMRDiff</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.btaSerialBuff">
+<span class="sig-name descname"><span class="pre">btaSerialBuff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bytearray</span></em><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.btaSerialBuff" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.calculate_checksum">
+<span class="sig-name descname"><span class="pre">calculate_checksum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abtaPayload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytearray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.calculate_checksum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.calculate_checksum" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.connect">
+<span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strPort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.connect" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.deserialize_packet">
+<span class="sig-name descname"><span class="pre">deserialize_packet</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.deserialize_packet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.deserialize_packet" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.disconnect">
+<span class="sig-name descname"><span class="pre">disconnect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.disconnect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.disconnect" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.fPrevTime">
+<span class="sig-name descname"><span class="pre">fPrevTime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.fPrevTime" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.fRadiusLimit">
+<span class="sig-name descname"><span class="pre">fRadiusLimit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.fRadiusLimit" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.fSerialStopBits">
+<span class="sig-name descname"><span class="pre">fSerialStopBits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.fSerialStopBits" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.get_controller_gain">
+<span class="sig-name descname"><span class="pre">get_controller_gain</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.get_controller_gain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.get_controller_gain" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.is_connected">
+<span class="sig-name descname"><span class="pre">is_connected</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.is_connected"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.is_connected" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.make_packet">
+<span class="sig-name descname"><span class="pre">make_packet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abtaPayload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytearray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytearray</span></span></span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.make_packet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.make_packet" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.make_payload">
+<span class="sig-name descname"><span class="pre">make_payload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anCmd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anSize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abtaPayLoad</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bytearray</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytearray</span></span></span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.make_payload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.make_payload" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.move_joint_space">
+<span class="sig-name descname"><span class="pre">move_joint_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">afRight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">afLeft</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.move_joint_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.move_joint_space" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.move_stop">
+<span class="sig-name descname"><span class="pre">move_stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.move_stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.move_stop" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.nSerialBaud">
+<span class="sig-name descname"><span class="pre">nSerialBaud</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.nSerialBaud" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.nSerialByteSize">
+<span class="sig-name descname"><span class="pre">nSerialByteSize</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.nSerialByteSize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.on_serial_connect">
+<span class="sig-name descname"><span class="pre">on_serial_connect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.on_serial_connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.on_serial_connect" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.on_serial_disconnect">
+<span class="sig-name descname"><span class="pre">on_serial_disconnect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.on_serial_disconnect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.on_serial_disconnect" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.on_serial_error">
+<span class="sig-name descname"><span class="pre">on_serial_error</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.on_serial_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.on_serial_error" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.on_serial_recv">
+<span class="sig-name descname"><span class="pre">on_serial_recv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abtData</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.on_serial_recv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.on_serial_recv" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.on_serial_send">
+<span class="sig-name descname"><span class="pre">on_serial_send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abtData</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.on_serial_send"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.on_serial_send" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.parse_payload_values">
+<span class="sig-name descname"><span class="pre">parse_payload_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abtPayload</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.parse_payload_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.parse_payload_values" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.play_custom_sound">
+<span class="sig-name descname"><span class="pre">play_custom_sound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anFreqHz</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anDurationMs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.play_custom_sound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.play_custom_sound" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.play_sound_sequence">
+<span class="sig-name descname"><span class="pre">play_sound_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anSequenceNo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.play_sound_sequence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.play_sound_sequence" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.release">
+<span class="sig-name descname"><span class="pre">release</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.release"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.release" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.request_extra_data">
+<span class="sig-name descname"><span class="pre">request_extra_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aenumExtra</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#TMRKobuki2.EnumKobuki2ExtraData" title="TMRKobuki2.EnumKobuki2ExtraData"><span class="pre">EnumKobuki2ExtraData</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">EnumKobuki2ExtraData.UDID</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.request_extra_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.request_extra_data" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.send_packet">
+<span class="sig-name descname"><span class="pre">send_packet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anCmd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anSize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abtaPayLoad</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bytearray</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.send_packet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.send_packet" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.set_controller_gain">
+<span class="sig-name descname"><span class="pre">set_controller_gain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">afKp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">afKi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">afKd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.set_controller_gain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.set_controller_gain" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.set_gpio">
+<span class="sig-name descname"><span class="pre">set_gpio</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.set_gpio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.set_gpio" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.set_velocity_control">
+<span class="sig-name descname"><span class="pre">set_velocity_control</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">afVel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">afYawRate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#CTMRKobuki2.set_velocity_control"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.set_velocity_control" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.strSerialParity">
+<span class="sig-name descname"><span class="pre">strSerialParity</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.strSerialParity" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.CTMRKobuki2.strSerialPort">
+<span class="sig-name descname"><span class="pre">strSerialPort</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#TMRKobuki2.CTMRKobuki2.strSerialPort" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2CmdIdentifier">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TMRKobuki2.</span></span><span class="sig-name descname"><span class="pre">EnumKobuki2CmdIdentifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#EnumKobuki2CmdIdentifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.EnumKobuki2CmdIdentifier" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2CmdIdentifier.BASE_CONTROL">
+<span class="sig-name descname"><span class="pre">BASE_CONTROL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2CmdIdentifier.BASE_CONTROL" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2CmdIdentifier.CHANGE_FRAME">
+<span class="sig-name descname"><span class="pre">CHANGE_FRAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2CmdIdentifier.CHANGE_FRAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2CmdIdentifier.GET_CONTROLLER_GAIN">
+<span class="sig-name descname"><span class="pre">GET_CONTROLLER_GAIN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">14</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2CmdIdentifier.GET_CONTROLLER_GAIN" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2CmdIdentifier.GPO">
+<span class="sig-name descname"><span class="pre">GPO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">12</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2CmdIdentifier.GPO" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2CmdIdentifier.REQUEST_EEPROM">
+<span class="sig-name descname"><span class="pre">REQUEST_EEPROM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">11</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2CmdIdentifier.REQUEST_EEPROM" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2CmdIdentifier.REQUEST_EXTRA">
+<span class="sig-name descname"><span class="pre">REQUEST_EXTRA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">9</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2CmdIdentifier.REQUEST_EXTRA" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2CmdIdentifier.SET_CONTROLLER_GAIN">
+<span class="sig-name descname"><span class="pre">SET_CONTROLLER_GAIN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">13</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2CmdIdentifier.SET_CONTROLLER_GAIN" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2CmdIdentifier.SOUND">
+<span class="sig-name descname"><span class="pre">SOUND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2CmdIdentifier.SOUND" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2CmdIdentifier.SOUND_SEQUENCE">
+<span class="sig-name descname"><span class="pre">SOUND_SEQUENCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2CmdIdentifier.SOUND_SEQUENCE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2CmdIdentifier.toInt">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">toInt</span></span><a class="headerlink" href="#TMRKobuki2.EnumKobuki2CmdIdentifier.toInt" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2ExtraData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TMRKobuki2.</span></span><span class="sig-name descname"><span class="pre">EnumKobuki2ExtraData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#EnumKobuki2ExtraData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.EnumKobuki2ExtraData" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2ExtraData.FW_VERSION">
+<span class="sig-name descname"><span class="pre">FW_VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2ExtraData.FW_VERSION" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2ExtraData.HW_VERSION">
+<span class="sig-name descname"><span class="pre">HW_VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2ExtraData.HW_VERSION" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2ExtraData.UDID">
+<span class="sig-name descname"><span class="pre">UDID</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2ExtraData.UDID" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2ExtraData.toInt">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">toInt</span></span><a class="headerlink" href="#TMRKobuki2.EnumKobuki2ExtraData.toInt" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2FeedbackIdentifier">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TMRKobuki2.</span></span><span class="sig-name descname"><span class="pre">EnumKobuki2FeedbackIdentifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#EnumKobuki2FeedbackIdentifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.EnumKobuki2FeedbackIdentifier" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2FeedbackIdentifier.CLIFF">
+<span class="sig-name descname"><span class="pre">CLIFF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2FeedbackIdentifier.CLIFF" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2FeedbackIdentifier.CONTROLLER_INFO">
+<span class="sig-name descname"><span class="pre">CONTROLLER_INFO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">21</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2FeedbackIdentifier.CONTROLLER_INFO" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2FeedbackIdentifier.CORE_SENSORS">
+<span class="sig-name descname"><span class="pre">CORE_SENSORS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2FeedbackIdentifier.CORE_SENSORS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2FeedbackIdentifier.CURRENT">
+<span class="sig-name descname"><span class="pre">CURRENT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2FeedbackIdentifier.CURRENT" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2FeedbackIdentifier.DOCK_INFRARED">
+<span class="sig-name descname"><span class="pre">DOCK_INFRARED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2FeedbackIdentifier.DOCK_INFRARED" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2FeedbackIdentifier.FW_VERSION">
+<span class="sig-name descname"><span class="pre">FW_VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">11</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2FeedbackIdentifier.FW_VERSION" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2FeedbackIdentifier.GPI">
+<span class="sig-name descname"><span class="pre">GPI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">16</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2FeedbackIdentifier.GPI" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2FeedbackIdentifier.GYRO">
+<span class="sig-name descname"><span class="pre">GYRO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">13</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2FeedbackIdentifier.GYRO" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2FeedbackIdentifier.HW_VERSION">
+<span class="sig-name descname"><span class="pre">HW_VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2FeedbackIdentifier.HW_VERSION" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2FeedbackIdentifier.INERTIAL_SENSOR">
+<span class="sig-name descname"><span class="pre">INERTIAL_SENSOR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2FeedbackIdentifier.INERTIAL_SENSOR" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2FeedbackIdentifier.UDID">
+<span class="sig-name descname"><span class="pre">UDID</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">19</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2FeedbackIdentifier.UDID" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2FeedbackIdentifier.toInt">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">toInt</span></span><a class="headerlink" href="#TMRKobuki2.EnumKobuki2FeedbackIdentifier.toInt" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2SoundSequence">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TMRKobuki2.</span></span><span class="sig-name descname"><span class="pre">EnumKobuki2SoundSequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TMRKobuki2.html#EnumKobuki2SoundSequence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TMRKobuki2.EnumKobuki2SoundSequence" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2SoundSequence.BUTTON">
+<span class="sig-name descname"><span class="pre">BUTTON</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2SoundSequence.BUTTON" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2SoundSequence.CLEANINGEND">
+<span class="sig-name descname"><span class="pre">CLEANINGEND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2SoundSequence.CLEANINGEND" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2SoundSequence.CLEANINGSTART">
+<span class="sig-name descname"><span class="pre">CLEANINGSTART</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2SoundSequence.CLEANINGSTART" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2SoundSequence.ERROR">
+<span class="sig-name descname"><span class="pre">ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2SoundSequence.ERROR" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2SoundSequence.OFF">
+<span class="sig-name descname"><span class="pre">OFF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2SoundSequence.OFF" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2SoundSequence.ON">
+<span class="sig-name descname"><span class="pre">ON</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2SoundSequence.ON" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2SoundSequence.RECHARGE">
+<span class="sig-name descname"><span class="pre">RECHARGE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#TMRKobuki2.EnumKobuki2SoundSequence.RECHARGE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TMRKobuki2.EnumKobuki2SoundSequence.toInt">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">toInt</span></span><a class="headerlink" href="#TMRKobuki2.EnumKobuki2SoundSequence.toInt" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="TMRExaRobot.html" class="btn btn-neutral float-left" title="TMRExaRobot module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="TMRStellaB2.html" class="btn btn-neutral float-right" title="TMRStellaB2 module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

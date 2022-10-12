@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AStar module &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Dijkstra module" href="Dijkstra.html" />
+    <link rel="prev" title="PathPlanning" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../apis.html">Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Include.html">Overview</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../apis.html#include">Include</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../modules.html">Include</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../AudioRecognition/modules.html">AudioRecognition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../SpeechSynthesis/modules.html">SpeechSynthesis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Dialog/modules.html">Dialog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../DockWidgets/modules.html">DockWidgets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ExternalComm/modules.html">ExternalComm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../MdiBackground/modules.html">MdiBackground</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Misc/modules.html">Misc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../MobileRobot/modules.html">MobileRobot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../MultiProcessing/modules.html">MultiProcessing</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="modules.html">PathPlanning</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">AStar module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Dijkstra.html">Dijkstra module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="env.html">env module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plotting.html">plotting module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../ROSIntegration/modules.html">ROSIntegration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../SubWindow/modules.html">SubWindow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../SubWindow/SerialTerm/modules.html">SerialTerm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../TrajectoryGenerator/modules.html">TrajectoryGenerator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../apis.html#library">Library</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../apis.html">Modules</a> &raquo;</li>
+          <li><a href="modules.html">PathPlanning</a> &raquo;</li>
+      <li>AStar module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/Inc/PathPlanning/AStar.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-AStar">
+<span id="astar-module"></span><h1>AStar module<a class="headerlink" href="#module-AStar" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="AStar.AStar">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">AStar.</span></span><span class="sig-name descname"><span class="pre">AStar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_goal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heuristic_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/AStar.html#AStar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AStar.AStar" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>AStar set the cost + heuristics as the priority</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="AStar.AStar.cost">
+<span class="sig-name descname"><span class="pre">cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_goal</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/AStar.html#AStar.cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AStar.AStar.cost" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate Cost for this motion
+:param s_start: starting node
+:param s_goal: end node
+:return:  Cost for this motion
+:note: Cost function could be more complicate!</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AStar.AStar.extract_path">
+<span class="sig-name descname"><span class="pre">extract_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">PARENT</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/AStar.html#AStar.extract_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AStar.AStar.extract_path" title="Permalink to this definition"></a></dt>
+<dd><p>Extract the path based on the PARENT set.
+:return: The planning path</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AStar.AStar.f_value">
+<span class="sig-name descname"><span class="pre">f_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/AStar.html#AStar.f_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AStar.AStar.f_value" title="Permalink to this definition"></a></dt>
+<dd><p>f = g + h. (g: Cost to come, h: heuristic value)
+:param s: current state
+:return: f</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AStar.AStar.get_neighbor">
+<span class="sig-name descname"><span class="pre">get_neighbor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/AStar.html#AStar.get_neighbor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AStar.AStar.get_neighbor" title="Permalink to this definition"></a></dt>
+<dd><p>find neighbors of state s that not in obstacles.
+:param s: state
+:return: neighbors</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AStar.AStar.heuristic">
+<span class="sig-name descname"><span class="pre">heuristic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/AStar.html#AStar.heuristic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AStar.AStar.heuristic" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate heuristic.
+:param s: current node (state)
+:return: heuristic function value</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AStar.AStar.is_collision">
+<span class="sig-name descname"><span class="pre">is_collision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_end</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/AStar.html#AStar.is_collision"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AStar.AStar.is_collision" title="Permalink to this definition"></a></dt>
+<dd><p>check if the line segment (s_start, s_end) is collision.
+:param s_start: start node
+:param s_end: end node
+:return: True: is collision / False: not collision</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AStar.AStar.repeated_searching">
+<span class="sig-name descname"><span class="pre">repeated_searching</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_goal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/AStar.html#AStar.repeated_searching"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AStar.AStar.repeated_searching" title="Permalink to this definition"></a></dt>
+<dd><p>run A* with weight e.
+:param s_start: starting state
+:param s_goal: goal state
+:param e: weight of a*
+:return: path and visited order.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AStar.AStar.searching">
+<span class="sig-name descname"><span class="pre">searching</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/AStar.html#AStar.searching"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AStar.AStar.searching" title="Permalink to this definition"></a></dt>
+<dd><p>A_star Searching.
+:return: path, visited order</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AStar.AStar.searching_repeated_astar">
+<span class="sig-name descname"><span class="pre">searching_repeated_astar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/AStar.html#AStar.searching_repeated_astar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AStar.AStar.searching_repeated_astar" title="Permalink to this definition"></a></dt>
+<dd><p>repeated A*.
+:param e: weight of A*
+:return: path and visited order</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="AStar.main">
+<span class="sig-prename descclassname"><span class="pre">AStar.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/AStar.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AStar.main" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="PathPlanning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Dijkstra.html" class="btn btn-neutral float-right" title="Dijkstra module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

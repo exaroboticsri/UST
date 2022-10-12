@@ -1,0 +1,14 @@
+[35m[1mScanning dependencies of target realsense2_camera[0m
+[ 12%] Built target realsense2_camera_node
+make[2]: *** No rule to make target '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/realsense-ros/realsense2_camera/src/parameters.cpp', needed by 'CMakeFiles/realsense2_camera.dir/src/parameters.cpp.o'.  Stop.
+make[2]: *** Waiting for unfinished jobs....
+[ 25%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/realsense_node_factory.cpp.o[0m
+[ 25%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/t265_realsense_node.cpp.o[0m
+[ 31%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/base_realsense_node.cpp.o[0m
+[01m[K/home/jw/robot/ros_ws/src/ExaRobot_ROS2/realsense-ros/realsense2_camera/src/base_realsense_node.cpp:[m[K In member function ‘[01m[Krealsense2_camera_msgs::msg::Extrinsics realsense2_camera::BaseRealSenseNode::rsExtrinsicsToMsg(const rs2_extrinsics&, const string&) const[m[K’:
+[01m[K/home/jw/robot/ros_ws/src/ExaRobot_ROS2/realsense-ros/realsense2_camera/src/base_realsense_node.cpp:2578:19:[m[K [01;31m[Kerror: [m[K‘[01m[Kusing Extrinsics = struct realsense2_camera_msgs::msg::Extrinsics_<std::allocator<void> >[m[K’ {aka ‘[01m[Kstruct realsense2_camera_msgs::msg::Extrinsics_<std::allocator<void> >[m[K’} has no member named ‘[01m[Kheader[m[K’
+ 2578 |     extrinsicsMsg.[01;31m[Kheader[m[K.frame_id = frame_id;
+      |                   [01;31m[K^~~~~~[m[K
+make[2]: *** [CMakeFiles/realsense2_camera.dir/build.make:76: CMakeFiles/realsense2_camera.dir/src/base_realsense_node.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:107: CMakeFiles/realsense2_camera.dir/all] Error 2
+make: *** [Makefile:141: all] Error 2

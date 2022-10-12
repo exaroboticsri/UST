@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DockProcessMonitor module &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="DockServerConnect module" href="DockServerConnect.html" />
+    <link rel="prev" title="DockPathPlanSim module" href="DockPathPlanSim.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../apis.html">Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Include.html">Overview</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../apis.html#include">Include</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../modules.html">Include</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../AudioRecognition/modules.html">AudioRecognition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../SpeechSynthesis/modules.html">SpeechSynthesis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Dialog/modules.html">Dialog</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="modules.html">DockWidgets</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="DockExaRobotCtrl.html">DockExaRobotCtrl module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="DockKobuki2Ctrl.html">DockKobuki2Ctrl module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="DockLogger.html">DockLogger module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="DockPathPlanSim.html">DockPathPlanSim module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">DockProcessMonitor module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="DockServerConnect.html">DockServerConnect module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="DockStellaB2Ctrl.html">DockStellaB2Ctrl module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../ExternalComm/modules.html">ExternalComm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../MdiBackground/modules.html">MdiBackground</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Misc/modules.html">Misc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../MobileRobot/modules.html">MobileRobot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../MultiProcessing/modules.html">MultiProcessing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../PathPlanning/modules.html">PathPlanning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ROSIntegration/modules.html">ROSIntegration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../SubWindow/modules.html">SubWindow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../SubWindow/SerialTerm/modules.html">SerialTerm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../TrajectoryGenerator/modules.html">TrajectoryGenerator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../apis.html#library">Library</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../apis.html">Modules</a> &raquo;</li>
+          <li><a href="modules.html">DockWidgets</a> &raquo;</li>
+      <li>DockProcessMonitor module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/Inc/DockWidgets/DockProcessMonitor.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-DockProcessMonitor">
+<span id="dockprocessmonitor-module"></span><h1>DockProcessMonitor module<a class="headerlink" href="#module-DockProcessMonitor" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="DockProcessMonitor.DockProcessMonitor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">DockProcessMonitor.</span></span><span class="sig-name descname"><span class="pre">DockProcessMonitor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockProcessMonitor.html#DockProcessMonitor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockProcessMonitor.DockProcessMonitor" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QDockWidget</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="DockProcessMonitor.DockProcessMonitor.closeEvent">
+<span class="sig-name descname"><span class="pre">closeEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QCloseEvent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockProcessMonitor.html#DockProcessMonitor.closeEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockProcessMonitor.DockProcessMonitor.closeEvent" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockProcessMonitor.DockProcessMonitor.initTable">
+<span class="sig-name descname"><span class="pre">initTable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockProcessMonitor.html#DockProcessMonitor.initTable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockProcessMonitor.DockProcessMonitor.initTable" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockProcessMonitor.DockProcessMonitor.initUI">
+<span class="sig-name descname"><span class="pre">initUI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockProcessMonitor.html#DockProcessMonitor.initUI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockProcessMonitor.DockProcessMonitor.initUI" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockProcessMonitor.DockProcessMonitor.on_change_state">
+<span class="sig-name descname"><span class="pre">on_change_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockProcessMonitor.html#DockProcessMonitor.on_change_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockProcessMonitor.DockProcessMonitor.on_change_state" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockProcessMonitor.DockProcessMonitor.on_terminated_thread_update_table">
+<span class="sig-name descname"><span class="pre">on_terminated_thread_update_table</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockProcessMonitor.html#DockProcessMonitor.on_terminated_thread_update_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockProcessMonitor.DockProcessMonitor.on_terminated_thread_update_table" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockProcessMonitor.DockProcessMonitor.on_update_dict">
+<span class="sig-name descname"><span class="pre">on_update_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict_proc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockProcessMonitor.html#DockProcessMonitor.on_update_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockProcessMonitor.DockProcessMonitor.on_update_dict" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockProcessMonitor.DockProcessMonitor.on_update_list_update_table">
+<span class="sig-name descname"><span class="pre">on_update_list_update_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dictContents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockProcessMonitor.html#DockProcessMonitor.on_update_list_update_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockProcessMonitor.DockProcessMonitor.on_update_list_update_table" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="DockProcessMonitor.DockProcessMonitor.sig_btn_refresh">
+<span class="sig-name descname"><span class="pre">sig_btn_refresh</span></span><a class="headerlink" href="#DockProcessMonitor.DockProcessMonitor.sig_btn_refresh" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="DockProcessMonitor.DockProcessMonitor.sig_close">
+<span class="sig-name descname"><span class="pre">sig_close</span></span><a class="headerlink" href="#DockProcessMonitor.DockProcessMonitor.sig_close" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockProcessMonitor.DockProcessMonitor.start_thread_update_table">
+<span class="sig-name descname"><span class="pre">start_thread_update_table</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockProcessMonitor.html#DockProcessMonitor.start_thread_update_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockProcessMonitor.DockProcessMonitor.start_thread_update_table" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockProcessMonitor.DockProcessMonitor.stop_thread_update_table">
+<span class="sig-name descname"><span class="pre">stop_thread_update_table</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockProcessMonitor.html#DockProcessMonitor.stop_thread_update_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockProcessMonitor.DockProcessMonitor.stop_thread_update_table" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="DockProcessMonitor.DockProcessMonitor.tableProcInfo">
+<span class="sig-name descname"><span class="pre">tableProcInfo</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">QTableWidget</span></em><a class="headerlink" href="#DockProcessMonitor.DockProcessMonitor.tableProcInfo" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="DockProcessMonitor.ThreadUpdateTable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">DockProcessMonitor.</span></span><span class="sig-name descname"><span class="pre">ThreadUpdateTable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aDock</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#DockProcessMonitor.DockProcessMonitor" title="DockProcessMonitor.DockProcessMonitor"><span class="pre">DockProcessMonitor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Queue</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockProcessMonitor.html#ThreadUpdateTable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockProcessMonitor.ThreadUpdateTable" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QThread</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="DockProcessMonitor.ThreadUpdateTable.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockProcessMonitor.html#ThreadUpdateTable.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockProcessMonitor.ThreadUpdateTable.run" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockProcessMonitor.ThreadUpdateTable.set_cpu_get_period">
+<span class="sig-name descname"><span class="pre">set_cpu_get_period</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anInMs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockProcessMonitor.html#ThreadUpdateTable.set_cpu_get_period"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockProcessMonitor.ThreadUpdateTable.set_cpu_get_period" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="DockProcessMonitor.ThreadUpdateTable.sig_terminated">
+<span class="sig-name descname"><span class="pre">sig_terminated</span></span><a class="headerlink" href="#DockProcessMonitor.ThreadUpdateTable.sig_terminated" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="DockProcessMonitor.ThreadUpdateTable.sig_update_list">
+<span class="sig-name descname"><span class="pre">sig_update_list</span></span><a class="headerlink" href="#DockProcessMonitor.ThreadUpdateTable.sig_update_list" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockProcessMonitor.ThreadUpdateTable.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockProcessMonitor.html#ThreadUpdateTable.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockProcessMonitor.ThreadUpdateTable.stop" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DockProcessMonitor.ThreadUpdateTable.write_log_test">
+<span class="sig-name descname"><span class="pre">write_log_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logfile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/DockProcessMonitor.html#ThreadUpdateTable.write_log_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#DockProcessMonitor.ThreadUpdateTable.write_log_test" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="DockPathPlanSim.html" class="btn btn-neutral float-left" title="DockPathPlanSim module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="DockServerConnect.html" class="btn btn-neutral float-right" title="DockServerConnect module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

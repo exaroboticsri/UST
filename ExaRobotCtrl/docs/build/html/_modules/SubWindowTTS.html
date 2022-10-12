@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SubWindowTTS &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>SubWindowTTS</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for SubWindowTTS</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="c1"># File Name    : MainWindow.py</span>
+<span class="c1"># Project Name : PySerialTerm</span>
+<span class="c1"># Author       : Raim.Delgado</span>
+<span class="c1"># Organization : SeoulTech</span>
+<span class="c1"># Description  :</span>
+<span class="c1"># [Revision History]</span>
+<span class="c1"># &gt;&gt; 2022.04.26 - First Commit</span>
+<span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">queue</span>
+<span class="kn">import</span> <span class="nn">pyttsx3</span>
+
+<span class="n">FILE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>  <span class="c1"># %PROJECT_ROOT%/Include/SubWindow</span>
+<span class="n">ROOT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">FILE_PATH</span><span class="p">))</span>
+<span class="n">RESOURCES_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Resources&quot;</span><span class="p">)</span>
+<span class="n">INCLUDE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Include&quot;</span><span class="p">)</span>
+<span class="n">STT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;AudioRecognition&quot;</span><span class="p">)</span>
+<span class="n">SUBWIN_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;SubWindow&quot;</span><span class="p">)</span>
+<span class="n">WIDGETS_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">SUBWIN_PATH</span><span class="p">,</span> <span class="s2">&quot;SerialTerm&quot;</span><span class="p">)</span>
+<span class="n">MISC_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;Misc&quot;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">WIDGETS_PATH</span><span class="p">,</span> <span class="n">MISC_PATH</span><span class="p">])</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+<span class="k">del</span> <span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">WIDGETS_PATH</span><span class="p">,</span> <span class="n">MISC_PATH</span>
+
+<span class="kn">from</span> <span class="nn">UiCommon</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">Commons</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">SpeechToText</span> <span class="k">import</span> <span class="n">CSpeechToText</span>
+
+
+<div class="viewcode-block" id="SubWindowTTS"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowTTS.html#SubWindowTTS.SubWindowTTS">[docs]</a><span class="k">class</span> <span class="nc">SubWindowTTS</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QMdiSubWindow</span><span class="p">):</span>
+    <span class="n">sig_close</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
+    <span class="n">sig_text_to_convert</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">sig_listen_sst</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">btnPlayTTS</span><span class="p">:</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span>
+    <span class="n">txtTextToConvert</span><span class="p">:</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLineEdit</span>
+    <span class="n">_gBoxTTS</span><span class="p">:</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGroupBox</span>
+    <span class="n">_gBoxSTT</span><span class="p">:</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGroupBox</span>
+    <span class="n">_threadLogWriter</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="SubWindowTTS.closeEvent"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowTTS.html#SubWindowTTS.SubWindowTTS.closeEvent">[docs]</a>    <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">closeEvent</span><span class="p">:</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QCloseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_close</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SubWindowTTS</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowIcon</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s2">&quot;tts.png&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;TTS Test&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_queueMsg</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initUI</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setMinimumWidth</span><span class="p">(</span><span class="mi">267</span><span class="p">)</span>
+        <span class="c1"># self.setMaximumHeight(80)</span>
+        <span class="c1"># self.resize(267, 80)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initSlots</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">on_clicked_btn_refresh</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_thread_logwriter</span><span class="p">()</span>
+
+<div class="viewcode-block" id="SubWindowTTS.initUI"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowTTS.html#SubWindowTTS.SubWindowTTS.initUI">[docs]</a>    <span class="k">def</span> <span class="nf">initUI</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initTTS</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initSTT</span><span class="p">()</span>
+        <span class="n">centralWidget</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">MainLayout</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">centralWidget</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWidget</span><span class="p">(</span><span class="n">centralWidget</span><span class="p">)</span>
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gBoxTTS</span><span class="p">)</span>
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gBoxSTT</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SubWindowTTS.initTTS"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowTTS.html#SubWindowTTS.SubWindowTTS.initTTS">[docs]</a>    <span class="k">def</span> <span class="nf">initTTS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gBoxTTS</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;TextToSpeech (TTS)&#39;</span><span class="p">)</span>
+        <span class="n">HlayoutTTS</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gBoxTTS</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txtTextToConvert</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLineEdit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txtTextToConvert</span><span class="o">.</span><span class="n">setFixedHeight</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnPlayTTS</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Play&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnPlayTTS</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s2">&quot;play.png&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnPlayTTS</span><span class="o">.</span><span class="n">setIconSize</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QSize</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnPlayTTS</span><span class="o">.</span><span class="n">setFixedWidth</span><span class="p">(</span><span class="mi">130</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnPlayTTS</span><span class="o">.</span><span class="n">setFixedHeight</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnClearTTS</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnClearTTS</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s2">&quot;clear2.png&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnClearTTS</span><span class="o">.</span><span class="n">setFixedWidth</span><span class="p">(</span><span class="mi">25</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnClearTTS</span><span class="o">.</span><span class="n">setFixedHeight</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+        <span class="n">HlayoutTTS</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">txtTextToConvert</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">HlayoutTTS</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnPlayTTS</span><span class="p">)</span>
+        <span class="n">HlayoutTTS</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnClearTTS</span><span class="p">)</span>
+        <span class="n">HlayoutTTS</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SubWindowTTS.initSTT"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowTTS.html#SubWindowTTS.SubWindowTTS.initSTT">[docs]</a>    <span class="k">def</span> <span class="nf">initSTT</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gBoxSTT</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;SpeechToText (STT)&#39;</span><span class="p">)</span>
+        <span class="n">HLayoutSTT</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gBoxSTT</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txtSSTHistory</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTextEdit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txtSSTHistory</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnListenSST</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Listen&#39;</span><span class="p">)</span>
+
+        <span class="n">VLayoutCtrl</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="n">HLayoutListen</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnListenSST</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s2">&quot;mic.png&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnListenSST</span><span class="o">.</span><span class="n">setIconSize</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QSize</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnListenSST</span><span class="o">.</span><span class="n">setFixedWidth</span><span class="p">(</span><span class="mi">130</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnListenSST</span><span class="o">.</span><span class="n">setFixedHeight</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnClearSST</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnClearSST</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s2">&quot;clear2.png&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnClearSST</span><span class="o">.</span><span class="n">setFixedWidth</span><span class="p">(</span><span class="mi">25</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnClearSST</span><span class="o">.</span><span class="n">setFixedHeight</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+        <span class="n">HLayoutListen</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnListenSST</span><span class="p">)</span>
+        <span class="n">HLayoutListen</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnClearSST</span><span class="p">)</span>
+        <span class="n">HLayoutListen</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmbMicList</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QComboBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmbMicList</span><span class="o">.</span><span class="n">setFixedWidth</span><span class="p">(</span><span class="mi">130</span><span class="p">)</span>
+
+        <span class="n">HLayoutRefresh</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRefresh</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRefresh</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s2">&quot;reset.png&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRefresh</span><span class="o">.</span><span class="n">setFixedWidth</span><span class="p">(</span><span class="mi">25</span><span class="p">)</span>
+        <span class="n">HLayoutRefresh</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cmbMicList</span><span class="p">)</span>
+        <span class="n">HLayoutRefresh</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnRefresh</span><span class="p">)</span>
+        <span class="n">VLayoutCtrl</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">HLayoutListen</span><span class="p">)</span>
+        <span class="n">VLayoutCtrl</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">HLayoutRefresh</span><span class="p">)</span>
+        <span class="n">VLayoutCtrl</span><span class="o">.</span><span class="n">addStretch</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">HLayoutSTT</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">txtSSTHistory</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">HLayoutSTT</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">VLayoutCtrl</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SubWindowTTS.initSlots"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowTTS.html#SubWindowTTS.SubWindowTTS.initSlots">[docs]</a>    <span class="k">def</span> <span class="nf">initSlots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnPlayTTS</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_clicked_btn_play</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRefresh</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_clicked_btn_refresh</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnListenSST</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_clicked_listen_sst</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnClearTTS</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_clicked_clear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">txtTextToConvert</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnClearSST</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_clicked_clear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">txtSSTHistory</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SubWindowTTS.on_clicked_btn_refresh"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowTTS.html#SubWindowTTS.SubWindowTTS.on_clicked_btn_refresh">[docs]</a>    <span class="k">def</span> <span class="nf">on_clicked_btn_refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmbMicList</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmbMicList</span><span class="o">.</span><span class="n">addItems</span><span class="p">(</span><span class="n">CSpeechToText</span><span class="p">()</span><span class="o">.</span><span class="n">get_mic_list</span><span class="p">())</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">mic</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">CSpeechToText</span><span class="p">()</span><span class="o">.</span><span class="n">get_mic_list</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cmbMicList</span><span class="o">.</span><span class="n">setItemData</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">mic</span><span class="p">,</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">ToolTipRole</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SubWindowTTS.on_clicked_btn_play"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowTTS.html#SubWindowTTS.SubWindowTTS.on_clicked_btn_play">[docs]</a>    <span class="k">def</span> <span class="nf">on_clicked_btn_play</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">str_to_convert</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">txtTextToConvert</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_text_to_convert</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">str_to_convert</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SubWindowTTS.put_sst_queue"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowTTS.html#SubWindowTTS.SubWindowTTS.put_sst_queue">[docs]</a>    <span class="k">def</span> <span class="nf">put_sst_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strMsg</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_queueMsg</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">strMsg</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SubWindowTTS.add_sst_message"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowTTS.html#SubWindowTTS.SubWindowTTS.add_sst_message">[docs]</a>    <span class="k">def</span> <span class="nf">add_sst_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strMsg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">is_newline</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">txtSSTHistory</span><span class="o">.</span><span class="n">document</span><span class="p">()</span><span class="o">.</span><span class="n">blockCount</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">rows</span> <span class="o">&gt;=</span> <span class="mi">100</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">txtTcpMonitor</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QTextCursor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">txtSSTHistory</span><span class="o">.</span><span class="n">textCursor</span><span class="p">())</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">movePosition</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QTextCursor</span><span class="o">.</span><span class="n">End</span><span class="p">)</span>
+        <span class="n">fmt</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QTextCharFormat</span><span class="p">()</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">setCharFormat</span><span class="p">(</span><span class="n">fmt</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">is_newline</span><span class="p">:</span>
+            <span class="n">strMsg</span> <span class="o">=</span> <span class="n">strMsg</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+        <span class="n">cursor</span><span class="o">.</span><span class="n">insertText</span><span class="p">(</span><span class="n">strMsg</span><span class="p">)</span>
+        <span class="n">vsbar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">txtSSTHistory</span><span class="o">.</span><span class="n">verticalScrollBar</span><span class="p">()</span>
+        <span class="n">vsbar</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">vsbar</span><span class="o">.</span><span class="n">maximum</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="SubWindowTTS.start_thread_logwriter"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowTTS.html#SubWindowTTS.SubWindowTTS.start_thread_logwriter">[docs]</a>    <span class="k">def</span> <span class="nf">start_thread_logwriter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadLogWriter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadLogWriter</span> <span class="o">=</span> <span class="n">ThreadLogWriter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queueMsg</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadLogWriter</span><span class="o">.</span><span class="n">sig_terminated</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_terminate_thread_logwriter</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadLogWriter</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SubWindowTTS.stop_thread_logwriter"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowTTS.html#SubWindowTTS.SubWindowTTS.stop_thread_logwriter">[docs]</a>    <span class="k">def</span> <span class="nf">stop_thread_logwriter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadLogWriter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadLogWriter</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SubWindowTTS.on_terminate_thread_logwriter"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowTTS.html#SubWindowTTS.SubWindowTTS.on_terminate_thread_logwriter">[docs]</a>    <span class="k">def</span> <span class="nf">on_terminate_thread_logwriter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threadLogWriter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_threadLogWriter</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="SubWindowTTS.on_clicked_clear"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowTTS.html#SubWindowTTS.SubWindowTTS.on_clicked_clear">[docs]</a>    <span class="k">def</span> <span class="nf">on_clicked_clear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">txtBox</span><span class="p">:</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">):</span>
+        <span class="n">txtBox</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SubWindowTTS.on_clicked_listen_sst"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowTTS.html#SubWindowTTS.SubWindowTTS.on_clicked_listen_sst">[docs]</a>    <span class="k">def</span> <span class="nf">on_clicked_listen_sst</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">strMic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmbMicList</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_listen_sst</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">strMic</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="ThreadLogWriter"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowTTS.html#SubWindowTTS.ThreadLogWriter">[docs]</a><span class="k">class</span> <span class="nc">ThreadLogWriter</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QThread</span><span class="p">):</span>
+    <span class="n">keepAlive</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">sig_terminated</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
+    <span class="n">sig_update_log</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">tuple</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">:</span> <span class="n">SubWindowTTS</span><span class="p">,</span> <span class="n">queue</span><span class="p">:</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ThreadLogWriter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span> <span class="o">=</span> <span class="n">queue</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="n">handle</span>
+
+<div class="viewcode-block" id="ThreadLogWriter.run"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowTTS.html#SubWindowTTS.ThreadLogWriter.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">write_log</span><span class="p">(</span><span class="s1">&#39;Started&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">keepAlive</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">qMsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">qMsg</span> <span class="o">==</span> <span class="s1">&#39;STOP&#39;</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">add_sst_message</span><span class="p">(</span><span class="n">qMsg</span><span class="p">)</span>
+
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_terminated</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
+        <span class="n">write_log</span><span class="p">(</span><span class="s1">&#39;Terminated&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ThreadLogWriter.stop"><a class="viewcode-back" href="../Inc/SubWindow/SubWindowTTS.html#SubWindowTTS.ThreadLogWriter.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;STOP&#39;</span><span class="p">)</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">app</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">app</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+
+    <span class="n">MainUI</span> <span class="o">=</span> <span class="n">SubWindowTTS</span><span class="p">()</span>
+    <span class="n">MainUI</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

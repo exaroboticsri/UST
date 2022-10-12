@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DockServerConnect &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>DockServerConnect</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for DockServerConnect</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="c1"># File Name    : DockServerConnect.py</span>
+<span class="c1"># Project Name : MobileRobotTest</span>
+<span class="c1"># Author       : Raim.Delgado</span>
+<span class="c1"># Organization : SeoulTech</span>
+<span class="c1"># Description  :</span>
+<span class="c1"># [Revision History]</span>
+<span class="c1"># &gt;&gt; 2021.08.24 - First Commit</span>
+<span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">FILE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>  <span class="c1"># %PROJECT_ROOT%/Include/DOckWidgets</span>
+<span class="n">ROOT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">FILE_PATH</span><span class="p">))</span>
+<span class="n">INCLUDE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Include&quot;</span><span class="p">)</span>
+<span class="n">MDI_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;MdiBackground&quot;</span><span class="p">)</span>
+<span class="n">MISC_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Misc&quot;</span><span class="p">)</span>
+<span class="n">RESOURCES_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Resources&quot;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">])</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+<span class="k">del</span> <span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span>
+
+<span class="kn">from</span> <span class="nn">UiCommon</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">Commons</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="DockServerConnect"><a class="viewcode-back" href="../Inc/DockWidgets/DockServerConnect.html#DockServerConnect.DockServerConnect">[docs]</a><span class="k">class</span> <span class="nc">DockServerConnect</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDockWidget</span><span class="p">):</span>
+    <span class="n">def_fontSize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">_writeThread</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">sig_close</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
+
+<div class="viewcode-block" id="DockServerConnect.closeEvent"><a class="viewcode-back" href="../Inc/DockWidgets/DockServerConnect.html#DockServerConnect.DockServerConnect.closeEvent">[docs]</a>    <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">closeEvent</span><span class="p">:</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QCloseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_close</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+    <span class="n">sig_start_server</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>  <span class="c1"># ip address, port</span>
+    <span class="n">sig_disconnect_client</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">tuple</span><span class="p">)</span>
+    <span class="n">sig_stop_server</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
+    <span class="n">sig_send_msg</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">_sckType</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DockServerConnect</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;Server Connection&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initUi</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initSlots</span><span class="p">()</span>
+
+<div class="viewcode-block" id="DockServerConnect.initUi"><a class="viewcode-back" href="../Inc/DockWidgets/DockServerConnect.html#DockServerConnect.DockServerConnect.initUi">[docs]</a>    <span class="k">def</span> <span class="nf">initUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initAddressPort</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initSocketType</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initButtons</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initConnectionList</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initTestSender</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initClientList</span><span class="p">()</span>
+
+        <span class="n">centralWidget</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWidget</span><span class="p">(</span><span class="n">centralWidget</span><span class="p">)</span>
+
+        <span class="n">MainLayout</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">centralWidget</span><span class="p">)</span>
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wdgAddressPort</span><span class="p">)</span>
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wdgSocketType</span><span class="p">)</span>
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wdgButtons</span><span class="p">)</span>
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gbxConnection</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wdgTestSender</span><span class="p">)</span>
+        <span class="n">MainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gbxClientList</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">onServerStart</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockServerConnect.initAddressPort"><a class="viewcode-back" href="../Inc/DockWidgets/DockServerConnect.html#DockServerConnect.DockServerConnect.initAddressPort">[docs]</a>    <span class="k">def</span> <span class="nf">initAddressPort</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wdgAddressPort</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">HLayoutAddressPort</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wdgAddressPort</span><span class="p">)</span>
+        <span class="n">HLayoutAddressPort</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">lblAddress</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">()</span>
+        <span class="n">lblAddress</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;Address&quot;</span><span class="p">)</span>
+
+        <span class="n">ipRange</span> <span class="o">=</span> <span class="s2">&quot;(?:[0-1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])&quot;</span>  <span class="c1"># Part of the regular expression</span>
+        <span class="n">ipRegex</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QRegExp</span><span class="p">(</span><span class="s2">&quot;^&quot;</span> <span class="o">+</span> <span class="n">ipRange</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">.&quot;</span> <span class="o">+</span> <span class="n">ipRange</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">.&quot;</span> <span class="o">+</span> <span class="n">ipRange</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">.&quot;</span> <span class="o">+</span> <span class="n">ipRange</span> <span class="o">+</span> <span class="s2">&quot;$&quot;</span><span class="p">)</span>
+        <span class="n">ipValidator</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QRegExpValidator</span><span class="p">(</span><span class="n">ipRegex</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txtAddress</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLineEdit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txtAddress</span><span class="o">.</span><span class="n">setPlaceholderText</span><span class="p">(</span><span class="s2">&quot;0.0.0.0&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txtAddress</span><span class="o">.</span><span class="n">setValidator</span><span class="p">(</span><span class="n">ipValidator</span><span class="p">)</span>
+
+        <span class="n">lblPort</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">()</span>
+        <span class="n">lblPort</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;Port&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">spbPort</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spbPort</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spbPort</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="mi">65535</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spbPort</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="mi">7506</span><span class="p">)</span>
+        <span class="n">HLayoutAddressPort</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lblAddress</span><span class="p">)</span>
+        <span class="n">HLayoutAddressPort</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">txtAddress</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">HLayoutAddressPort</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lblPort</span><span class="p">)</span>
+        <span class="n">HLayoutAddressPort</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spbPort</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockServerConnect.initSocketType"><a class="viewcode-back" href="../Inc/DockWidgets/DockServerConnect.html#DockServerConnect.DockServerConnect.initSocketType">[docs]</a>    <span class="k">def</span> <span class="nf">initSocketType</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wdgSocketType</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">HLayoutSocketType</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wdgSocketType</span><span class="p">)</span>
+        <span class="n">HLayoutSocketType</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rbtnTcp</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QRadioButton</span><span class="p">(</span><span class="s1">&#39;TCP/IP&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rbtnTcp</span><span class="o">.</span><span class="n">sckType</span> <span class="o">=</span> <span class="s2">&quot;TCP&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sckType</span> <span class="o">=</span> <span class="s2">&quot;TCP&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rbtnTcp</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rbtnUdp</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QRadioButton</span><span class="p">(</span><span class="s1">&#39;UDP&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rbtnUdp</span><span class="o">.</span><span class="n">sckType</span> <span class="o">=</span> <span class="s2">&quot;UDP&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rbtnUdp</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">HLayoutSocketType</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rbtnTcp</span><span class="p">)</span>
+        <span class="n">HLayoutSocketType</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rbtnUdp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockServerConnect.initButtons"><a class="viewcode-back" href="../Inc/DockWidgets/DockServerConnect.html#DockServerConnect.DockServerConnect.initButtons">[docs]</a>    <span class="k">def</span> <span class="nf">initButtons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wdgButtons</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">HLayoutButtons</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wdgButtons</span><span class="p">)</span>
+        <span class="n">HLayoutButtons</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnStart</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;START&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnStart</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s1">&#39;ethernet_open.png&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnStop</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;STOP&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnStop</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s1">&#39;ethernet_close.png&#39;</span><span class="p">))</span>
+
+        <span class="n">HLayoutButtons</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnStart</span><span class="p">)</span>
+        <span class="n">HLayoutButtons</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnStop</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockServerConnect.initConnectionList"><a class="viewcode-back" href="../Inc/DockWidgets/DockServerConnect.html#DockServerConnect.DockServerConnect.initConnectionList">[docs]</a>    <span class="k">def</span> <span class="nf">initConnectionList</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gbxConnection</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Server Adaptor List&#39;</span><span class="p">)</span>
+        <span class="n">VLayoutConnection</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gbxConnection</span><span class="p">)</span>
+
+        <span class="n">HLayoutConnect</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRefresh</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Refresh&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRefresh</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s1">&#39;reset.png&#39;</span><span class="p">))</span>
+        <span class="n">HLayoutConnect</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnRefresh</span><span class="p">)</span>
+        <span class="n">HLayoutConnect</span><span class="o">.</span><span class="n">addStretch</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">hHeader</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Adaptor Name&quot;</span><span class="p">,</span> <span class="s2">&quot;IPv4 Address&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tblAdaptorList</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTableWidget</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tblAdaptorList</span><span class="o">.</span><span class="n">setColumnCount</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hHeader</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tblAdaptorList</span><span class="o">.</span><span class="n">setHorizontalHeaderLabels</span><span class="p">(</span><span class="n">hHeader</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tblAdaptorList</span><span class="o">.</span><span class="n">horizontalHeader</span><span class="p">()</span><span class="o">.</span><span class="n">setSectionResizeMode</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHeaderView</span><span class="o">.</span><span class="n">Stretch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tblAdaptorList</span><span class="o">.</span><span class="n">setSelectionBehavior</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTableView</span><span class="o">.</span><span class="n">SelectRows</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tblAdaptorList</span><span class="o">.</span><span class="n">setSelectionMode</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAbstractItemView</span><span class="o">.</span><span class="n">SingleSelection</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tblAdaptorList</span><span class="o">.</span><span class="n">doubleClicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onDoubleClickedAdaptor</span><span class="p">)</span>
+        <span class="n">VLayoutConnection</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">HLayoutConnect</span><span class="p">)</span>
+        <span class="n">VLayoutConnection</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tblAdaptorList</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockServerConnect.initClientList"><a class="viewcode-back" href="../Inc/DockWidgets/DockServerConnect.html#DockServerConnect.DockServerConnect.initClientList">[docs]</a>    <span class="k">def</span> <span class="nf">initClientList</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gbxClientList</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Client List&#39;</span><span class="p">)</span>
+        <span class="n">VLayoutConnection</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gbxClientList</span><span class="p">)</span>
+        <span class="n">hHeader</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;IPv4 Address&quot;</span><span class="p">,</span> <span class="s2">&quot;Port&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tblClientList</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTableWidget</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tblClientList</span><span class="o">.</span><span class="n">setColumnCount</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hHeader</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tblClientList</span><span class="o">.</span><span class="n">setHorizontalHeaderLabels</span><span class="p">(</span><span class="n">hHeader</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tblClientList</span><span class="o">.</span><span class="n">horizontalHeader</span><span class="p">()</span><span class="o">.</span><span class="n">setSectionResizeMode</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHeaderView</span><span class="o">.</span><span class="n">Stretch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tblClientList</span><span class="o">.</span><span class="n">setSelectionBehavior</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTableView</span><span class="o">.</span><span class="n">SelectRows</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tblClientList</span><span class="o">.</span><span class="n">setSelectionMode</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAbstractItemView</span><span class="o">.</span><span class="n">SingleSelection</span><span class="p">)</span>
+        <span class="n">HLayoutDisconnectClient</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnDisconnectClient</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;DISCONNECT&#39;</span><span class="p">)</span>
+        <span class="n">HLayoutDisconnectClient</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="n">HLayoutDisconnectClient</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnDisconnectClient</span><span class="p">)</span>
+        <span class="n">VLayoutConnection</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tblClientList</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">VLayoutConnection</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">HLayoutDisconnectClient</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockServerConnect.onDoubleClickedAdaptor"><a class="viewcode-back" href="../Inc/DockWidgets/DockServerConnect.html#DockServerConnect.DockServerConnect.onDoubleClickedAdaptor">[docs]</a>    <span class="k">def</span> <span class="nf">onDoubleClickedAdaptor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txtAddress</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tblAdaptorList</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tblAdaptorList</span><span class="o">.</span><span class="n">currentRow</span><span class="p">(),</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">()))</span></div>
+
+<div class="viewcode-block" id="DockServerConnect.initTestSender"><a class="viewcode-back" href="../Inc/DockWidgets/DockServerConnect.html#DockServerConnect.DockServerConnect.initTestSender">[docs]</a>    <span class="k">def</span> <span class="nf">initTestSender</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wdgTestSender</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">HLayoutTestSender</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wdgTestSender</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txtSendMsg</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLineEdit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnSendMsg</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;SEND&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnSendMsg</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">EmbdQtIcon</span><span class="p">(</span><span class="s1">&#39;send.png&#39;</span><span class="p">))</span>
+        <span class="n">HLayoutTestSender</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">txtSendMsg</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">HLayoutTestSender</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnSendMsg</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockServerConnect.initSlots"><a class="viewcode-back" href="../Inc/DockWidgets/DockServerConnect.html#DockServerConnect.DockServerConnect.initSlots">[docs]</a>    <span class="k">def</span> <span class="nf">initSlots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRefresh</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onClickRefresh</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnStart</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onClickStart</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnStop</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onClickStop</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnSendMsg</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onClickSend</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rbtnTcp</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onClickSckType</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rbtnUdp</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onClickSckType</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnDisconnectClient</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onClickDisconnectClient</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockServerConnect.onClickDisconnectClient"><a class="viewcode-back" href="../Inc/DockWidgets/DockServerConnect.html#DockServerConnect.DockServerConnect.onClickDisconnectClient">[docs]</a>    <span class="k">def</span> <span class="nf">onClickDisconnectClient</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">clientAddr</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tblAdaptorList</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tblClientList</span><span class="o">.</span><span class="n">currentRow</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+        <span class="n">clientPort</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tblAdaptorList</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tblClientList</span><span class="o">.</span><span class="n">currentRow</span><span class="p">(),</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_disconnect_client</span><span class="o">.</span><span class="n">emit</span><span class="p">((</span><span class="n">clientAddr</span><span class="p">,</span> <span class="n">clientPort</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DockServerConnect.onClickStart"><a class="viewcode-back" href="../Inc/DockWidgets/DockServerConnect.html#DockServerConnect.DockServerConnect.onClickStart">[docs]</a>    <span class="k">def</span> <span class="nf">onClickStart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ipAddress</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">txtAddress</span><span class="o">.</span><span class="n">text</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">txtAddress</span><span class="o">.</span><span class="n">text</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="k">else</span> <span class="s2">&quot;0.0.0.0&quot;</span>
+        <span class="n">portNo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spbPort</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_start_server</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sckType</span><span class="p">,</span> <span class="n">ipAddress</span><span class="p">,</span> <span class="n">portNo</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockServerConnect.onClickStop"><a class="viewcode-back" href="../Inc/DockWidgets/DockServerConnect.html#DockServerConnect.DockServerConnect.onClickStop">[docs]</a>    <span class="k">def</span> <span class="nf">onClickStop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_stop_server</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DockServerConnect.onClickSend"><a class="viewcode-back" href="../Inc/DockWidgets/DockServerConnect.html#DockServerConnect.DockServerConnect.onClickSend">[docs]</a>    <span class="k">def</span> <span class="nf">onClickSend</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">txtToSend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">txtSendMsg</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_send_msg</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">txtToSend</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockServerConnect.onClickRefresh"><a class="viewcode-back" href="../Inc/DockWidgets/DockServerConnect.html#DockServerConnect.DockServerConnect.onClickRefresh">[docs]</a>    <span class="k">def</span> <span class="nf">onClickRefresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">iplist</span> <span class="o">=</span> <span class="n">get_ip_addr_list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tblAdaptorList</span><span class="o">.</span><span class="n">setRowCount</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">iplist</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">row</span><span class="p">,</span> <span class="n">ip</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">iplist</span><span class="p">):</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTableWidgetItem</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">ip</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+            <span class="n">name</span><span class="o">.</span><span class="n">setFlags</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">ItemFlags</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">flags</span><span class="p">())</span> <span class="o">^</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">ItemIsEditable</span><span class="p">))</span>
+            <span class="n">ip</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTableWidgetItem</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">ip</span><span class="p">[</span><span class="s1">&#39;ipv4&#39;</span><span class="p">])</span>
+            <span class="n">ip</span><span class="o">.</span><span class="n">setFlags</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">ItemFlags</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">ip</span><span class="o">.</span><span class="n">flags</span><span class="p">())</span> <span class="o">^</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">ItemIsEditable</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tblAdaptorList</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tblAdaptorList</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ip</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockServerConnect.onClickSckType"><a class="viewcode-back" href="../Inc/DockWidgets/DockServerConnect.html#DockServerConnect.DockServerConnect.onClickSckType">[docs]</a>    <span class="k">def</span> <span class="nf">onClickSckType</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">rBtn</span><span class="p">:</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QRadioButton</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">rBtn</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sckType</span> <span class="o">=</span> <span class="n">rBtn</span><span class="o">.</span><span class="n">sckType</span></div>
+
+<div class="viewcode-block" id="DockServerConnect.showEvent"><a class="viewcode-back" href="../Inc/DockWidgets/DockServerConnect.html#DockServerConnect.DockServerConnect.showEvent">[docs]</a>    <span class="k">def</span> <span class="nf">showEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a0</span><span class="p">:</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QShowEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">onClickRefresh</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DockServerConnect.addClient"><a class="viewcode-back" href="../Inc/DockWidgets/DockServerConnect.html#DockServerConnect.DockServerConnect.addClient">[docs]</a>    <span class="k">def</span> <span class="nf">addClient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tpAddPort</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="n">address</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="n">tpAddPort</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tblClientList</span><span class="o">.</span><span class="n">insertRow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tblClientList</span><span class="o">.</span><span class="n">rowCount</span><span class="p">())</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tblClientList</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tblClientList</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+                                   <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">address</span><span class="p">),</span> <span class="n">abIsReadOnly</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tblClientList</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tblClientList</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+                                   <span class="n">EmbdQtTableItem</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">port</span><span class="p">),</span> <span class="n">abIsReadOnly</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tblClientList</span><span class="o">.</span><span class="n">viewport</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DockServerConnect.removeClient"><a class="viewcode-back" href="../Inc/DockWidgets/DockServerConnect.html#DockServerConnect.DockServerConnect.removeClient">[docs]</a>    <span class="k">def</span> <span class="nf">removeClient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tpAddPort</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="n">address</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="n">tpAddPort</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tblClientList</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()):</span>
+            <span class="n">find_add</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tblClientList</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+            <span class="n">find_port</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tblClientList</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">find_port</span> <span class="o">==</span> <span class="n">port</span> <span class="ow">and</span> <span class="n">find_add</span> <span class="o">==</span> <span class="n">address</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tblClientList</span><span class="o">.</span><span class="n">removeRow</span><span class="p">(</span><span class="n">i</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DockServerConnect.onServerStart"><a class="viewcode-back" href="../Inc/DockWidgets/DockServerConnect.html#DockServerConnect.DockServerConnect.onServerStart">[docs]</a>    <span class="k">def</span> <span class="nf">onServerStart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_start</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txtAddress</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="ow">not</span> <span class="n">is_start</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spbPort</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="ow">not</span> <span class="n">is_start</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnStart</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="ow">not</span> <span class="n">is_start</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tblAdaptorList</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="ow">not</span> <span class="n">is_start</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnRefresh</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="ow">not</span> <span class="n">is_start</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnSendMsg</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">is_start</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txtSendMsg</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">is_start</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnDisconnectClient</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">is_start</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnStop</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">is_start</span><span class="p">)</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">app</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">app</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+
+    <span class="n">MainUI</span> <span class="o">=</span> <span class="n">DockServerConnect</span><span class="p">()</span>
+    <span class="n">MainUI</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+<span class="c1"># MainUI.release()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

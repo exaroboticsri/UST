@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MultiProcessBase &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../apis.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>MultiProcessBase</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for MultiProcessBase</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="c1"># File Name    : MultiProcessBase.py</span>
+<span class="c1"># Project Name : ExaRobotCtrl</span>
+<span class="c1"># Author       : Raim.Delgado</span>
+<span class="c1"># Organization : SeoulTech</span>
+<span class="c1"># Description  :</span>
+<span class="c1"># [Revision History]</span>
+<span class="c1"># &gt;&gt; 2022.02.17 - First Commit</span>
+<span class="c1"># -------------------------------------------------------------------------------------------------------------------- #</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="k">import</span> <span class="n">Process</span><span class="p">,</span> <span class="n">Queue</span><span class="p">,</span> <span class="n">Pipe</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Union</span>
+
+<span class="n">FILE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>  <span class="c1"># %PROJECT_ROOT%/Library/Socket</span>
+<span class="n">ROOT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">FILE_PATH</span><span class="p">))</span>
+<span class="n">INCLUDE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Include&quot;</span><span class="p">)</span>
+<span class="n">MDI_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;MdiBackground&quot;</span><span class="p">)</span>
+<span class="n">DOCK_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;DockWidgets&quot;</span><span class="p">)</span>
+<span class="n">MISC_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;Misc&quot;</span><span class="p">)</span>
+<span class="n">RESOURCES_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="s2">&quot;Resources&quot;</span><span class="p">)</span>
+<span class="n">LIBRARY_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s2">&quot;Library&quot;</span><span class="p">)</span>
+<span class="n">SERIAL_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">LIBRARY_PATH</span><span class="p">,</span> <span class="s2">&quot;Serial&quot;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">DOCK_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">LIBRARY_PATH</span><span class="p">,</span> <span class="n">SERIAL_PATH</span><span class="p">])</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+<span class="k">del</span> <span class="n">FILE_PATH</span><span class="p">,</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">INCLUDE_PATH</span><span class="p">,</span> <span class="n">MDI_PATH</span><span class="p">,</span> <span class="n">DOCK_PATH</span><span class="p">,</span> <span class="n">RESOURCES_PATH</span><span class="p">,</span> <span class="n">LIBRARY_PATH</span><span class="p">,</span> <span class="n">SERIAL_PATH</span>
+
+<span class="kn">from</span> <span class="nn">Commons</span> <span class="k">import</span> <span class="n">PySignal</span>
+
+<span class="c1"># https://stackoverflow.com/questions/8463008/multiprocessing-pipe-vs-queue</span>
+<span class="c1"># Sending 10000 numbers to Pipe() took 0.0369849205017 seconds</span>
+<span class="c1"># Sending 100000 numbers to Pipe() took 0.328398942947 seconds</span>
+<span class="c1"># Sending 1000000 numbers to Pipe() took 3.17266988754 seconds</span>
+<span class="c1"># Sending 10000 numbers to Queue() took 0.105256080627 seconds</span>
+<span class="c1"># Sending 100000 numbers to Queue() took 0.980564117432 seconds</span>
+<span class="c1"># Sending 1000000 numbers to Queue() took 10.1611330509 seconds</span>
+
+<div class="viewcode-block" id="ThreadQueueBroadcaster"><a class="viewcode-back" href="../Inc/MultiProcessing/MultiProcessBase.html#MultiProcessBase.ThreadQueueBroadcaster">[docs]</a><span class="k">class</span> <span class="nc">ThreadQueueBroadcaster</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
+    <span class="n">keepAlive</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="c1"># todo: do we need mutex?</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pQueue</span><span class="p">:</span> <span class="n">Queue</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ThreadQueueBroadcaster</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_terminated</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_queue_bcast</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">pQueue</span>
+
+<div class="viewcode-block" id="ThreadQueueBroadcaster.stop"><a class="viewcode-back" href="../Inc/MultiProcessing/MultiProcessBase.html#MultiProcessBase.ThreadQueueBroadcaster.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keepAlive</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;QUIT_THREAD`&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ThreadQueueBroadcaster.run"><a class="viewcode-back" href="../Inc/MultiProcessing/MultiProcessBase.html#MultiProcessBase.ThreadQueueBroadcaster.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">keepAlive</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">msg</span> <span class="o">==</span> <span class="s2">&quot;QUIT_THREAD&quot;</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sig_queue_bcast</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_terminated</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="CMultiProcessBase"><a class="viewcode-back" href="../Inc/MultiProcessing/MultiProcessBase.html#MultiProcessBase.CMultiProcessBase">[docs]</a><span class="k">class</span> <span class="nc">CMultiProcessBase</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    CMultiProcessBase은 멀티 프로세스를 생성하는데 가장 기본적인 클래스이다. </span>
+
+<span class="sd">    프로세스, Pipe, Queue에 대한 object를 생성해준다. </span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        astrName (str, optional): 프로세스 이름. Defaults to &quot;BASE&quot;.</span>
+<span class="sd">        apRoutine (_type_, optional): 프로세스 APP Routine . Defaults to None.</span>
+<span class="sd">        abQueueBkup (bool, optional): 프로세스 QueueBk 유무. Defaults to False.</span>
+<span class="sd">        abDaemon (bool, optional): 프로세스 Daemon 유무. Defaults to True.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">procDescriptor</span><span class="p">:</span> <span class="n">Process</span>
+    <span class="n">threadQueueBcast</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ThreadQueueBroadcaster</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">threadQueueBcastBk</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ThreadQueueBroadcaster</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">astrName</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;BASE&quot;</span><span class="p">,</span> <span class="n">apRoutine</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">abQueueBkup</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">abDaemon</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="n">routine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routine_proc</span>
+        <span class="k">if</span> <span class="n">apRoutine</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">routine</span> <span class="o">=</span> <span class="n">apRoutine</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_queue_bcast</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_queue_bcast_bk</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_error</span> <span class="o">=</span> <span class="n">PySignal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+
+        <span class="c1"># todo: check if we need bidirectional for ACK</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pipeParent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pipeChild</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">queueRecv</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">abQueueBkup</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">queueRecvBk</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">queueRecvBk</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">proc_args</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeChild</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">queueRecv</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">queueRecvBk</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">procDescriptor</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">routine</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">astrName</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">proc_args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">procDescriptor</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="n">abDaemon</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_thread_queue_bcast</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">abQueueBkup</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">start_thread_queue_bcast_bk</span><span class="p">()</span>
+
+<div class="viewcode-block" id="CMultiProcessBase.start"><a class="viewcode-back" href="../Inc/MultiProcessing/MultiProcessBase.html#MultiProcessBase.CMultiProcessBase.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">procDescriptor</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="CMultiProcessBase.release"><a class="viewcode-back" href="../Inc/MultiProcessing/MultiProcessBase.html#MultiProcessBase.CMultiProcessBase.release">[docs]</a>    <span class="k">def</span> <span class="nf">release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">procDescriptor</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">procDescriptor</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_thread_queue_bcast</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_thread_queue_bcast_bk</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pipeParent</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CMultiProcessBase.send_command"><a class="viewcode-back" href="../Inc/MultiProcessing/MultiProcessBase.html#MultiProcessBase.CMultiProcessBase.send_command">[docs]</a>    <span class="k">def</span> <span class="nf">send_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">adictCmd</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">procDescriptor</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sig_error</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;MP ERROR&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">pipeParent</span><span class="o">.</span><span class="n">writable</span><span class="p">:</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">)</span>
+            <span class="k">pass</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pipeParent</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">adictCmd</span><span class="p">)</span></div>
+
+    <span class="c1"># aPipe: is an instance of PipeConnection on Windows. In Linux, this is different (unknown)</span>
+<div class="viewcode-block" id="CMultiProcessBase.routine_proc"><a class="viewcode-back" href="../Inc/MultiProcessing/MultiProcessBase.html#MultiProcessBase.CMultiProcessBase.routine_proc">[docs]</a>    <span class="k">def</span> <span class="nf">routine_proc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aPipe</span><span class="p">,</span> <span class="n">aQueue</span><span class="p">:</span> <span class="n">Queue</span><span class="p">,</span> <span class="n">aQueueBk</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Queue</span><span class="p">,</span> <span class="kc">None</span><span class="p">]):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="CMultiProcessBase.start_thread_queue_bcast"><a class="viewcode-back" href="../Inc/MultiProcessing/MultiProcessBase.html#MultiProcessBase.CMultiProcessBase.start_thread_queue_bcast">[docs]</a>    <span class="k">def</span> <span class="nf">start_thread_queue_bcast</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">threadQueueBcast</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threadQueueBcast</span> <span class="o">=</span> <span class="n">ThreadQueueBroadcaster</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">queueRecv</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threadQueueBcast</span><span class="o">.</span><span class="n">sig_terminated</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_terminate_thread_queue_bcast</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threadQueueBcast</span><span class="o">.</span><span class="n">sig_queue_bcast</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_bcast_thread_queue_bcast</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threadQueueBcast</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CMultiProcessBase.on_bcast_thread_queue_bcast"><a class="viewcode-back" href="../Inc/MultiProcessing/MultiProcessBase.html#MultiProcessBase.CMultiProcessBase.on_bcast_thread_queue_bcast">[docs]</a>    <span class="k">def</span> <span class="nf">on_bcast_thread_queue_bcast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_queue_bcast</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CMultiProcessBase.stop_thread_queue_bcast"><a class="viewcode-back" href="../Inc/MultiProcessing/MultiProcessBase.html#MultiProcessBase.CMultiProcessBase.stop_thread_queue_bcast">[docs]</a>    <span class="k">def</span> <span class="nf">stop_thread_queue_bcast</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">threadQueueBcast</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threadQueueBcast</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CMultiProcessBase.on_terminate_thread_queue_bcast"><a class="viewcode-back" href="../Inc/MultiProcessing/MultiProcessBase.html#MultiProcessBase.CMultiProcessBase.on_terminate_thread_queue_bcast">[docs]</a>    <span class="k">def</span> <span class="nf">on_terminate_thread_queue_bcast</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">threadQueueBcast</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threadQueueBcast</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="CMultiProcessBase.start_thread_queue_bcast_bk"><a class="viewcode-back" href="../Inc/MultiProcessing/MultiProcessBase.html#MultiProcessBase.CMultiProcessBase.start_thread_queue_bcast_bk">[docs]</a>    <span class="k">def</span> <span class="nf">start_thread_queue_bcast_bk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">threadQueueBcastBk</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threadQueueBcastBk</span> <span class="o">=</span> <span class="n">ThreadQueueBroadcaster</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">queueRecvBk</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threadQueueBcastBk</span><span class="o">.</span><span class="n">sig_terminated</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_terminate_thread_queue_bcast_bk</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threadQueueBcastBk</span><span class="o">.</span><span class="n">sig_queue_bcast</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_bcast_thread_queue_bcast_bk</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threadQueueBcastBk</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CMultiProcessBase.stop_thread_queue_bcast_bk"><a class="viewcode-back" href="../Inc/MultiProcessing/MultiProcessBase.html#MultiProcessBase.CMultiProcessBase.stop_thread_queue_bcast_bk">[docs]</a>    <span class="k">def</span> <span class="nf">stop_thread_queue_bcast_bk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">threadQueueBcastBk</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threadQueueBcastBk</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CMultiProcessBase.on_bcast_thread_queue_bcast_bk"><a class="viewcode-back" href="../Inc/MultiProcessing/MultiProcessBase.html#MultiProcessBase.CMultiProcessBase.on_bcast_thread_queue_bcast_bk">[docs]</a>    <span class="k">def</span> <span class="nf">on_bcast_thread_queue_bcast_bk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sig_queue_bcast_bk</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CMultiProcessBase.on_terminate_thread_queue_bcast_bk"><a class="viewcode-back" href="../Inc/MultiProcessing/MultiProcessBase.html#MultiProcessBase.CMultiProcessBase.on_terminate_thread_queue_bcast_bk">[docs]</a>    <span class="k">def</span> <span class="nf">on_terminate_thread_queue_bcast_bk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">threadQueueBcastBk</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threadQueueBcastBk</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">PID</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">procDescriptor</span><span class="o">.</span><span class="n">pid</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">NAME</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">procDescriptor</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">NICENESS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">psutil</span>
+        <span class="n">this_proc</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PID</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">this_proc</span><span class="o">.</span><span class="n">nice</span><span class="p">()</span>
+    <span class="nd">@NICENESS</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">NICENESS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anPriority</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">psutil</span>
+        <span class="n">this_proc</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PID</span><span class="p">)</span>
+        <span class="n">this_proc</span><span class="o">.</span><span class="n">nice</span><span class="p">(</span><span class="n">anPriority</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="f"><a class="viewcode-back" href="../Inc/MultiProcessing/MultiProcessBase.html#MultiProcessBase.f">[docs]</a><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">connection</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;parent process:&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getppid</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;process id:&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
+    <span class="n">connection</span><span class="o">.</span><span class="n">send</span><span class="p">([</span><span class="mi">42</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;hello&#39;</span><span class="p">])</span>
+    <span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">parent_conn</span><span class="p">,</span> <span class="n">child_conn</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">()</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">child_conn</span><span class="p">,))</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">parent_conn</span><span class="o">.</span><span class="n">recv</span><span class="p">())</span>  <span class="c1"># prints &quot;[42, None, &#39;hello&#39;]&quot;</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

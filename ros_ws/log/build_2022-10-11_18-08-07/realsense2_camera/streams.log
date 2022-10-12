@@ -1,0 +1,48 @@
+[0.043s] Invoking command in '/home/jw/robot/ros_ws/build/realsense2_camera': CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:/home/jw/robot/ros_ws/install/ydlidar_ros2_driver:/home/jw/robot/ros_ws/install/velocity_smoother:/home/jw/robot/ros_ws/install/urg_node:/home/jw/robot/ros_ws/install/teb_local_planner:/home/jw/robot/ros_ws/install/teb_msgs:/home/jw/robot/ros_ws/install/realsense2_description:/home/jw/robot/ros_ws/install/realsense2_camera:/home/jw/robot/ros_ws/install/costmap_converter:/home/jw/robot/ros_ws/install/costmap_converter_msgs:/home/jw/robot/ros_ws/install/exa_robot:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib:/home/jw/robot/ros_ws/install/velocity_smoother/lib:/home/jw/robot/ros_ws/install/urg_node/lib:/home/jw/robot/ros_ws/install/teb_local_planner/lib:/home/jw/robot/ros_ws/install/teb_msgs/lib:/home/jw/robot/ros_ws/install/realsense2_camera/lib:/home/jw/robot/ros_ws/install/costmap_converter/lib:/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib:/opt/ros/galactic/opt/yaml_cpp_vendor/lib:/opt/ros/galactic/opt/rviz_ogre_vendor/lib:/opt/ros/galactic/lib/x86_64-linux-gnu:/opt/ros/galactic/lib PYTHONPATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib/python3.8/site-packages:/home/jw/robot/ros_ws/install/teb_msgs/lib/python3.8/site-packages:/home/jw/robot/ros_ws/install/exa_robot/lib/python3.8/site-packages:/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages:/opt/ros/galactic/lib/python3.8/site-packages /usr/bin/cmake --build /home/jw/robot/ros_ws/build/realsense2_camera -- -j12 -l12
+[0.074s] -- Create Release Build.
+[0.074s] -- Found ament_cmake: 1.1.5 (/opt/ros/galactic/share/ament_cmake/cmake)
+[0.103s] -- Using PYTHON_EXECUTABLE: /usr/bin/python3
+[0.197s] -- Found builtin_interfaces: 1.0.3 (/opt/ros/galactic/share/builtin_interfaces/cmake)
+[0.227s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.230s] -- Found rosidl_adapter: 2.2.2 (/opt/ros/galactic/share/rosidl_adapter/cmake)
+[0.362s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.388s] -- Found cv_bridge: 2.2.1 (/opt/ros/galactic/share/cv_bridge/cmake)
+[0.407s] -- Found image_transport: 2.5.0 (/opt/ros/galactic/share/image_transport/cmake)
+[0.461s] -- Found rmw_implementation_cmake: 3.3.1 (/opt/ros/galactic/share/rmw_implementation_cmake/cmake)
+[0.462s] -- Found rmw_fastrtps_cpp: 5.0.2 (/opt/ros/galactic/share/rmw_fastrtps_cpp/cmake)
+[0.589s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[0.920s] -- Found rclcpp_components: 9.2.1 (/opt/ros/galactic/share/rclcpp_components/cmake)
+[0.967s] -- Found realsense2_camera_msgs: 4.51.1 (/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/cmake)
+[1.000s] -- Found std_srvs: 2.2.4 (/opt/ros/galactic/share/std_srvs/cmake)
+[1.008s] -- Found nav_msgs: 2.2.4 (/opt/ros/galactic/share/nav_msgs/cmake)
+[1.075s] -- Found tf2_ros: 0.17.4 (/opt/ros/galactic/share/tf2_ros/cmake)
+[1.323s] -- Found diagnostic_updater: 2.1.3 (/opt/ros/galactic/share/diagnostic_updater/cmake)
+[1.375s] -- Build for ROS2 Galactic
+[1.441s] -- Found ament_lint_auto: 0.10.7 (/opt/ros/galactic/share/ament_lint_auto/cmake)
+[1.516s] -- Added test 'copyright' to check source files copyright and LICENSE
+[1.518s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[1.519s] -- Configured cppcheck include dirs: /home/jw/robot/ros_ws/src/ExaRobot_ROS2/realsense-ros/realsense2_camera/include
+[1.519s] -- Configured cppcheck exclude dirs and/or files: 
+[1.521s] -- Added test 'cpplint' to check C / C++ code against the Google style
+[1.521s] -- Configured cpplint exclude dirs and/or files: 
+[1.522s] -- Added test 'flake8' to check Python code syntax and style conventions
+[1.523s] -- Added test 'lint_cmake' to check CMake code style
+[1.523s] -- Added test 'pep257' to check Python code against some of the style conventions in PEP 257
+[1.526s] -- Added test 'uncrustify' to check C / C++ code style
+[1.526s] -- Configured uncrustify additional arguments: 
+[1.526s] -- Added test 'xmllint' to check XML markup files
+[1.531s] -- Configuring done
+[1.571s] -- Generating done
+[1.572s] -- Build files have been written to: /home/jw/robot/ros_ws/build/realsense2_camera
+[1.608s] [35m[1mScanning dependencies of target realsense2_camera[0m
+[1.618s] [ 25%] Built target realsense2_camera_node
+[1.647s] [ 50%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/dynamic_params.cpp.o[0m
+[1.647s] [ 50%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/base_realsense_node.cpp.o[0m
+[5.251s] [01m[K/home/jw/robot/ros_ws/src/ExaRobot_ROS2/realsense-ros/realsense2_camera/src/base_realsense_node.cpp:[m[K In member function ‘[01m[Krealsense2_camera_msgs::msg::Extrinsics realsense2_camera::BaseRealSenseNode::rsExtrinsicsToMsg(const rs2_extrinsics&, const string&) const[m[K’:
+[5.251s] [01m[K/home/jw/robot/ros_ws/src/ExaRobot_ROS2/realsense-ros/realsense2_camera/src/base_realsense_node.cpp:2578:19:[m[K [01;31m[Kerror: [m[K‘[01m[Kusing Extrinsics = struct realsense2_camera_msgs::msg::Extrinsics_<std::allocator<void> >[m[K’ {aka ‘[01m[Kstruct realsense2_camera_msgs::msg::Extrinsics_<std::allocator<void> >[m[K’} has no member named ‘[01m[Kheader[m[K’
+[5.251s]  2578 |     extrinsicsMsg.[01;31m[Kheader[m[K.frame_id = frame_id;
+[5.251s]       |                   [01;31m[K^~~~~~[m[K
+[8.796s] make[2]: *** [CMakeFiles/realsense2_camera.dir/build.make:76: CMakeFiles/realsense2_camera.dir/src/base_realsense_node.cpp.o] Error 1
+[8.796s] make[1]: *** [CMakeFiles/Makefile2:107: CMakeFiles/realsense2_camera.dir/all] Error 2
+[8.797s] make: *** [Makefile:141: all] Error 2
+[8.801s] Invoked command in '/home/jw/robot/ros_ws/build/realsense2_camera' returned '2': CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:/home/jw/robot/ros_ws/install/ydlidar_ros2_driver:/home/jw/robot/ros_ws/install/velocity_smoother:/home/jw/robot/ros_ws/install/urg_node:/home/jw/robot/ros_ws/install/teb_local_planner:/home/jw/robot/ros_ws/install/teb_msgs:/home/jw/robot/ros_ws/install/realsense2_description:/home/jw/robot/ros_ws/install/realsense2_camera:/home/jw/robot/ros_ws/install/costmap_converter:/home/jw/robot/ros_ws/install/costmap_converter_msgs:/home/jw/robot/ros_ws/install/exa_robot:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib:/home/jw/robot/ros_ws/install/velocity_smoother/lib:/home/jw/robot/ros_ws/install/urg_node/lib:/home/jw/robot/ros_ws/install/teb_local_planner/lib:/home/jw/robot/ros_ws/install/teb_msgs/lib:/home/jw/robot/ros_ws/install/realsense2_camera/lib:/home/jw/robot/ros_ws/install/costmap_converter/lib:/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib:/opt/ros/galactic/opt/yaml_cpp_vendor/lib:/opt/ros/galactic/opt/rviz_ogre_vendor/lib:/opt/ros/galactic/lib/x86_64-linux-gnu:/opt/ros/galactic/lib PYTHONPATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib/python3.8/site-packages:/home/jw/robot/ros_ws/install/teb_msgs/lib/python3.8/site-packages:/home/jw/robot/ros_ws/install/exa_robot/lib/python3.8/site-packages:/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages:/opt/ros/galactic/lib/python3.8/site-packages /usr/bin/cmake --build /home/jw/robot/ros_ws/build/realsense2_camera -- -j12 -l12

@@ -1,0 +1,60 @@
+[0.268s] Invoking command in '/home/jw/robot/ros_ws/build/ydlidar_ros2_driver': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake /home/jw/robot/ros_ws/src/ExaRobot_ROS2/ydlidar_ros2_driver -DCMAKE_INSTALL_PREFIX=/home/jw/robot/ros_ws/install/ydlidar_ros2_driver
+[0.325s] -- The C compiler identification is GNU 9.4.0
+[0.379s] -- The CXX compiler identification is GNU 9.4.0
+[0.383s] -- Check for working C compiler: /usr/bin/cc
+[0.447s] -- Check for working C compiler: /usr/bin/cc -- works
+[0.449s] -- Detecting C compiler ABI info
+[0.516s] -- Detecting C compiler ABI info - done
+[0.529s] -- Detecting C compile features
+[0.529s] -- Detecting C compile features - done
+[0.531s] -- Check for working CXX compiler: /usr/bin/c++
+[0.609s] -- Check for working CXX compiler: /usr/bin/c++ -- works
+[0.610s] -- Detecting CXX compiler ABI info
+[0.694s] -- Detecting CXX compiler ABI info - done
+[0.705s] -- Detecting CXX compile features
+[0.705s] -- Detecting CXX compile features - done
+[0.708s] -- Found ament_cmake: 1.1.5 (/opt/ros/galactic/share/ament_cmake/cmake)
+[0.729s] -- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3") 
+[0.730s] -- Using PYTHON_EXECUTABLE: /usr/bin/python3
+[0.816s] -- Found rclcpp: 9.2.1 (/opt/ros/galactic/share/rclcpp/cmake)
+[0.868s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.874s] -- Found rosidl_adapter: 2.2.2 (/opt/ros/galactic/share/rosidl_adapter/cmake)
+[0.961s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "1.1.1f")  
+[1.007s] -- Found FastRTPS: /opt/ros/galactic/include  
+[1.081s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[1.146s] -- Found rmw_implementation_cmake: 3.3.1 (/opt/ros/galactic/share/rmw_implementation_cmake/cmake)
+[1.149s] -- Found rmw_fastrtps_cpp: 5.0.2 (/opt/ros/galactic/share/rmw_fastrtps_cpp/cmake)
+[1.282s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[1.283s] -- Looking for pthread.h
+[1.347s] -- Looking for pthread.h - found
+[1.347s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[1.421s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+[1.421s] -- Looking for pthread_create in pthreads
+[1.491s] -- Looking for pthread_create in pthreads - not found
+[1.492s] -- Looking for pthread_create in pthread
+[1.564s] -- Looking for pthread_create in pthread - found
+[1.565s] -- Found Threads: TRUE  
+[1.789s] -- Found sensor_msgs: 2.2.4 (/opt/ros/galactic/share/sensor_msgs/cmake)
+[1.997s] -- Found visualization_msgs: 2.2.4 (/opt/ros/galactic/share/visualization_msgs/cmake)
+[2.146s] -- Found std_srvs: 2.2.4 (/opt/ros/galactic/share/std_srvs/cmake)
+[2.181s] CMake Error at CMakeLists.txt:25 (find_package):
+[2.182s]   By not providing "Findydlidar_sdk.cmake" in CMAKE_MODULE_PATH this project
+[2.182s]   has asked CMake to find a package configuration file provided by
+[2.182s]   "ydlidar_sdk", but CMake did not find one.
+[2.182s] 
+[2.182s]   Could not find a package configuration file provided by "ydlidar_sdk" with
+[2.182s]   any of the following names:
+[2.182s] 
+[2.182s]     ydlidar_sdkConfig.cmake
+[2.182s]     ydlidar_sdk-config.cmake
+[2.182s] 
+[2.183s]   Add the installation prefix of "ydlidar_sdk" to CMAKE_PREFIX_PATH or set
+[2.183s]   "ydlidar_sdk_DIR" to a directory containing one of the above files.  If
+[2.183s]   "ydlidar_sdk" provides a separate development package or SDK, be sure it
+[2.183s]   has been installed.
+[2.183s] 
+[2.183s] 
+[2.185s] -- Configuring incomplete, errors occurred!
+[2.185s] See also "/home/jw/robot/ros_ws/build/ydlidar_ros2_driver/CMakeFiles/CMakeOutput.log".
+[2.185s] See also "/home/jw/robot/ros_ws/build/ydlidar_ros2_driver/CMakeFiles/CMakeError.log".
+[2.202s] Invoked command in '/home/jw/robot/ros_ws/build/ydlidar_ros2_driver' returned '1': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake /home/jw/robot/ros_ws/src/ExaRobot_ROS2/ydlidar_ros2_driver -DCMAKE_INSTALL_PREFIX=/home/jw/robot/ros_ws/install/ydlidar_ros2_driver

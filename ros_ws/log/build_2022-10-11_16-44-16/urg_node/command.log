@@ -1,0 +1,1 @@
+Invoking command in '/home/jw/robot/ros_ws/build/urg_node': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake /home/jw/robot/ros_ws/src/ExaRobot_ROS2/urg_node -DCMAKE_INSTALL_PREFIX=/home/jw/robot/ros_ws/install/urg_node

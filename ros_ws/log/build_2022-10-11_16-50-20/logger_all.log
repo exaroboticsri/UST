@@ -1,0 +1,926 @@
+[0.143s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build']
+[0.143s] DEBUG:colcon:Parsed command line arguments: Namespace(allow_overriding=[], ament_cmake_args=None, base_paths=['.'], build_base='build', catkin_cmake_args=None, catkin_skip_building_tests=False, cmake_args=None, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, cmake_target=None, cmake_target_skip_unavailable=False, continue_on_error=False, event_handlers=None, executor='parallel', ignore_user_meta=False, install_base='install', log_base=None, log_level=None, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7f63f1df58b0>>, merge_install=False, metas=['./colcon.meta'], packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_end=None, packages_ignore=None, packages_ignore_regex=None, packages_select=None, packages_select_build_failed=False, packages_select_by_dep=None, packages_select_regex=None, packages_select_test_failures=False, packages_skip=None, packages_skip_build_finished=False, packages_skip_by_dep=None, packages_skip_regex=None, packages_skip_test_passed=False, packages_skip_up_to=None, packages_start=None, packages_up_to=None, packages_up_to_regex=None, parallel_workers=12, paths=None, symlink_install=False, test_result_base=None, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7f63f1df58b0>, verb_name='build', verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x7f63f1df5e20>)
+[0.165s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.165s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.165s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.165s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.165s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.165s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.166s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/jw/robot/ros_ws'
+[0.166s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.166s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.166s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.166s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.166s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.166s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.166s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.166s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.166s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.181s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.181s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.181s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.181s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.181s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.181s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.181s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.181s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.181s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ignore', 'ignore_ament_install']
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore_ament_install'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_pkg']
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_pkg'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_meta']
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_meta'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ros']
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ros'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['cmake', 'python']
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'cmake'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['python_setup_py']
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python_setup_py'
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2) by extensions ['ignore', 'ignore_ament_install']
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2) by extension 'ignore'
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2) by extension 'ignore_ament_install'
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2) by extensions ['colcon_pkg']
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2) by extension 'colcon_pkg'
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2) by extensions ['colcon_meta']
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2) by extension 'colcon_meta'
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2) by extensions ['ros']
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2) by extension 'ros'
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2) by extensions ['cmake', 'python']
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2) by extension 'cmake'
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2) by extension 'python'
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2) by extensions ['python_setup_py']
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2) by extension 'python_setup_py'
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter) by extensions ['ignore', 'ignore_ament_install']
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter) by extension 'ignore'
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter) by extension 'ignore_ament_install'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter) by extensions ['colcon_pkg']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter) by extension 'colcon_pkg'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter) by extensions ['colcon_meta']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter) by extension 'colcon_meta'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter) by extensions ['ros']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter) by extension 'ros'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter) by extensions ['cmake', 'python']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter) by extension 'cmake'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter) by extension 'python'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter) by extensions ['python_setup_py']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter) by extension 'python_setup_py'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter/costmap_converter) by extensions ['ignore', 'ignore_ament_install']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter/costmap_converter) by extension 'ignore'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter/costmap_converter) by extension 'ignore_ament_install'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter/costmap_converter) by extensions ['colcon_pkg']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter/costmap_converter) by extension 'colcon_pkg'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter/costmap_converter) by extensions ['colcon_meta']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter/costmap_converter) by extension 'colcon_meta'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter/costmap_converter) by extensions ['ros']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter/costmap_converter) by extension 'ros'
+[0.187s] DEBUG:colcon.colcon_core.package_identification:Package 'src/ExaRobot_ROS2/costmap_converter/costmap_converter' with type 'ros.ament_cmake' and name 'costmap_converter'
+[0.187s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter/costmap_converter_msgs) by extensions ['ignore', 'ignore_ament_install']
+[0.187s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter/costmap_converter_msgs) by extension 'ignore'
+[0.187s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter/costmap_converter_msgs) by extension 'ignore_ament_install'
+[0.187s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter/costmap_converter_msgs) by extensions ['colcon_pkg']
+[0.187s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter/costmap_converter_msgs) by extension 'colcon_pkg'
+[0.187s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter/costmap_converter_msgs) by extensions ['colcon_meta']
+[0.187s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter/costmap_converter_msgs) by extension 'colcon_meta'
+[0.188s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter/costmap_converter_msgs) by extensions ['ros']
+[0.188s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/costmap_converter/costmap_converter_msgs) by extension 'ros'
+[0.188s] DEBUG:colcon.colcon_core.package_identification:Package 'src/ExaRobot_ROS2/costmap_converter/costmap_converter_msgs' with type 'ros.ament_cmake' and name 'costmap_converter_msgs'
+[0.188s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/exa_robot) by extensions ['ignore', 'ignore_ament_install']
+[0.188s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/exa_robot) by extension 'ignore'
+[0.188s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/exa_robot) by extension 'ignore_ament_install'
+[0.188s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/exa_robot) by extensions ['colcon_pkg']
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/exa_robot) by extension 'colcon_pkg'
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/exa_robot) by extensions ['colcon_meta']
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/exa_robot) by extension 'colcon_meta'
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/exa_robot) by extensions ['ros']
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/exa_robot) by extension 'ros'
+[0.189s] DEBUG:colcon.colcon_core.package_identification:Package 'src/ExaRobot_ROS2/exa_robot' with type 'ros.ament_python' and name 'exa_robot'
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros) by extensions ['ignore', 'ignore_ament_install']
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros) by extension 'ignore'
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros) by extension 'ignore_ament_install'
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros) by extensions ['colcon_pkg']
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros) by extension 'colcon_pkg'
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros) by extensions ['colcon_meta']
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros) by extension 'colcon_meta'
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros) by extensions ['ros']
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros) by extension 'ros'
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros) by extensions ['cmake', 'python']
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros) by extension 'cmake'
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros) by extension 'python'
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros) by extensions ['python_setup_py']
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros) by extension 'python_setup_py'
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_camera) by extensions ['ignore', 'ignore_ament_install']
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_camera) by extension 'ignore'
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_camera) by extension 'ignore_ament_install'
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_camera) by extensions ['colcon_pkg']
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_camera) by extension 'colcon_pkg'
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_camera) by extensions ['colcon_meta']
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_camera) by extension 'colcon_meta'
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_camera) by extensions ['ros']
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_camera) by extension 'ros'
+[0.192s] DEBUG:colcon.colcon_core.package_identification:Package 'src/ExaRobot_ROS2/realsense-ros/realsense2_camera' with type 'ros.ament_cmake' and name 'realsense2_camera'
+[0.192s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_camera_msgs) by extensions ['ignore', 'ignore_ament_install']
+[0.192s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_camera_msgs) by extension 'ignore'
+[0.192s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_camera_msgs) by extension 'ignore_ament_install'
+[0.192s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_camera_msgs) by extensions ['colcon_pkg']
+[0.192s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_camera_msgs) by extension 'colcon_pkg'
+[0.192s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_camera_msgs) by extensions ['colcon_meta']
+[0.192s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_camera_msgs) by extension 'colcon_meta'
+[0.192s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_camera_msgs) by extensions ['ros']
+[0.192s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_camera_msgs) by extension 'ros'
+[0.193s] DEBUG:colcon.colcon_core.package_identification:Package 'src/ExaRobot_ROS2/realsense-ros/realsense2_camera_msgs' with type 'ros.ament_cmake' and name 'realsense2_camera_msgs'
+[0.193s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_description) by extensions ['ignore', 'ignore_ament_install']
+[0.193s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_description) by extension 'ignore'
+[0.193s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_description) by extension 'ignore_ament_install'
+[0.193s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_description) by extensions ['colcon_pkg']
+[0.193s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_description) by extension 'colcon_pkg'
+[0.193s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_description) by extensions ['colcon_meta']
+[0.193s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_description) by extension 'colcon_meta'
+[0.193s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_description) by extensions ['ros']
+[0.193s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/realsense-ros/realsense2_description) by extension 'ros'
+[0.194s] DEBUG:colcon.colcon_core.package_identification:Package 'src/ExaRobot_ROS2/realsense-ros/realsense2_description' with type 'ros.ament_cmake' and name 'realsense2_description'
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner) by extensions ['ignore', 'ignore_ament_install']
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner) by extension 'ignore'
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner) by extension 'ignore_ament_install'
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner) by extensions ['colcon_pkg']
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner) by extension 'colcon_pkg'
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner) by extensions ['colcon_meta']
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner) by extension 'colcon_meta'
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner) by extensions ['ros']
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner) by extension 'ros'
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner) by extensions ['cmake', 'python']
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner) by extension 'cmake'
+[0.195s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner) by extension 'python'
+[0.195s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner) by extensions ['python_setup_py']
+[0.195s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner) by extension 'python_setup_py'
+[0.195s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner/teb_local_planner) by extensions ['ignore', 'ignore_ament_install']
+[0.195s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner/teb_local_planner) by extension 'ignore'
+[0.195s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner/teb_local_planner) by extension 'ignore_ament_install'
+[0.195s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner/teb_local_planner) by extensions ['colcon_pkg']
+[0.195s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner/teb_local_planner) by extension 'colcon_pkg'
+[0.195s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner/teb_local_planner) by extensions ['colcon_meta']
+[0.195s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner/teb_local_planner) by extension 'colcon_meta'
+[0.195s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner/teb_local_planner) by extensions ['ros']
+[0.195s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner/teb_local_planner) by extension 'ros'
+[0.197s] DEBUG:colcon.colcon_core.package_identification:Package 'src/ExaRobot_ROS2/teb_local_planner/teb_local_planner' with type 'ros.ament_cmake' and name 'teb_local_planner'
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner/teb_msgs) by extensions ['ignore', 'ignore_ament_install']
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner/teb_msgs) by extension 'ignore'
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner/teb_msgs) by extension 'ignore_ament_install'
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner/teb_msgs) by extensions ['colcon_pkg']
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner/teb_msgs) by extension 'colcon_pkg'
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner/teb_msgs) by extensions ['colcon_meta']
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner/teb_msgs) by extension 'colcon_meta'
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner/teb_msgs) by extensions ['ros']
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/teb_local_planner/teb_msgs) by extension 'ros'
+[0.198s] DEBUG:colcon.colcon_core.package_identification:Package 'src/ExaRobot_ROS2/teb_local_planner/teb_msgs' with type 'ros.ament_cmake' and name 'teb_msgs'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/urg_node) by extensions ['ignore', 'ignore_ament_install']
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/urg_node) by extension 'ignore'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/urg_node) by extension 'ignore_ament_install'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/urg_node) by extensions ['colcon_pkg']
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/urg_node) by extension 'colcon_pkg'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/urg_node) by extensions ['colcon_meta']
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/urg_node) by extension 'colcon_meta'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/urg_node) by extensions ['ros']
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/urg_node) by extension 'ros'
+[0.200s] DEBUG:colcon.colcon_core.package_identification:Package 'src/ExaRobot_ROS2/urg_node' with type 'ros.ament_cmake' and name 'urg_node'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/velocity_smoother) by extensions ['ignore', 'ignore_ament_install']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/velocity_smoother) by extension 'ignore'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/velocity_smoother) by extension 'ignore_ament_install'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/velocity_smoother) by extensions ['colcon_pkg']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/velocity_smoother) by extension 'colcon_pkg'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/velocity_smoother) by extensions ['colcon_meta']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/velocity_smoother) by extension 'colcon_meta'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/velocity_smoother) by extensions ['ros']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/velocity_smoother) by extension 'ros'
+[0.201s] DEBUG:colcon.colcon_core.package_identification:Package 'src/ExaRobot_ROS2/velocity_smoother' with type 'ros.ament_cmake' and name 'velocity_smoother'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/ydlidar_ros2_driver) by extensions ['ignore', 'ignore_ament_install']
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/ydlidar_ros2_driver) by extension 'ignore'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/ydlidar_ros2_driver) by extension 'ignore_ament_install'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/ydlidar_ros2_driver) by extensions ['colcon_pkg']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/ydlidar_ros2_driver) by extension 'colcon_pkg'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/ydlidar_ros2_driver) by extensions ['colcon_meta']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/ydlidar_ros2_driver) by extension 'colcon_meta'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/ydlidar_ros2_driver) by extensions ['ros']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(src/ExaRobot_ROS2/ydlidar_ros2_driver) by extension 'ros'
+[0.202s] DEBUG:colcon.colcon_core.package_identification:Package 'src/ExaRobot_ROS2/ydlidar_ros2_driver' with type 'ros.ament_cmake' and name 'ydlidar_ros2_driver'
+[0.202s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.202s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.202s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.202s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.202s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.221s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.221s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.223s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 0 installed packages in /home/jw/exa_ws/install
+[0.224s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 0 installed packages in /home/jw/exa_test_ws/install
+[0.226s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 316 installed packages in /opt/ros/galactic
+[0.228s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[0.297s] Level 5:colcon.colcon_core.verb:set package 'costmap_converter_msgs' build argument 'cmake_args' from command line to 'None'
+[0.297s] Level 5:colcon.colcon_core.verb:set package 'costmap_converter_msgs' build argument 'cmake_target' from command line to 'None'
+[0.297s] Level 5:colcon.colcon_core.verb:set package 'costmap_converter_msgs' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.297s] Level 5:colcon.colcon_core.verb:set package 'costmap_converter_msgs' build argument 'cmake_clean_cache' from command line to 'False'
+[0.297s] Level 5:colcon.colcon_core.verb:set package 'costmap_converter_msgs' build argument 'cmake_clean_first' from command line to 'False'
+[0.297s] Level 5:colcon.colcon_core.verb:set package 'costmap_converter_msgs' build argument 'cmake_force_configure' from command line to 'False'
+[0.297s] Level 5:colcon.colcon_core.verb:set package 'costmap_converter_msgs' build argument 'ament_cmake_args' from command line to 'None'
+[0.297s] Level 5:colcon.colcon_core.verb:set package 'costmap_converter_msgs' build argument 'catkin_cmake_args' from command line to 'None'
+[0.297s] Level 5:colcon.colcon_core.verb:set package 'costmap_converter_msgs' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.297s] DEBUG:colcon.colcon_core.verb:Building package 'costmap_converter_msgs' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jw/robot/ros_ws/build/costmap_converter_msgs', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jw/robot/ros_ws/install/costmap_converter_msgs', 'merge_install': False, 'path': '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/costmap_converter/costmap_converter_msgs', 'symlink_install': False, 'test_result_base': None}
+[0.298s] Level 5:colcon.colcon_core.verb:set package 'exa_robot' build argument 'cmake_args' from command line to 'None'
+[0.298s] Level 5:colcon.colcon_core.verb:set package 'exa_robot' build argument 'cmake_target' from command line to 'None'
+[0.298s] Level 5:colcon.colcon_core.verb:set package 'exa_robot' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.298s] Level 5:colcon.colcon_core.verb:set package 'exa_robot' build argument 'cmake_clean_cache' from command line to 'False'
+[0.298s] Level 5:colcon.colcon_core.verb:set package 'exa_robot' build argument 'cmake_clean_first' from command line to 'False'
+[0.298s] Level 5:colcon.colcon_core.verb:set package 'exa_robot' build argument 'cmake_force_configure' from command line to 'False'
+[0.298s] Level 5:colcon.colcon_core.verb:set package 'exa_robot' build argument 'ament_cmake_args' from command line to 'None'
+[0.298s] Level 5:colcon.colcon_core.verb:set package 'exa_robot' build argument 'catkin_cmake_args' from command line to 'None'
+[0.298s] Level 5:colcon.colcon_core.verb:set package 'exa_robot' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.298s] DEBUG:colcon.colcon_core.verb:Building package 'exa_robot' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jw/robot/ros_ws/build/exa_robot', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jw/robot/ros_ws/install/exa_robot', 'merge_install': False, 'path': '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/exa_robot', 'symlink_install': False, 'test_result_base': None}
+[0.299s] Level 5:colcon.colcon_core.verb:set package 'realsense2_camera_msgs' build argument 'cmake_args' from command line to 'None'
+[0.299s] Level 5:colcon.colcon_core.verb:set package 'realsense2_camera_msgs' build argument 'cmake_target' from command line to 'None'
+[0.299s] Level 5:colcon.colcon_core.verb:set package 'realsense2_camera_msgs' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.300s] Level 5:colcon.colcon_core.verb:set package 'realsense2_camera_msgs' build argument 'cmake_clean_cache' from command line to 'False'
+[0.300s] Level 5:colcon.colcon_core.verb:set package 'realsense2_camera_msgs' build argument 'cmake_clean_first' from command line to 'False'
+[0.300s] Level 5:colcon.colcon_core.verb:set package 'realsense2_camera_msgs' build argument 'cmake_force_configure' from command line to 'False'
+[0.300s] Level 5:colcon.colcon_core.verb:set package 'realsense2_camera_msgs' build argument 'ament_cmake_args' from command line to 'None'
+[0.300s] Level 5:colcon.colcon_core.verb:set package 'realsense2_camera_msgs' build argument 'catkin_cmake_args' from command line to 'None'
+[0.300s] Level 5:colcon.colcon_core.verb:set package 'realsense2_camera_msgs' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.300s] DEBUG:colcon.colcon_core.verb:Building package 'realsense2_camera_msgs' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jw/robot/ros_ws/build/realsense2_camera_msgs', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jw/robot/ros_ws/install/realsense2_camera_msgs', 'merge_install': False, 'path': '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/realsense-ros/realsense2_camera_msgs', 'symlink_install': False, 'test_result_base': None}
+[0.301s] Level 5:colcon.colcon_core.verb:set package 'urg_node' build argument 'cmake_args' from command line to 'None'
+[0.301s] Level 5:colcon.colcon_core.verb:set package 'urg_node' build argument 'cmake_target' from command line to 'None'
+[0.301s] Level 5:colcon.colcon_core.verb:set package 'urg_node' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.301s] Level 5:colcon.colcon_core.verb:set package 'urg_node' build argument 'cmake_clean_cache' from command line to 'False'
+[0.301s] Level 5:colcon.colcon_core.verb:set package 'urg_node' build argument 'cmake_clean_first' from command line to 'False'
+[0.301s] Level 5:colcon.colcon_core.verb:set package 'urg_node' build argument 'cmake_force_configure' from command line to 'False'
+[0.301s] Level 5:colcon.colcon_core.verb:set package 'urg_node' build argument 'ament_cmake_args' from command line to 'None'
+[0.301s] Level 5:colcon.colcon_core.verb:set package 'urg_node' build argument 'catkin_cmake_args' from command line to 'None'
+[0.301s] Level 5:colcon.colcon_core.verb:set package 'urg_node' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.301s] DEBUG:colcon.colcon_core.verb:Building package 'urg_node' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jw/robot/ros_ws/build/urg_node', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jw/robot/ros_ws/install/urg_node', 'merge_install': False, 'path': '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/urg_node', 'symlink_install': False, 'test_result_base': None}
+[0.302s] Level 5:colcon.colcon_core.verb:set package 'velocity_smoother' build argument 'cmake_args' from command line to 'None'
+[0.302s] Level 5:colcon.colcon_core.verb:set package 'velocity_smoother' build argument 'cmake_target' from command line to 'None'
+[0.302s] Level 5:colcon.colcon_core.verb:set package 'velocity_smoother' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.302s] Level 5:colcon.colcon_core.verb:set package 'velocity_smoother' build argument 'cmake_clean_cache' from command line to 'False'
+[0.302s] Level 5:colcon.colcon_core.verb:set package 'velocity_smoother' build argument 'cmake_clean_first' from command line to 'False'
+[0.302s] Level 5:colcon.colcon_core.verb:set package 'velocity_smoother' build argument 'cmake_force_configure' from command line to 'False'
+[0.302s] Level 5:colcon.colcon_core.verb:set package 'velocity_smoother' build argument 'ament_cmake_args' from command line to 'None'
+[0.302s] Level 5:colcon.colcon_core.verb:set package 'velocity_smoother' build argument 'catkin_cmake_args' from command line to 'None'
+[0.302s] Level 5:colcon.colcon_core.verb:set package 'velocity_smoother' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.302s] DEBUG:colcon.colcon_core.verb:Building package 'velocity_smoother' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jw/robot/ros_ws/build/velocity_smoother', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jw/robot/ros_ws/install/velocity_smoother', 'merge_install': False, 'path': '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/velocity_smoother', 'symlink_install': False, 'test_result_base': None}
+[0.303s] Level 5:colcon.colcon_core.verb:set package 'ydlidar_ros2_driver' build argument 'cmake_args' from command line to 'None'
+[0.304s] Level 5:colcon.colcon_core.verb:set package 'ydlidar_ros2_driver' build argument 'cmake_target' from command line to 'None'
+[0.304s] Level 5:colcon.colcon_core.verb:set package 'ydlidar_ros2_driver' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.304s] Level 5:colcon.colcon_core.verb:set package 'ydlidar_ros2_driver' build argument 'cmake_clean_cache' from command line to 'False'
+[0.304s] Level 5:colcon.colcon_core.verb:set package 'ydlidar_ros2_driver' build argument 'cmake_clean_first' from command line to 'False'
+[0.304s] Level 5:colcon.colcon_core.verb:set package 'ydlidar_ros2_driver' build argument 'cmake_force_configure' from command line to 'False'
+[0.304s] Level 5:colcon.colcon_core.verb:set package 'ydlidar_ros2_driver' build argument 'ament_cmake_args' from command line to 'None'
+[0.304s] Level 5:colcon.colcon_core.verb:set package 'ydlidar_ros2_driver' build argument 'catkin_cmake_args' from command line to 'None'
+[0.304s] Level 5:colcon.colcon_core.verb:set package 'ydlidar_ros2_driver' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.304s] DEBUG:colcon.colcon_core.verb:Building package 'ydlidar_ros2_driver' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jw/robot/ros_ws/build/ydlidar_ros2_driver', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver', 'merge_install': False, 'path': '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/ydlidar_ros2_driver', 'symlink_install': False, 'test_result_base': None}
+[0.305s] Level 5:colcon.colcon_core.verb:set package 'costmap_converter' build argument 'cmake_args' from command line to 'None'
+[0.305s] Level 5:colcon.colcon_core.verb:set package 'costmap_converter' build argument 'cmake_target' from command line to 'None'
+[0.305s] Level 5:colcon.colcon_core.verb:set package 'costmap_converter' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.305s] Level 5:colcon.colcon_core.verb:set package 'costmap_converter' build argument 'cmake_clean_cache' from command line to 'False'
+[0.305s] Level 5:colcon.colcon_core.verb:set package 'costmap_converter' build argument 'cmake_clean_first' from command line to 'False'
+[0.305s] Level 5:colcon.colcon_core.verb:set package 'costmap_converter' build argument 'cmake_force_configure' from command line to 'False'
+[0.305s] Level 5:colcon.colcon_core.verb:set package 'costmap_converter' build argument 'ament_cmake_args' from command line to 'None'
+[0.305s] Level 5:colcon.colcon_core.verb:set package 'costmap_converter' build argument 'catkin_cmake_args' from command line to 'None'
+[0.305s] Level 5:colcon.colcon_core.verb:set package 'costmap_converter' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.305s] DEBUG:colcon.colcon_core.verb:Building package 'costmap_converter' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jw/robot/ros_ws/build/costmap_converter', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jw/robot/ros_ws/install/costmap_converter', 'merge_install': False, 'path': '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/costmap_converter/costmap_converter', 'symlink_install': False, 'test_result_base': None}
+[0.306s] Level 5:colcon.colcon_core.verb:set package 'realsense2_camera' build argument 'cmake_args' from command line to 'None'
+[0.306s] Level 5:colcon.colcon_core.verb:set package 'realsense2_camera' build argument 'cmake_target' from command line to 'None'
+[0.306s] Level 5:colcon.colcon_core.verb:set package 'realsense2_camera' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.306s] Level 5:colcon.colcon_core.verb:set package 'realsense2_camera' build argument 'cmake_clean_cache' from command line to 'False'
+[0.306s] Level 5:colcon.colcon_core.verb:set package 'realsense2_camera' build argument 'cmake_clean_first' from command line to 'False'
+[0.306s] Level 5:colcon.colcon_core.verb:set package 'realsense2_camera' build argument 'cmake_force_configure' from command line to 'False'
+[0.306s] Level 5:colcon.colcon_core.verb:set package 'realsense2_camera' build argument 'ament_cmake_args' from command line to 'None'
+[0.306s] Level 5:colcon.colcon_core.verb:set package 'realsense2_camera' build argument 'catkin_cmake_args' from command line to 'None'
+[0.306s] Level 5:colcon.colcon_core.verb:set package 'realsense2_camera' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.306s] DEBUG:colcon.colcon_core.verb:Building package 'realsense2_camera' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jw/robot/ros_ws/build/realsense2_camera', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jw/robot/ros_ws/install/realsense2_camera', 'merge_install': False, 'path': '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/realsense-ros/realsense2_camera', 'symlink_install': False, 'test_result_base': None}
+[0.308s] Level 5:colcon.colcon_core.verb:set package 'realsense2_description' build argument 'cmake_args' from command line to 'None'
+[0.308s] Level 5:colcon.colcon_core.verb:set package 'realsense2_description' build argument 'cmake_target' from command line to 'None'
+[0.308s] Level 5:colcon.colcon_core.verb:set package 'realsense2_description' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.308s] Level 5:colcon.colcon_core.verb:set package 'realsense2_description' build argument 'cmake_clean_cache' from command line to 'False'
+[0.308s] Level 5:colcon.colcon_core.verb:set package 'realsense2_description' build argument 'cmake_clean_first' from command line to 'False'
+[0.308s] Level 5:colcon.colcon_core.verb:set package 'realsense2_description' build argument 'cmake_force_configure' from command line to 'False'
+[0.308s] Level 5:colcon.colcon_core.verb:set package 'realsense2_description' build argument 'ament_cmake_args' from command line to 'None'
+[0.308s] Level 5:colcon.colcon_core.verb:set package 'realsense2_description' build argument 'catkin_cmake_args' from command line to 'None'
+[0.308s] Level 5:colcon.colcon_core.verb:set package 'realsense2_description' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.308s] DEBUG:colcon.colcon_core.verb:Building package 'realsense2_description' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jw/robot/ros_ws/build/realsense2_description', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jw/robot/ros_ws/install/realsense2_description', 'merge_install': False, 'path': '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/realsense-ros/realsense2_description', 'symlink_install': False, 'test_result_base': None}
+[0.309s] Level 5:colcon.colcon_core.verb:set package 'teb_msgs' build argument 'cmake_args' from command line to 'None'
+[0.309s] Level 5:colcon.colcon_core.verb:set package 'teb_msgs' build argument 'cmake_target' from command line to 'None'
+[0.309s] Level 5:colcon.colcon_core.verb:set package 'teb_msgs' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.309s] Level 5:colcon.colcon_core.verb:set package 'teb_msgs' build argument 'cmake_clean_cache' from command line to 'False'
+[0.309s] Level 5:colcon.colcon_core.verb:set package 'teb_msgs' build argument 'cmake_clean_first' from command line to 'False'
+[0.309s] Level 5:colcon.colcon_core.verb:set package 'teb_msgs' build argument 'cmake_force_configure' from command line to 'False'
+[0.309s] Level 5:colcon.colcon_core.verb:set package 'teb_msgs' build argument 'ament_cmake_args' from command line to 'None'
+[0.309s] Level 5:colcon.colcon_core.verb:set package 'teb_msgs' build argument 'catkin_cmake_args' from command line to 'None'
+[0.309s] Level 5:colcon.colcon_core.verb:set package 'teb_msgs' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.309s] DEBUG:colcon.colcon_core.verb:Building package 'teb_msgs' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jw/robot/ros_ws/build/teb_msgs', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jw/robot/ros_ws/install/teb_msgs', 'merge_install': False, 'path': '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/teb_local_planner/teb_msgs', 'symlink_install': False, 'test_result_base': None}
+[0.310s] Level 5:colcon.colcon_core.verb:set package 'teb_local_planner' build argument 'cmake_args' from command line to 'None'
+[0.310s] Level 5:colcon.colcon_core.verb:set package 'teb_local_planner' build argument 'cmake_target' from command line to 'None'
+[0.310s] Level 5:colcon.colcon_core.verb:set package 'teb_local_planner' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.310s] Level 5:colcon.colcon_core.verb:set package 'teb_local_planner' build argument 'cmake_clean_cache' from command line to 'False'
+[0.310s] Level 5:colcon.colcon_core.verb:set package 'teb_local_planner' build argument 'cmake_clean_first' from command line to 'False'
+[0.310s] Level 5:colcon.colcon_core.verb:set package 'teb_local_planner' build argument 'cmake_force_configure' from command line to 'False'
+[0.310s] Level 5:colcon.colcon_core.verb:set package 'teb_local_planner' build argument 'ament_cmake_args' from command line to 'None'
+[0.310s] Level 5:colcon.colcon_core.verb:set package 'teb_local_planner' build argument 'catkin_cmake_args' from command line to 'None'
+[0.310s] Level 5:colcon.colcon_core.verb:set package 'teb_local_planner' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.311s] DEBUG:colcon.colcon_core.verb:Building package 'teb_local_planner' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jw/robot/ros_ws/build/teb_local_planner', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jw/robot/ros_ws/install/teb_local_planner', 'merge_install': False, 'path': '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/teb_local_planner/teb_local_planner', 'symlink_install': False, 'test_result_base': None}
+[0.311s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.317s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.317s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/costmap_converter/costmap_converter_msgs' with build type 'ament_cmake'
+[0.317s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/costmap_converter/costmap_converter_msgs'
+[0.322s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.322s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.322s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.329s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/realsense-ros/realsense2_camera_msgs' with build type 'ament_cmake'
+[0.330s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/realsense-ros/realsense2_camera_msgs'
+[0.332s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.332s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.339s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/exa_robot' with build type 'ament_python'
+[0.340s] Level 1:colcon.colcon_core.shell:create_environment_hook('exa_robot', 'ament_prefix_path')
+[0.342s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/hook/ament_prefix_path.ps1'
+[0.343s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/hook/ament_prefix_path.dsv'
+[0.343s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/hook/ament_prefix_path.sh'
+[0.346s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.346s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.353s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/urg_node' with build type 'ament_cmake'
+[0.353s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/urg_node'
+[0.355s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.355s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.364s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/velocity_smoother' with build type 'ament_cmake'
+[0.365s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/velocity_smoother'
+[0.368s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.368s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.381s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/ydlidar_ros2_driver' with build type 'ament_cmake'
+[0.382s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/ydlidar_ros2_driver'
+[0.386s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.386s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.415s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jw/robot/ros_ws/build/costmap_converter_msgs': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/jw/robot/ros_ws/build/costmap_converter_msgs -- -j12 -l12
+[0.425s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jw/robot/ros_ws/build/realsense2_camera_msgs': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/jw/robot/ros_ws/build/realsense2_camera_msgs -- -j12 -l12
+[0.706s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/exa_robot'
+[0.708s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.708s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.719s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jw/robot/ros_ws/build/urg_node': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/jw/robot/ros_ws/build/urg_node -- -j12 -l12
+[0.724s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jw/robot/ros_ws/build/velocity_smoother': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/jw/robot/ros_ws/build/velocity_smoother -- -j12 -l12
+[0.729s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jw/robot/ros_ws/build/ydlidar_ros2_driver': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/jw/robot/ros_ws/build/ydlidar_ros2_driver -- -j12 -l12
+[0.751s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jw/robot/ros_ws/build/costmap_converter_msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/jw/robot/ros_ws/build/costmap_converter_msgs -- -j12 -l12
+[0.752s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jw/robot/ros_ws/build/realsense2_camera_msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/jw/robot/ros_ws/build/realsense2_camera_msgs -- -j12 -l12
+[0.822s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jw/robot/ros_ws/build/costmap_converter_msgs': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/jw/robot/ros_ws/build/costmap_converter_msgs
+[0.826s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jw/robot/ros_ws/build/ydlidar_ros2_driver' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/jw/robot/ros_ws/build/ydlidar_ros2_driver -- -j12 -l12
+[0.844s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jw/robot/ros_ws/build/velocity_smoother' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/jw/robot/ros_ws/build/velocity_smoother -- -j12 -l12
+[0.851s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jw/robot/ros_ws/build/realsense2_camera_msgs': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/jw/robot/ros_ws/build/realsense2_camera_msgs
+[0.877s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jw/robot/ros_ws/build/urg_node' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/jw/robot/ros_ws/build/urg_node -- -j12 -l12
+[0.896s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(ydlidar_ros2_driver)
+[0.897s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jw/robot/ros_ws/build/ydlidar_ros2_driver': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/jw/robot/ros_ws/build/ydlidar_ros2_driver
+[0.923s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jw/robot/ros_ws/build/velocity_smoother': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/jw/robot/ros_ws/build/velocity_smoother
+[0.928s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver' for CMake module files
+[0.934s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver' for CMake config files
+[0.938s] Level 1:colcon.colcon_core.shell:create_environment_hook('ydlidar_ros2_driver', 'cmake_prefix_path')
+[0.942s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/share/ydlidar_ros2_driver/hook/cmake_prefix_path.ps1'
+[0.943s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/share/ydlidar_ros2_driver/hook/cmake_prefix_path.dsv'
+[0.944s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/share/ydlidar_ros2_driver/hook/cmake_prefix_path.sh'
+[0.946s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/lib'
+[0.947s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/bin'
+[0.947s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/lib/pkgconfig/ydlidar_ros2_driver.pc'
+[0.947s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/lib/python3.8/site-packages'
+[0.948s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/bin'
+[0.952s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/share/ydlidar_ros2_driver/package.ps1'
+[0.953s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/share/ydlidar_ros2_driver/package.dsv'
+[0.955s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/share/ydlidar_ros2_driver/package.sh'
+[0.956s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jw/robot/ros_ws/build/ydlidar_ros2_driver' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/jw/robot/ros_ws/build/ydlidar_ros2_driver
+[0.957s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/share/ydlidar_ros2_driver/package.bash'
+[0.959s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/share/ydlidar_ros2_driver/package.zsh'
+[0.960s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/share/colcon-core/packages/ydlidar_ros2_driver)
+[0.966s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(costmap_converter_msgs)
+[0.970s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter_msgs' for CMake module files
+[0.974s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter_msgs' for CMake config files
+[0.977s] Level 1:colcon.colcon_core.shell:create_environment_hook('costmap_converter_msgs', 'cmake_prefix_path')
+[0.981s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/hook/cmake_prefix_path.ps1'
+[0.981s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/hook/cmake_prefix_path.dsv'
+[0.982s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/hook/cmake_prefix_path.sh'
+[0.983s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib'
+[0.984s] Level 1:colcon.colcon_core.shell:create_environment_hook('costmap_converter_msgs', 'ld_library_path_lib')
+[0.988s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/hook/ld_library_path_lib.ps1'
+[0.989s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/hook/ld_library_path_lib.dsv'
+[0.989s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/hook/ld_library_path_lib.sh'
+[0.990s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter_msgs/bin'
+[0.990s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/pkgconfig/costmap_converter_msgs.pc'
+[0.991s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages'
+[0.991s] Level 1:colcon.colcon_core.shell:create_environment_hook('costmap_converter_msgs', 'pythonpath')
+[0.994s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/hook/pythonpath.ps1'
+[0.995s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/hook/pythonpath.dsv'
+[0.995s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jw/robot/ros_ws/build/costmap_converter_msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/jw/robot/ros_ws/build/costmap_converter_msgs
+[0.996s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/hook/pythonpath.sh'
+[0.996s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter_msgs/bin'
+[0.998s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/package.ps1'
+[0.999s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/package.dsv'
+[0.999s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/package.sh'
+[0.999s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/package.bash'
+[1.000s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/package.zsh'
+[1.000s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/colcon-core/packages/costmap_converter_msgs)
+[1.003s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(velocity_smoother)
+[1.006s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/velocity_smoother' for CMake module files
+[1.007s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jw/robot/ros_ws/build/velocity_smoother' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/jw/robot/ros_ws/build/velocity_smoother
+[1.008s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/velocity_smoother' for CMake config files
+[1.008s] Level 1:colcon.colcon_core.shell:create_environment_hook('velocity_smoother', 'cmake_prefix_path')
+[1.010s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/hook/cmake_prefix_path.ps1'
+[1.010s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/hook/cmake_prefix_path.dsv'
+[1.010s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/hook/cmake_prefix_path.sh'
+[1.011s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/velocity_smoother/lib'
+[1.011s] Level 1:colcon.colcon_core.shell:create_environment_hook('velocity_smoother', 'ld_library_path_lib')
+[1.014s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/hook/ld_library_path_lib.ps1'
+[1.014s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/hook/ld_library_path_lib.dsv'
+[1.014s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/hook/ld_library_path_lib.sh'
+[1.015s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/velocity_smoother/bin'
+[1.015s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/velocity_smoother/lib/pkgconfig/velocity_smoother.pc'
+[1.015s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/velocity_smoother/lib/python3.8/site-packages'
+[1.016s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/velocity_smoother/bin'
+[1.018s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/package.ps1'
+[1.018s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/package.dsv'
+[1.018s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/package.sh'
+[1.019s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/package.bash'
+[1.019s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/package.zsh'
+[1.020s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jw/robot/ros_ws/install/velocity_smoother/share/colcon-core/packages/velocity_smoother)
+[1.023s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(realsense2_camera_msgs)
+[1.026s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera_msgs' for CMake module files
+[1.028s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jw/robot/ros_ws/build/realsense2_camera_msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/jw/robot/ros_ws/build/realsense2_camera_msgs
+[1.029s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera_msgs' for CMake config files
+[1.029s] Level 1:colcon.colcon_core.shell:create_environment_hook('realsense2_camera_msgs', 'cmake_prefix_path')
+[1.032s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/hook/cmake_prefix_path.ps1'
+[1.033s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/hook/cmake_prefix_path.dsv'
+[1.033s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/hook/cmake_prefix_path.sh'
+[1.034s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib'
+[1.034s] Level 1:colcon.colcon_core.shell:create_environment_hook('realsense2_camera_msgs', 'ld_library_path_lib')
+[1.036s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/hook/ld_library_path_lib.ps1'
+[1.037s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/hook/ld_library_path_lib.dsv'
+[1.037s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/hook/ld_library_path_lib.sh'
+[1.037s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/bin'
+[1.038s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib/pkgconfig/realsense2_camera_msgs.pc'
+[1.038s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib/python3.8/site-packages'
+[1.038s] Level 1:colcon.colcon_core.shell:create_environment_hook('realsense2_camera_msgs', 'pythonpath')
+[1.040s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/hook/pythonpath.ps1'
+[1.041s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/hook/pythonpath.dsv'
+[1.041s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/hook/pythonpath.sh'
+[1.042s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/bin'
+[1.044s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/package.ps1'
+[1.045s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/package.dsv'
+[1.045s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/package.sh'
+[1.046s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/package.bash'
+[1.046s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/package.zsh'
+[1.046s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/colcon-core/packages/realsense2_camera_msgs)
+[1.054s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jw/robot/ros_ws/build/urg_node': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/jw/robot/ros_ws/build/urg_node
+[1.061s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(ydlidar_ros2_driver)
+[1.068s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver' for CMake module files
+[1.071s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver' for CMake config files
+[1.072s] Level 1:colcon.colcon_core.shell:create_environment_hook('ydlidar_ros2_driver', 'cmake_prefix_path')
+[1.075s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/share/ydlidar_ros2_driver/hook/cmake_prefix_path.ps1'
+[1.075s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/share/ydlidar_ros2_driver/hook/cmake_prefix_path.dsv'
+[1.076s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/share/ydlidar_ros2_driver/hook/cmake_prefix_path.sh'
+[1.077s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/lib'
+[1.077s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/bin'
+[1.077s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/lib/pkgconfig/ydlidar_ros2_driver.pc'
+[1.078s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/lib/python3.8/site-packages'
+[1.078s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/bin'
+[1.080s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/share/ydlidar_ros2_driver/package.ps1'
+[1.081s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/share/ydlidar_ros2_driver/package.dsv'
+[1.081s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/share/ydlidar_ros2_driver/package.sh'
+[1.082s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/share/ydlidar_ros2_driver/package.bash'
+[1.082s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/share/ydlidar_ros2_driver/package.zsh'
+[1.082s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jw/robot/ros_ws/install/ydlidar_ros2_driver/share/colcon-core/packages/ydlidar_ros2_driver)
+[1.086s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(velocity_smoother)
+[1.089s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/velocity_smoother' for CMake module files
+[1.089s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/velocity_smoother' for CMake config files
+[1.090s] Level 1:colcon.colcon_core.shell:create_environment_hook('velocity_smoother', 'cmake_prefix_path')
+[1.092s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/hook/cmake_prefix_path.ps1'
+[1.092s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/hook/cmake_prefix_path.dsv'
+[1.092s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/hook/cmake_prefix_path.sh'
+[1.093s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/velocity_smoother/lib'
+[1.093s] Level 1:colcon.colcon_core.shell:create_environment_hook('velocity_smoother', 'ld_library_path_lib')
+[1.095s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/hook/ld_library_path_lib.ps1'
+[1.095s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/hook/ld_library_path_lib.dsv'
+[1.095s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/hook/ld_library_path_lib.sh'
+[1.096s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/velocity_smoother/bin'
+[1.096s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/velocity_smoother/lib/pkgconfig/velocity_smoother.pc'
+[1.096s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/velocity_smoother/lib/python3.8/site-packages'
+[1.096s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/velocity_smoother/bin'
+[1.098s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/package.ps1'
+[1.099s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/package.dsv'
+[1.099s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/package.sh'
+[1.099s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/package.bash'
+[1.100s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/velocity_smoother/share/velocity_smoother/package.zsh'
+[1.100s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jw/robot/ros_ws/install/velocity_smoother/share/colcon-core/packages/velocity_smoother)
+[1.102s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(costmap_converter_msgs)
+[1.105s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter_msgs' for CMake module files
+[1.106s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter_msgs' for CMake config files
+[1.107s] Level 1:colcon.colcon_core.shell:create_environment_hook('costmap_converter_msgs', 'cmake_prefix_path')
+[1.110s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/hook/cmake_prefix_path.ps1'
+[1.111s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/hook/cmake_prefix_path.dsv'
+[1.111s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/hook/cmake_prefix_path.sh'
+[1.112s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib'
+[1.112s] Level 1:colcon.colcon_core.shell:create_environment_hook('costmap_converter_msgs', 'ld_library_path_lib')
+[1.116s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/hook/ld_library_path_lib.ps1'
+[1.116s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/hook/ld_library_path_lib.dsv'
+[1.116s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/hook/ld_library_path_lib.sh'
+[1.116s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter_msgs/bin'
+[1.116s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/pkgconfig/costmap_converter_msgs.pc'
+[1.117s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages'
+[1.117s] Level 1:colcon.colcon_core.shell:create_environment_hook('costmap_converter_msgs', 'pythonpath')
+[1.119s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/hook/pythonpath.ps1'
+[1.119s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/hook/pythonpath.dsv'
+[1.119s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/hook/pythonpath.sh'
+[1.120s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter_msgs/bin'
+[1.122s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/package.ps1'
+[1.122s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/package.dsv'
+[1.123s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/package.sh'
+[1.124s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/package.bash'
+[1.124s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/costmap_converter_msgs/package.zsh'
+[1.124s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jw/robot/ros_ws/install/costmap_converter_msgs/share/colcon-core/packages/costmap_converter_msgs)
+[1.125s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(urg_node)
+[1.129s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/urg_node' for CMake module files
+[1.130s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jw/robot/ros_ws/build/urg_node' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/jw/robot/ros_ws/build/urg_node
+[1.131s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/urg_node' for CMake config files
+[1.131s] Level 1:colcon.colcon_core.shell:create_environment_hook('urg_node', 'cmake_prefix_path')
+[1.135s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/urg_node/share/urg_node/hook/cmake_prefix_path.ps1'
+[1.135s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/urg_node/share/urg_node/hook/cmake_prefix_path.dsv'
+[1.136s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/urg_node/share/urg_node/hook/cmake_prefix_path.sh'
+[1.136s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/urg_node/lib'
+[1.136s] Level 1:colcon.colcon_core.shell:create_environment_hook('urg_node', 'ld_library_path_lib')
+[1.140s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/urg_node/share/urg_node/hook/ld_library_path_lib.ps1'
+[1.140s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/urg_node/share/urg_node/hook/ld_library_path_lib.dsv'
+[1.140s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/urg_node/share/urg_node/hook/ld_library_path_lib.sh'
+[1.140s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/urg_node/bin'
+[1.141s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/urg_node/lib/pkgconfig/urg_node.pc'
+[1.141s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/urg_node/lib/python3.8/site-packages'
+[1.141s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/urg_node/bin'
+[1.143s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/urg_node/share/urg_node/package.ps1'
+[1.143s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jw/robot/ros_ws/install/urg_node/share/urg_node/package.dsv'
+[1.144s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/urg_node/share/urg_node/package.sh'
+[1.144s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/urg_node/share/urg_node/package.bash'
+[1.144s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/urg_node/share/urg_node/package.zsh'
+[1.145s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jw/robot/ros_ws/install/urg_node/share/colcon-core/packages/urg_node)
+[1.148s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/costmap_converter/costmap_converter' with build type 'ament_cmake'
+[1.148s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/costmap_converter/costmap_converter'
+[1.151s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.151s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.160s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/teb_local_planner/teb_msgs' with build type 'ament_cmake'
+[1.161s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/teb_local_planner/teb_msgs'
+[1.165s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.165s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.184s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(realsense2_camera_msgs)
+[1.187s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera_msgs' for CMake module files
+[1.187s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera_msgs' for CMake config files
+[1.188s] Level 1:colcon.colcon_core.shell:create_environment_hook('realsense2_camera_msgs', 'cmake_prefix_path')
+[1.190s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/hook/cmake_prefix_path.ps1'
+[1.190s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/hook/cmake_prefix_path.dsv'
+[1.191s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/hook/cmake_prefix_path.sh'
+[1.191s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib'
+[1.192s] Level 1:colcon.colcon_core.shell:create_environment_hook('realsense2_camera_msgs', 'ld_library_path_lib')
+[1.202s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/hook/ld_library_path_lib.ps1'
+[1.203s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/hook/ld_library_path_lib.dsv'
+[1.204s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/hook/ld_library_path_lib.sh'
+[1.205s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/bin'
+[1.205s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib/pkgconfig/realsense2_camera_msgs.pc'
+[1.206s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib/python3.8/site-packages'
+[1.206s] Level 1:colcon.colcon_core.shell:create_environment_hook('realsense2_camera_msgs', 'pythonpath')
+[1.209s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/hook/pythonpath.ps1'
+[1.210s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/hook/pythonpath.dsv'
+[1.210s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/hook/pythonpath.sh'
+[1.212s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/bin'
+[1.214s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/package.ps1'
+[1.214s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/package.dsv'
+[1.215s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/package.sh'
+[1.216s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/package.bash'
+[1.216s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/package.zsh'
+[1.216s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/colcon-core/packages/realsense2_camera_msgs)
+[1.220s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(urg_node)
+[1.228s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/urg_node' for CMake module files
+[1.232s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/urg_node' for CMake config files
+[1.233s] Level 1:colcon.colcon_core.shell:create_environment_hook('urg_node', 'cmake_prefix_path')
+[1.237s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/urg_node/share/urg_node/hook/cmake_prefix_path.ps1'
+[1.239s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/urg_node/share/urg_node/hook/cmake_prefix_path.dsv'
+[1.239s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/urg_node/share/urg_node/hook/cmake_prefix_path.sh'
+[1.240s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/urg_node/lib'
+[1.240s] Level 1:colcon.colcon_core.shell:create_environment_hook('urg_node', 'ld_library_path_lib')
+[1.243s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/urg_node/share/urg_node/hook/ld_library_path_lib.ps1'
+[1.243s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/urg_node/share/urg_node/hook/ld_library_path_lib.dsv'
+[1.243s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/urg_node/share/urg_node/hook/ld_library_path_lib.sh'
+[1.244s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/urg_node/bin'
+[1.244s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/urg_node/lib/pkgconfig/urg_node.pc'
+[1.244s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/urg_node/lib/python3.8/site-packages'
+[1.244s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/urg_node/bin'
+[1.247s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/urg_node/share/urg_node/package.ps1'
+[1.247s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jw/robot/ros_ws/install/urg_node/share/urg_node/package.dsv'
+[1.248s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/urg_node/share/urg_node/package.sh'
+[1.248s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/urg_node/share/urg_node/package.bash'
+[1.248s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/urg_node/share/urg_node/package.zsh'
+[1.249s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jw/robot/ros_ws/install/urg_node/share/colcon-core/packages/urg_node)
+[1.249s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/realsense-ros/realsense2_camera' with build type 'ament_cmake'
+[1.250s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/realsense-ros/realsense2_camera'
+[1.252s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.252s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.276s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/realsense-ros/realsense2_description' with build type 'ament_cmake'
+[1.277s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/realsense-ros/realsense2_description'
+[1.280s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.281s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.311s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jw/robot/ros_ws/build/costmap_converter': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --build /home/jw/robot/ros_ws/build/costmap_converter -- -j12 -l12
+[1.323s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jw/robot/ros_ws/build/teb_msgs': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --build /home/jw/robot/ros_ws/build/teb_msgs -- -j12 -l12
+[1.334s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jw/robot/ros_ws/build/realsense2_camera': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --build /home/jw/robot/ros_ws/build/realsense2_camera -- -j12 -l12
+[1.359s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jw/robot/ros_ws/build/realsense2_description': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --build /home/jw/robot/ros_ws/build/realsense2_description -- -j12 -l12
+[1.407s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/exa_robot': PYTHONPATH=/home/jw/robot/ros_ws/install/exa_robot/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../../build/exa_robot build --build-base /home/jw/robot/ros_ws/build/exa_robot/build install --prefix /home/jw/robot/ros_ws/install/exa_robot --record /home/jw/robot/ros_ws/build/exa_robot/install.log --single-version-externally-managed
+[1.425s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jw/robot/ros_ws/build/realsense2_description' returned '0': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --build /home/jw/robot/ros_ws/build/realsense2_description -- -j12 -l12
+[1.453s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jw/robot/ros_ws/build/realsense2_description': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --install /home/jw/robot/ros_ws/build/realsense2_description
+[1.466s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(realsense2_description)
+[1.473s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_description' for CMake module files
+[1.476s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_description' for CMake config files
+[1.479s] Level 1:colcon.colcon_core.shell:create_environment_hook('realsense2_description', 'cmake_prefix_path')
+[1.485s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_description/share/realsense2_description/hook/cmake_prefix_path.ps1'
+[1.487s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jw/robot/ros_ws/build/realsense2_description' returned '0': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --install /home/jw/robot/ros_ws/build/realsense2_description
+[1.488s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/realsense2_description/share/realsense2_description/hook/cmake_prefix_path.dsv'
+[1.488s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_description/share/realsense2_description/hook/cmake_prefix_path.sh'
+[1.490s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_description/bin'
+[1.490s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_description/lib/pkgconfig/realsense2_description.pc'
+[1.491s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_description/lib/python3.8/site-packages'
+[1.491s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_description/bin'
+[1.496s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_description/share/realsense2_description/package.ps1'
+[1.498s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jw/robot/ros_ws/install/realsense2_description/share/realsense2_description/package.dsv'
+[1.498s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_description/share/realsense2_description/package.sh'
+[1.499s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_description/share/realsense2_description/package.bash'
+[1.499s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_description/share/realsense2_description/package.zsh'
+[1.500s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jw/robot/ros_ws/install/realsense2_description/share/colcon-core/packages/realsense2_description)
+[1.507s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jw/robot/ros_ws/build/realsense2_camera' returned '0': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --build /home/jw/robot/ros_ws/build/realsense2_camera -- -j12 -l12
+[1.526s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(realsense2_description)
+[1.533s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_description' for CMake module files
+[1.534s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_description' for CMake config files
+[1.534s] Level 1:colcon.colcon_core.shell:create_environment_hook('realsense2_description', 'cmake_prefix_path')
+[1.537s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_description/share/realsense2_description/hook/cmake_prefix_path.ps1'
+[1.538s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/realsense2_description/share/realsense2_description/hook/cmake_prefix_path.dsv'
+[1.538s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_description/share/realsense2_description/hook/cmake_prefix_path.sh'
+[1.538s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_description/bin'
+[1.539s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_description/lib/pkgconfig/realsense2_description.pc'
+[1.539s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_description/lib/python3.8/site-packages'
+[1.539s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_description/bin'
+[1.541s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_description/share/realsense2_description/package.ps1'
+[1.542s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jw/robot/ros_ws/install/realsense2_description/share/realsense2_description/package.dsv'
+[1.542s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_description/share/realsense2_description/package.sh'
+[1.542s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_description/share/realsense2_description/package.bash'
+[1.543s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_description/share/realsense2_description/package.zsh'
+[1.543s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jw/robot/ros_ws/install/realsense2_description/share/colcon-core/packages/realsense2_description)
+[1.548s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jw/robot/ros_ws/build/realsense2_camera': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --install /home/jw/robot/ros_ws/build/realsense2_camera
+[1.554s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jw/robot/ros_ws/build/costmap_converter' returned '0': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --build /home/jw/robot/ros_ws/build/costmap_converter -- -j12 -l12
+[1.561s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(realsense2_camera)
+[1.566s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera' for CMake module files
+[1.568s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera' for CMake config files
+[1.572s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jw/robot/ros_ws/build/realsense2_camera' returned '0': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --install /home/jw/robot/ros_ws/build/realsense2_camera
+[1.572s] Level 1:colcon.colcon_core.shell:create_environment_hook('realsense2_camera', 'cmake_prefix_path')
+[1.577s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/hook/cmake_prefix_path.ps1'
+[1.578s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/hook/cmake_prefix_path.dsv'
+[1.578s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/hook/cmake_prefix_path.sh'
+[1.580s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera/lib'
+[1.580s] Level 1:colcon.colcon_core.shell:create_environment_hook('realsense2_camera', 'ld_library_path_lib')
+[1.584s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/hook/ld_library_path_lib.ps1'
+[1.586s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/hook/ld_library_path_lib.dsv'
+[1.586s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/hook/ld_library_path_lib.sh'
+[1.586s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera/bin'
+[1.587s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera/lib/pkgconfig/realsense2_camera.pc'
+[1.587s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera/lib/python3.8/site-packages'
+[1.587s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera/bin'
+[1.591s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/package.ps1'
+[1.592s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/package.dsv'
+[1.593s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/package.sh'
+[1.594s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/package.bash'
+[1.594s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/package.zsh'
+[1.595s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jw/robot/ros_ws/install/realsense2_camera/share/colcon-core/packages/realsense2_camera)
+[1.605s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jw/robot/ros_ws/build/costmap_converter': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --install /home/jw/robot/ros_ws/build/costmap_converter
+[1.612s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jw/robot/ros_ws/build/teb_msgs' returned '0': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --build /home/jw/robot/ros_ws/build/teb_msgs -- -j12 -l12
+[1.620s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(costmap_converter)
+[1.626s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter' for CMake module files
+[1.628s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter' for CMake config files
+[1.630s] Level 1:colcon.colcon_core.shell:create_environment_hook('costmap_converter', 'cmake_prefix_path')
+[1.634s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/cmake_prefix_path.ps1'
+[1.635s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/cmake_prefix_path.dsv'
+[1.636s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jw/robot/ros_ws/build/costmap_converter' returned '0': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --install /home/jw/robot/ros_ws/build/costmap_converter
+[1.636s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/cmake_prefix_path.sh'
+[1.637s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter/lib'
+[1.637s] Level 1:colcon.colcon_core.shell:create_environment_hook('costmap_converter', 'ld_library_path_lib')
+[1.642s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/ld_library_path_lib.ps1'
+[1.642s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/ld_library_path_lib.dsv'
+[1.643s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/ld_library_path_lib.sh'
+[1.643s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter/bin'
+[1.644s] Level 1:colcon.colcon_core.shell:create_environment_hook('costmap_converter', 'path')
+[1.648s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/path.ps1'
+[1.648s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/path.dsv'
+[1.648s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/path.sh'
+[1.649s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter/lib/pkgconfig/costmap_converter.pc'
+[1.649s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter/lib/python3.8/site-packages'
+[1.649s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter/bin'
+[1.649s] Level 1:colcon.colcon_core.shell:create_environment_hook('costmap_converter', 'pythonscriptspath')
+[1.651s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/pythonscriptspath.ps1'
+[1.652s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/pythonscriptspath.dsv'
+[1.652s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/pythonscriptspath.sh'
+[1.655s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/package.ps1'
+[1.655s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/package.dsv'
+[1.656s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/package.sh'
+[1.656s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/package.bash'
+[1.657s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/package.zsh'
+[1.657s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jw/robot/ros_ws/install/costmap_converter/share/colcon-core/packages/costmap_converter)
+[1.667s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(realsense2_camera)
+[1.671s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera' for CMake module files
+[1.672s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera' for CMake config files
+[1.672s] Level 1:colcon.colcon_core.shell:create_environment_hook('realsense2_camera', 'cmake_prefix_path')
+[1.676s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/hook/cmake_prefix_path.ps1'
+[1.677s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/hook/cmake_prefix_path.dsv'
+[1.678s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/hook/cmake_prefix_path.sh'
+[1.678s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera/lib'
+[1.679s] Level 1:colcon.colcon_core.shell:create_environment_hook('realsense2_camera', 'ld_library_path_lib')
+[1.682s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/hook/ld_library_path_lib.ps1'
+[1.682s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/hook/ld_library_path_lib.dsv'
+[1.683s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/hook/ld_library_path_lib.sh'
+[1.683s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera/bin'
+[1.683s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera/lib/pkgconfig/realsense2_camera.pc'
+[1.683s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera/lib/python3.8/site-packages'
+[1.684s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/realsense2_camera/bin'
+[1.686s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/package.ps1'
+[1.687s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/package.dsv'
+[1.688s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/package.sh'
+[1.688s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/package.bash'
+[1.688s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/package.zsh'
+[1.689s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jw/robot/ros_ws/install/realsense2_camera/share/colcon-core/packages/realsense2_camera)
+[1.692s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jw/robot/ros_ws/build/teb_msgs': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --install /home/jw/robot/ros_ws/build/teb_msgs
+[1.722s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(costmap_converter)
+[1.727s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter' for CMake module files
+[1.729s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter' for CMake config files
+[1.730s] Level 1:colcon.colcon_core.shell:create_environment_hook('costmap_converter', 'cmake_prefix_path')
+[1.733s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/cmake_prefix_path.ps1'
+[1.734s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/cmake_prefix_path.dsv'
+[1.734s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/cmake_prefix_path.sh'
+[1.735s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter/lib'
+[1.735s] Level 1:colcon.colcon_core.shell:create_environment_hook('costmap_converter', 'ld_library_path_lib')
+[1.737s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/ld_library_path_lib.ps1'
+[1.737s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/ld_library_path_lib.dsv'
+[1.738s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/ld_library_path_lib.sh'
+[1.739s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter/bin'
+[1.739s] Level 1:colcon.colcon_core.shell:create_environment_hook('costmap_converter', 'path')
+[1.741s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/path.ps1'
+[1.742s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/path.dsv'
+[1.742s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/path.sh'
+[1.743s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter/lib/pkgconfig/costmap_converter.pc'
+[1.743s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter/lib/python3.8/site-packages'
+[1.743s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/costmap_converter/bin'
+[1.743s] Level 1:colcon.colcon_core.shell:create_environment_hook('costmap_converter', 'pythonscriptspath')
+[1.746s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/pythonscriptspath.ps1'
+[1.747s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/pythonscriptspath.dsv'
+[1.747s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/hook/pythonscriptspath.sh'
+[1.751s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/package.ps1'
+[1.752s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/package.dsv'
+[1.754s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/package.sh'
+[1.755s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/package.bash'
+[1.756s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/costmap_converter/share/costmap_converter/package.zsh'
+[1.758s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jw/robot/ros_ws/install/costmap_converter/share/colcon-core/packages/costmap_converter)
+[1.772s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(teb_msgs)
+[1.776s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_msgs' for CMake module files
+[1.777s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_msgs' for CMake config files
+[1.779s] Level 1:colcon.colcon_core.shell:create_environment_hook('teb_msgs', 'cmake_prefix_path')
+[1.781s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/hook/cmake_prefix_path.ps1'
+[1.782s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/hook/cmake_prefix_path.dsv'
+[1.782s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/hook/cmake_prefix_path.sh'
+[1.784s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_msgs/lib'
+[1.784s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jw/robot/ros_ws/build/teb_msgs' returned '0': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --install /home/jw/robot/ros_ws/build/teb_msgs
+[1.784s] Level 1:colcon.colcon_core.shell:create_environment_hook('teb_msgs', 'ld_library_path_lib')
+[1.786s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/hook/ld_library_path_lib.ps1'
+[1.787s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/hook/ld_library_path_lib.dsv'
+[1.787s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/hook/ld_library_path_lib.sh'
+[1.787s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_msgs/bin'
+[1.787s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_msgs/lib/pkgconfig/teb_msgs.pc'
+[1.788s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_msgs/lib/python3.8/site-packages'
+[1.788s] Level 1:colcon.colcon_core.shell:create_environment_hook('teb_msgs', 'pythonpath')
+[1.790s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/hook/pythonpath.ps1'
+[1.790s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/hook/pythonpath.dsv'
+[1.791s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/hook/pythonpath.sh'
+[1.792s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_msgs/bin'
+[1.794s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/package.ps1'
+[1.795s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/package.dsv'
+[1.796s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/package.sh'
+[1.797s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/package.bash'
+[1.797s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/package.zsh'
+[1.797s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jw/robot/ros_ws/install/teb_msgs/share/colcon-core/packages/teb_msgs)
+[1.846s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/exa_robot' for CMake module files
+[1.847s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/exa_robot' returned '0': PYTHONPATH=/home/jw/robot/ros_ws/install/exa_robot/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../../build/exa_robot build --build-base /home/jw/robot/ros_ws/build/exa_robot/build install --prefix /home/jw/robot/ros_ws/install/exa_robot --record /home/jw/robot/ros_ws/build/exa_robot/install.log --single-version-externally-managed
+[1.848s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/exa_robot' for CMake config files
+[1.848s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/exa_robot/lib'
+[1.849s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/exa_robot/bin'
+[1.849s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/exa_robot/lib/pkgconfig/exa_robot.pc'
+[1.849s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/exa_robot/lib/python3.8/site-packages'
+[1.849s] Level 1:colcon.colcon_core.shell:create_environment_hook('exa_robot', 'pythonpath')
+[1.852s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/hook/pythonpath.ps1'
+[1.853s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/hook/pythonpath.dsv'
+[1.853s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/hook/pythonpath.sh'
+[1.854s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/exa_robot/bin'
+[1.854s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(exa_robot)
+[1.858s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/package.ps1'
+[1.858s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/package.dsv'
+[1.859s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/package.sh'
+[1.859s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/package.bash'
+[1.860s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/exa_robot/share/exa_robot/package.zsh'
+[1.860s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jw/robot/ros_ws/install/exa_robot/share/colcon-core/packages/exa_robot)
+[1.881s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(teb_msgs)
+[1.885s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_msgs' for CMake module files
+[1.886s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_msgs' for CMake config files
+[1.886s] Level 1:colcon.colcon_core.shell:create_environment_hook('teb_msgs', 'cmake_prefix_path')
+[1.888s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/hook/cmake_prefix_path.ps1'
+[1.889s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/hook/cmake_prefix_path.dsv'
+[1.889s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/hook/cmake_prefix_path.sh'
+[1.889s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_msgs/lib'
+[1.890s] Level 1:colcon.colcon_core.shell:create_environment_hook('teb_msgs', 'ld_library_path_lib')
+[1.891s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/hook/ld_library_path_lib.ps1'
+[1.892s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/hook/ld_library_path_lib.dsv'
+[1.892s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/hook/ld_library_path_lib.sh'
+[1.892s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_msgs/bin'
+[1.892s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_msgs/lib/pkgconfig/teb_msgs.pc'
+[1.893s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_msgs/lib/python3.8/site-packages'
+[1.893s] Level 1:colcon.colcon_core.shell:create_environment_hook('teb_msgs', 'pythonpath')
+[1.895s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/hook/pythonpath.ps1'
+[1.895s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/hook/pythonpath.dsv'
+[1.895s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/hook/pythonpath.sh'
+[1.896s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_msgs/bin'
+[1.898s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/package.ps1'
+[1.898s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/package.dsv'
+[1.899s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/package.sh'
+[1.899s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/package.bash'
+[1.900s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/teb_msgs/share/teb_msgs/package.zsh'
+[1.900s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jw/robot/ros_ws/install/teb_msgs/share/colcon-core/packages/teb_msgs)
+[1.901s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/teb_local_planner/teb_local_planner' with build type 'ament_cmake'
+[1.901s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/jw/robot/ros_ws/src/ExaRobot_ROS2/teb_local_planner/teb_local_planner'
+[1.903s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.903s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.928s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jw/robot/ros_ws/build/teb_local_planner': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/teb_msgs:/home/jw/robot/ros_ws/install/costmap_converter:/home/jw/robot/ros_ws/install/costmap_converter_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/teb_msgs:/home/jw/robot/ros_ws/install/costmap_converter:/home/jw/robot/ros_ws/install/costmap_converter_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/teb_msgs/lib:/home/jw/robot/ros_ws/install/costmap_converter/lib:/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib:${LD_LIBRARY_PATH} PATH=/home/jw/robot/ros_ws/install/costmap_converter/bin:${PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/teb_msgs/lib/python3.8/site-packages:/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --build /home/jw/robot/ros_ws/build/teb_local_planner -- -j12 -l12
+[2.060s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jw/robot/ros_ws/build/teb_local_planner' returned '0': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/teb_msgs:/home/jw/robot/ros_ws/install/costmap_converter:/home/jw/robot/ros_ws/install/costmap_converter_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/teb_msgs:/home/jw/robot/ros_ws/install/costmap_converter:/home/jw/robot/ros_ws/install/costmap_converter_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/teb_msgs/lib:/home/jw/robot/ros_ws/install/costmap_converter/lib:/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib:${LD_LIBRARY_PATH} PATH=/home/jw/robot/ros_ws/install/costmap_converter/bin:${PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/teb_msgs/lib/python3.8/site-packages:/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --build /home/jw/robot/ros_ws/build/teb_local_planner -- -j12 -l12
+[2.095s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jw/robot/ros_ws/build/teb_local_planner': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/teb_msgs:/home/jw/robot/ros_ws/install/costmap_converter:/home/jw/robot/ros_ws/install/costmap_converter_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/teb_msgs:/home/jw/robot/ros_ws/install/costmap_converter:/home/jw/robot/ros_ws/install/costmap_converter_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/teb_msgs/lib:/home/jw/robot/ros_ws/install/costmap_converter/lib:/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib:${LD_LIBRARY_PATH} PATH=/home/jw/robot/ros_ws/install/costmap_converter/bin:${PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/teb_msgs/lib/python3.8/site-packages:/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --install /home/jw/robot/ros_ws/build/teb_local_planner
+[2.107s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(teb_local_planner)
+[2.110s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_local_planner' for CMake module files
+[2.111s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_local_planner' for CMake config files
+[2.113s] Level 1:colcon.colcon_core.shell:create_environment_hook('teb_local_planner', 'cmake_prefix_path')
+[2.115s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/teb_local_planner/share/teb_local_planner/hook/cmake_prefix_path.ps1'
+[2.115s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/teb_local_planner/share/teb_local_planner/hook/cmake_prefix_path.dsv'
+[2.116s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/teb_local_planner/share/teb_local_planner/hook/cmake_prefix_path.sh'
+[2.117s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_local_planner/lib'
+[2.117s] Level 1:colcon.colcon_core.shell:create_environment_hook('teb_local_planner', 'ld_library_path_lib')
+[2.119s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/teb_local_planner/share/teb_local_planner/hook/ld_library_path_lib.ps1'
+[2.119s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/teb_local_planner/share/teb_local_planner/hook/ld_library_path_lib.dsv'
+[2.120s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/teb_local_planner/share/teb_local_planner/hook/ld_library_path_lib.sh'
+[2.120s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_local_planner/bin'
+[2.120s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_local_planner/lib/pkgconfig/teb_local_planner.pc'
+[2.121s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_local_planner/lib/python3.8/site-packages'
+[2.121s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_local_planner/bin'
+[2.123s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/teb_local_planner/share/teb_local_planner/package.ps1'
+[2.124s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jw/robot/ros_ws/install/teb_local_planner/share/teb_local_planner/package.dsv'
+[2.124s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/teb_local_planner/share/teb_local_planner/package.sh'
+[2.125s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/teb_local_planner/share/teb_local_planner/package.bash'
+[2.125s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/teb_local_planner/share/teb_local_planner/package.zsh'
+[2.126s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jw/robot/ros_ws/install/teb_local_planner/share/colcon-core/packages/teb_local_planner)
+[2.127s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jw/robot/ros_ws/build/teb_local_planner' returned '0': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/teb_msgs:/home/jw/robot/ros_ws/install/costmap_converter:/home/jw/robot/ros_ws/install/costmap_converter_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/teb_msgs:/home/jw/robot/ros_ws/install/costmap_converter:/home/jw/robot/ros_ws/install/costmap_converter_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/teb_msgs/lib:/home/jw/robot/ros_ws/install/costmap_converter/lib:/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib:${LD_LIBRARY_PATH} PATH=/home/jw/robot/ros_ws/install/costmap_converter/bin:${PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/teb_msgs/lib/python3.8/site-packages:/home/jw/robot/ros_ws/install/costmap_converter_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --install /home/jw/robot/ros_ws/build/teb_local_planner
+[2.160s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(teb_local_planner)
+[2.163s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_local_planner' for CMake module files
+[2.163s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_local_planner' for CMake config files
+[2.163s] Level 1:colcon.colcon_core.shell:create_environment_hook('teb_local_planner', 'cmake_prefix_path')
+[2.166s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/teb_local_planner/share/teb_local_planner/hook/cmake_prefix_path.ps1'
+[2.167s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/teb_local_planner/share/teb_local_planner/hook/cmake_prefix_path.dsv'
+[2.167s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/teb_local_planner/share/teb_local_planner/hook/cmake_prefix_path.sh'
+[2.168s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_local_planner/lib'
+[2.168s] Level 1:colcon.colcon_core.shell:create_environment_hook('teb_local_planner', 'ld_library_path_lib')
+[2.170s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/teb_local_planner/share/teb_local_planner/hook/ld_library_path_lib.ps1'
+[2.171s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jw/robot/ros_ws/install/teb_local_planner/share/teb_local_planner/hook/ld_library_path_lib.dsv'
+[2.171s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jw/robot/ros_ws/install/teb_local_planner/share/teb_local_planner/hook/ld_library_path_lib.sh'
+[2.171s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_local_planner/bin'
+[2.171s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_local_planner/lib/pkgconfig/teb_local_planner.pc'
+[2.172s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_local_planner/lib/python3.8/site-packages'
+[2.172s] Level 1:colcon.colcon_core.environment:checking '/home/jw/robot/ros_ws/install/teb_local_planner/bin'
+[2.174s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/teb_local_planner/share/teb_local_planner/package.ps1'
+[2.174s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jw/robot/ros_ws/install/teb_local_planner/share/teb_local_planner/package.dsv'
+[2.175s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/teb_local_planner/share/teb_local_planner/package.sh'
+[2.175s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/teb_local_planner/share/teb_local_planner/package.bash'
+[2.176s] INFO:colcon.colcon_core.shell:Creating package script '/home/jw/robot/ros_ws/install/teb_local_planner/share/teb_local_planner/package.zsh'
+[2.176s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jw/robot/ros_ws/install/teb_local_planner/share/colcon-core/packages/teb_local_planner)
+[2.176s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[2.177s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[2.177s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[2.177s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[2.188s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[2.188s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[2.188s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[2.201s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[2.204s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/jw/robot/ros_ws/install/local_setup.ps1'
+[2.206s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/jw/robot/ros_ws/install/_local_setup_util_ps1.py'
+[2.207s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/jw/robot/ros_ws/install/setup.ps1'
+[2.210s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/jw/robot/ros_ws/install/local_setup.sh'
+[2.211s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/jw/robot/ros_ws/install/_local_setup_util_sh.py'
+[2.211s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/jw/robot/ros_ws/install/setup.sh'
+[2.213s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/jw/robot/ros_ws/install/local_setup.bash'
+[2.214s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/jw/robot/ros_ws/install/setup.bash'
+[2.216s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/jw/robot/ros_ws/install/local_setup.zsh'
+[2.217s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/jw/robot/ros_ws/install/setup.zsh'

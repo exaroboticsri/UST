@@ -1,0 +1,6 @@
+Invoking command in '/home/jw/robot/ros_ws/build/ydlidar_ros2_driver': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake /home/jw/robot/ros_ws/src/ExaRobot_ROS2/ydlidar_ros2_driver -DCMAKE_INSTALL_PREFIX=/home/jw/robot/ros_ws/install/ydlidar_ros2_driver
+Invoked command in '/home/jw/robot/ros_ws/build/ydlidar_ros2_driver' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake /home/jw/robot/ros_ws/src/ExaRobot_ROS2/ydlidar_ros2_driver -DCMAKE_INSTALL_PREFIX=/home/jw/robot/ros_ws/install/ydlidar_ros2_driver
+Invoking command in '/home/jw/robot/ros_ws/build/ydlidar_ros2_driver': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/jw/robot/ros_ws/build/ydlidar_ros2_driver -- -j12 -l12
+Invoked command in '/home/jw/robot/ros_ws/build/ydlidar_ros2_driver' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/jw/robot/ros_ws/build/ydlidar_ros2_driver -- -j12 -l12
+Invoking command in '/home/jw/robot/ros_ws/build/ydlidar_ros2_driver': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/jw/robot/ros_ws/build/ydlidar_ros2_driver
+Invoked command in '/home/jw/robot/ros_ws/build/ydlidar_ros2_driver' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/jw/robot/ros_ws/build/ydlidar_ros2_driver

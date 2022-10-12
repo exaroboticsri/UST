@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ControlCore module &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="MainWindow module" href="MainWindow.html" />
+    <link rel="prev" title="Commons module" href="Commons.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../apis.html">Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Include.html">Overview</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../apis.html#include">Include</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="modules.html">Include</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="Commons.html">Commons module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">ControlCore module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="MainWindow.html">MainWindow module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="UiCommon.html">UiCommon module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="AudioRecognition/modules.html">AudioRecognition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpeechSynthesis/modules.html">SpeechSynthesis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Dialog/modules.html">Dialog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="DockWidgets/modules.html">DockWidgets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ExternalComm/modules.html">ExternalComm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MdiBackground/modules.html">MdiBackground</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Misc/modules.html">Misc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MobileRobot/modules.html">MobileRobot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MultiProcessing/modules.html">MultiProcessing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PathPlanning/modules.html">PathPlanning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ROSIntegration/modules.html">ROSIntegration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SubWindow/modules.html">SubWindow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SubWindow/SerialTerm/modules.html">SerialTerm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TrajectoryGenerator/modules.html">TrajectoryGenerator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../apis.html#library">Library</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../apis.html">Modules</a> &raquo;</li>
+          <li><a href="modules.html">Include</a> &raquo;</li>
+      <li>ControlCore module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/Inc/ControlCore.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-ControlCore">
+<span id="controlcore-module"></span><h1>ControlCore module<a class="headerlink" href="#module-ControlCore" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ControlCore.</span></span><span class="sig-name descname"><span class="pre">EmbdControlCore</span></span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>메인 컨트롤러로서 로봇제어 및 서비스 기능 구현을 위한 모듈을 제어 할 수 있도록 인터페이스 메소드를 제공한다.</p>
+<p>MultiProcess 모듈을 상속받아 각 기능별 프로세스와 Queue,Pipe,Signal 등을 사용하여 제어할 수 있도록 구현됨</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.do_when_robot_connected">
+<span class="sig-name descname"><span class="pre">do_when_robot_connected</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.do_when_robot_connected"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.do_when_robot_connected" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.exarobot_connect">
+<span class="sig-name descname"><span class="pre">exarobot_connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strComPort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.exarobot_connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.exarobot_connect" title="Permalink to this definition"></a></dt>
+<dd><p>로봇의 시리얼 장치연결을 요청하고 초기화를 한다.</p>
+<p>로봇 프로세스 초기화</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>strComPort</strong> (<em>str</em>) – 로봇이 연결된 시리얼 장치</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.exarobot_create">
+<span class="sig-name descname"><span class="pre">exarobot_create</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.exarobot_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.exarobot_create" title="Permalink to this definition"></a></dt>
+<dd><p>로봇제어 모듈 생성을 요청한다.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.exarobot_disconnect">
+<span class="sig-name descname"><span class="pre">exarobot_disconnect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.exarobot_disconnect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.exarobot_disconnect" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.exarobot_factory_reset">
+<span class="sig-name descname"><span class="pre">exarobot_factory_reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.exarobot_factory_reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.exarobot_factory_reset" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.exarobot_get_pos">
+<span class="sig-name descname"><span class="pre">exarobot_get_pos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.exarobot_get_pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.exarobot_get_pos" title="Permalink to this definition"></a></dt>
+<dd><p>로봇 포지션 요청 명령</p>
+<p>모터 엔코더기반 포지션을 요청한다.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.exarobot_move_joint_space">
+<span class="sig-name descname"><span class="pre">exarobot_move_joint_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">right_vel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">left_vel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.exarobot_move_joint_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.exarobot_move_joint_space" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.exarobot_release">
+<span class="sig-name descname"><span class="pre">exarobot_release</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.exarobot_release"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.exarobot_release" title="Permalink to this definition"></a></dt>
+<dd><p>로봇제어 모듈 종료 요청한다.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.exarobot_reset_motor">
+<span class="sig-name descname"><span class="pre">exarobot_reset_motor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.exarobot_reset_motor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.exarobot_reset_motor" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.exarobot_set_velocity_control">
+<span class="sig-name descname"><span class="pre">exarobot_set_velocity_control</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ang_vel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.exarobot_set_velocity_control"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.exarobot_set_velocity_control" title="Permalink to this definition"></a></dt>
+<dd><p>로봇 속도 제어 명령을 보낸다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vel</strong> (<em>float</em>) – 선속도 [m/s]</p></li>
+<li><p><strong>ang_vel</strong> (<em>float</em>) – 각속도 [radian]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.exarobot_stop_robot">
+<span class="sig-name descname"><span class="pre">exarobot_stop_robot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stop_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.exarobot_stop_robot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.exarobot_stop_robot" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.external_comm_create">
+<span class="sig-name descname"><span class="pre">external_comm_create</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.external_comm_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.external_comm_create" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.external_comm_disconnect_client">
+<span class="sig-name descname"><span class="pre">external_comm_disconnect_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tplAddrPort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.external_comm_disconnect_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.external_comm_disconnect_client" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.external_comm_release">
+<span class="sig-name descname"><span class="pre">external_comm_release</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.external_comm_release"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.external_comm_release" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.external_comm_send_raw">
+<span class="sig-name descname"><span class="pre">external_comm_send_raw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strMsg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.external_comm_send_raw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.external_comm_send_raw" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.external_comm_send_tts">
+<span class="sig-name descname"><span class="pre">external_comm_send_tts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strMsg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.external_comm_send_tts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.external_comm_send_tts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.external_comm_start">
+<span class="sig-name descname"><span class="pre">external_comm_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bSckType</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strAddr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nPort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.external_comm_start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.external_comm_start" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.external_comm_stop">
+<span class="sig-name descname"><span class="pre">external_comm_stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.external_comm_stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.external_comm_stop" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.get_proc_info">
+<span class="sig-name descname"><span class="pre">get_proc_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.get_proc_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.get_proc_info" title="Permalink to this definition"></a></dt>
+<dd><p>모니터링 프로세스에 관찰할 새로운 프로세스를 추가한다.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.init_multi_processes">
+<span class="sig-name descname"><span class="pre">init_multi_processes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.init_multi_processes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.init_multi_processes" title="Permalink to this definition"></a></dt>
+<dd><p>멀티 프로세스를 생성하고 초기화한다.</p>
+<p>생성되는 프로세스</p>
+<p>proc_mobile_robot (Stella)</p>
+<p>proc_mobile_robot (Kobuki2)</p>
+<p>proc_mobile_robot (ExaRobot)</p>
+<p>proc_external_comm</p>
+<p>proc_text_to_speech</p>
+<p>proc_ros_robot_node</p>
+<p>proc_ros_nav_node</p>
+<p>proc_ros_rs_node</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.is_server_status_alive">
+<span class="sig-name descname"><span class="pre">is_server_status_alive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.is_server_status_alive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.is_server_status_alive" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.kobuki2_connect">
+<span class="sig-name descname"><span class="pre">kobuki2_connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strComPort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.kobuki2_connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.kobuki2_connect" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.kobuki2_create">
+<span class="sig-name descname"><span class="pre">kobuki2_create</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.kobuki2_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.kobuki2_create" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.kobuki2_disconnect">
+<span class="sig-name descname"><span class="pre">kobuki2_disconnect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.kobuki2_disconnect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.kobuki2_disconnect" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.kobuki2_factory_reset">
+<span class="sig-name descname"><span class="pre">kobuki2_factory_reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.kobuki2_factory_reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.kobuki2_factory_reset" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.kobuki2_get_pos">
+<span class="sig-name descname"><span class="pre">kobuki2_get_pos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.kobuki2_get_pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.kobuki2_get_pos" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.kobuki2_move_joint_space">
+<span class="sig-name descname"><span class="pre">kobuki2_move_joint_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">right_vel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">left_vel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.kobuki2_move_joint_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.kobuki2_move_joint_space" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.kobuki2_release">
+<span class="sig-name descname"><span class="pre">kobuki2_release</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.kobuki2_release"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.kobuki2_release" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.kobuki2_reset_motor">
+<span class="sig-name descname"><span class="pre">kobuki2_reset_motor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.kobuki2_reset_motor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.kobuki2_reset_motor" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.kobuki2_set_velocity_control">
+<span class="sig-name descname"><span class="pre">kobuki2_set_velocity_control</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ang_vel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.kobuki2_set_velocity_control"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.kobuki2_set_velocity_control" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.kobuki2_stop_robot">
+<span class="sig-name descname"><span class="pre">kobuki2_stop_robot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stop_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.kobuki2_stop_robot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.kobuki2_stop_robot" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.onCamStart">
+<span class="sig-name descname"><span class="pre">onCamStart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nWidth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nHeight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.onCamStart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.onCamStart" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.on_exarobot_queue_bcast">
+<span class="sig-name descname"><span class="pre">on_exarobot_queue_bcast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.on_exarobot_queue_bcast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.on_exarobot_queue_bcast" title="Permalink to this definition"></a></dt>
+<dd><p>exarobot 프로세스로부터 받는 Queue msg수신시 동작하는  Callback이다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>msg</strong> (<em>dict</em>) – Queue msg</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.on_external_comm_queue_bcast">
+<span class="sig-name descname"><span class="pre">on_external_comm_queue_bcast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.on_external_comm_queue_bcast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.on_external_comm_queue_bcast" title="Permalink to this definition"></a></dt>
+<dd><p>external_comm 프로세스로부터 받는 Queue msg수신시 동작하는  Callback이다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>msg</strong> (<em>dict</em>) – Queue msg</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.on_kobuki2_queue_bcast">
+<span class="sig-name descname"><span class="pre">on_kobuki2_queue_bcast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.on_kobuki2_queue_bcast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.on_kobuki2_queue_bcast" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.on_mp_error">
+<span class="sig-name descname"><span class="pre">on_mp_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.on_mp_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.on_mp_error" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.on_nav_queue_bcast">
+<span class="sig-name descname"><span class="pre">on_nav_queue_bcast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.on_nav_queue_bcast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.on_nav_queue_bcast" title="Permalink to this definition"></a></dt>
+<dd><p>ROS Navagation2 프로세스로부터 받는 Queue msg수신시 동작하는  Callback이다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>msg</strong> (<em>dict</em>) – Queue msg</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.on_recv_image">
+<span class="sig-name descname"><span class="pre">on_recv_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.on_recv_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.on_recv_image" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.on_ros_cmd_vel_pub">
+<span class="sig-name descname"><span class="pre">on_ros_cmd_vel_pub</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.on_ros_cmd_vel_pub"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.on_ros_cmd_vel_pub" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.on_ros_robot_node_vel_sub">
+<span class="sig-name descname"><span class="pre">on_ros_robot_node_vel_sub</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.on_ros_robot_node_vel_sub"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.on_ros_robot_node_vel_sub" title="Permalink to this definition"></a></dt>
+<dd><p>ROS 로봇 노드로부터 속도 제어 명령을 수신시 동작하는 Callback 함수이다</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>msg</strong> (<em>dict</em>) – 속도 제어 메시지</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.on_ros_rs_node_queue_bcast">
+<span class="sig-name descname"><span class="pre">on_ros_rs_node_queue_bcast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.on_ros_rs_node_queue_bcast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.on_ros_rs_node_queue_bcast" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.on_stellab2_queue_bcast">
+<span class="sig-name descname"><span class="pre">on_stellab2_queue_bcast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.on_stellab2_queue_bcast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.on_stellab2_queue_bcast" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.on_stopped_cam">
+<span class="sig-name descname"><span class="pre">on_stopped_cam</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.on_stopped_cam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.on_stopped_cam" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.release">
+<span class="sig-name descname"><span class="pre">release</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.release"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.release" title="Permalink to this definition"></a></dt>
+<dd><p>생성된 모든 멀티 프로세서를 종료 한다.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_nav_node_create">
+<span class="sig-name descname"><span class="pre">ros_nav_node_create</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_nav_node_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_nav_node_create" title="Permalink to this definition"></a></dt>
+<dd><p>ROS Navagation2 모듈 오브젝트 생성 명령을 보낸다.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_nav_node_launch_cartograhper">
+<span class="sig-name descname"><span class="pre">ros_nav_node_launch_cartograhper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_nav_node_launch_cartograhper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_nav_node_launch_cartograhper" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_nav_node_launch_lidar">
+<span class="sig-name descname"><span class="pre">ros_nav_node_launch_lidar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_nav_node_launch_lidar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_nav_node_launch_lidar" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_nav_node_launch_nav">
+<span class="sig-name descname"><span class="pre">ros_nav_node_launch_nav</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_nav_node_launch_nav"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_nav_node_launch_nav" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_nav_node_move_cancle">
+<span class="sig-name descname"><span class="pre">ros_nav_node_move_cancle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_nav_node_move_cancle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_nav_node_move_cancle" title="Permalink to this definition"></a></dt>
+<dd><p>현재 Navagation 중인 명령을 취소한다.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_nav_node_move_pose">
+<span class="sig-name descname"><span class="pre">ros_nav_node_move_pose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xPos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yPos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_nav_node_move_pose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_nav_node_move_pose" title="Permalink to this definition"></a></dt>
+<dd><p>지정위치로 이동할수 있도록 Navigation 명령을 보낸다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xPos</strong> (<em>float</em>) – X 포지션 [m]</p></li>
+<li><p><strong>yPos</strong> (<em>float</em>) – Y 포지션 [m]</p></li>
+<li><p><strong>angle</strong> (<em>float</em>) – heading angle [radian]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_nav_node_release">
+<span class="sig-name descname"><span class="pre">ros_nav_node_release</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_nav_node_release"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_nav_node_release" title="Permalink to this definition"></a></dt>
+<dd><p>rs_node 프로세스로부터 받는 Queue msg수신시 동작하는  Callback이다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>msg</strong> (<em>dict</em>) – Queue msg</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_nav_node_request_pid_list">
+<span class="sig-name descname"><span class="pre">ros_nav_node_request_pid_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_nav_node_request_pid_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_nav_node_request_pid_list" title="Permalink to this definition"></a></dt>
+<dd><p>ROS Navagation2 Launch로 생성된 프로세스의 PID 를 요청한다.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_robot_node_create">
+<span class="sig-name descname"><span class="pre">ros_robot_node_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fPeriod</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strTopicNameOdom</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strTopicNameVel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_robot_node_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_robot_node_create" title="Permalink to this definition"></a></dt>
+<dd><p>ROS 로봇 노드 생성 명령을 보낸다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fPeriod</strong> (<em>float</em>) – odom 토픽 발행 주기</p></li>
+<li><p><strong>strTopicNameOdom</strong> (<em>str</em>) – 발행할 odometry 토픽 이름</p></li>
+<li><p><strong>strTopicNameVel</strong> (<em>str</em>) – 구독할 속도 제어 토픽 이름</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_robot_node_release">
+<span class="sig-name descname"><span class="pre">ros_robot_node_release</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_robot_node_release"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_robot_node_release" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_robot_node_start_timer">
+<span class="sig-name descname"><span class="pre">ros_robot_node_start_timer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_robot_node_start_timer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_robot_node_start_timer" title="Permalink to this definition"></a></dt>
+<dd><p>ROS 로봇 노드의 odometry 토픽 발행을 시작한다.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_robot_node_stop_timer">
+<span class="sig-name descname"><span class="pre">ros_robot_node_stop_timer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_robot_node_stop_timer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_robot_node_stop_timer" title="Permalink to this definition"></a></dt>
+<dd><p>ROS 로봇 노드의 odometry 토픽 발행을 종료한다.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_robot_node_update_odom">
+<span class="sig-name descname"><span class="pre">ros_robot_node_update_odom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fPos_X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fPos_Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fPos_Theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fVel_c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fOmega_c</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_robot_node_update_odom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_robot_node_update_odom" title="Permalink to this definition"></a></dt>
+<dd><p>ROS 로봇 노드 Odometry 데이터를 업데이트 한다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fPos_X</strong> (<em>float</em>) – 로봇 X 포지션</p></li>
+<li><p><strong>fPos_Y</strong> (<em>float</em>) – 로봇 Y 포지션</p></li>
+<li><p><strong>fPos_Theta</strong> (<em>float</em>) – 로봇 회전각도</p></li>
+<li><p><strong>fVel_c</strong> (<em>float</em>) – 로봇 속도</p></li>
+<li><p><strong>fOmega_c</strong> (<em>float</em>) – 로봇 회전속도</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_rs_node_create">
+<span class="sig-name descname"><span class="pre">ros_rs_node_create</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_rs_node_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_rs_node_create" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_rs_node_launch">
+<span class="sig-name descname"><span class="pre">ros_rs_node_launch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_rs_node_launch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_rs_node_launch" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_rs_node_release">
+<span class="sig-name descname"><span class="pre">ros_rs_node_release</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_rs_node_release"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_rs_node_release" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_rs_node_request_pid_list">
+<span class="sig-name descname"><span class="pre">ros_rs_node_request_pid_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_rs_node_request_pid_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_rs_node_request_pid_list" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_vel_pub_add_vel">
+<span class="sig-name descname"><span class="pre">ros_vel_pub_add_vel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">velCmds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_vel_pub_add_vel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_vel_pub_add_vel" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_vel_pub_clear">
+<span class="sig-name descname"><span class="pre">ros_vel_pub_clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_vel_pub_clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_vel_pub_clear" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_vel_pub_create">
+<span class="sig-name descname"><span class="pre">ros_vel_pub_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fPeriod</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strTopicName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_vel_pub_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_vel_pub_create" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_vel_pub_destroy">
+<span class="sig-name descname"><span class="pre">ros_vel_pub_destroy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_vel_pub_destroy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_vel_pub_destroy" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_vel_pub_reg_vel">
+<span class="sig-name descname"><span class="pre">ros_vel_pub_reg_vel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">velCmds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_vel_pub_reg_vel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_vel_pub_reg_vel" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_vel_pub_release">
+<span class="sig-name descname"><span class="pre">ros_vel_pub_release</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_vel_pub_release"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_vel_pub_release" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_vel_pub_reset_vel">
+<span class="sig-name descname"><span class="pre">ros_vel_pub_reset_vel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_vel_pub_reset_vel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_vel_pub_reset_vel" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_vel_pub_start_timer">
+<span class="sig-name descname"><span class="pre">ros_vel_pub_start_timer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_vel_pub_start_timer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_vel_pub_start_timer" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.ros_vel_pub_stop_timer">
+<span class="sig-name descname"><span class="pre">ros_vel_pub_stop_timer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.ros_vel_pub_stop_timer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.ros_vel_pub_stop_timer" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.send_cmd_exarobot">
+<span class="sig-name descname"><span class="pre">send_cmd_exarobot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">acmd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aparams</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.send_cmd_exarobot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.send_cmd_exarobot" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.send_cmd_kobuki2">
+<span class="sig-name descname"><span class="pre">send_cmd_kobuki2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">acmd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aparams</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.send_cmd_kobuki2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.send_cmd_kobuki2" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.send_cmd_ros_nav_node">
+<span class="sig-name descname"><span class="pre">send_cmd_ros_nav_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">acmd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aparams</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.send_cmd_ros_nav_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.send_cmd_ros_nav_node" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.send_cmd_ros_robot_node">
+<span class="sig-name descname"><span class="pre">send_cmd_ros_robot_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">acmd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aparams</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.send_cmd_ros_robot_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.send_cmd_ros_robot_node" title="Permalink to this definition"></a></dt>
+<dd><p>ROS 로봇 프로세스로 제어 명령을 보낸다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>acmd</strong> (<em>str</em>) – 제어 명령</p></li>
+<li><p><strong>aparams</strong> (<em>object</em><em>, </em><em>optional</em>) – 제어 값. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.send_cmd_ros_rs_node">
+<span class="sig-name descname"><span class="pre">send_cmd_ros_rs_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">acmd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aparams</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.send_cmd_ros_rs_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.send_cmd_ros_rs_node" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.send_cmd_ros_vel_pub">
+<span class="sig-name descname"><span class="pre">send_cmd_ros_vel_pub</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">acmd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aparams</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.send_cmd_ros_vel_pub"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.send_cmd_ros_vel_pub" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.send_cmd_stellab2">
+<span class="sig-name descname"><span class="pre">send_cmd_stellab2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">acmd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aparams</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.send_cmd_stellab2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.send_cmd_stellab2" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.send_external_comm">
+<span class="sig-name descname"><span class="pre">send_external_comm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">acmd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aparams</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.send_external_comm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.send_external_comm" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.stellab2_connect">
+<span class="sig-name descname"><span class="pre">stellab2_connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strComPort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.stellab2_connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.stellab2_connect" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.stellab2_create">
+<span class="sig-name descname"><span class="pre">stellab2_create</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.stellab2_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.stellab2_create" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.stellab2_disconnect">
+<span class="sig-name descname"><span class="pre">stellab2_disconnect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.stellab2_disconnect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.stellab2_disconnect" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.stellab2_factory_reset">
+<span class="sig-name descname"><span class="pre">stellab2_factory_reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.stellab2_factory_reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.stellab2_factory_reset" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.stellab2_move_joint_space">
+<span class="sig-name descname"><span class="pre">stellab2_move_joint_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">right_vel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">left_vel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.stellab2_move_joint_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.stellab2_move_joint_space" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.stellab2_release">
+<span class="sig-name descname"><span class="pre">stellab2_release</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.stellab2_release"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.stellab2_release" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.stellab2_reset_motor">
+<span class="sig-name descname"><span class="pre">stellab2_reset_motor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.stellab2_reset_motor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.stellab2_reset_motor" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.stellab2_set_monitoring">
+<span class="sig-name descname"><span class="pre">stellab2_set_monitoring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.stellab2_set_monitoring"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.stellab2_set_monitoring" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.stellab2_set_velocity_control">
+<span class="sig-name descname"><span class="pre">stellab2_set_velocity_control</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ang_vel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.stellab2_set_velocity_control"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.stellab2_set_velocity_control" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.stellab2_stop_robot">
+<span class="sig-name descname"><span class="pre">stellab2_stop_robot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stop_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.stellab2_stop_robot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.stellab2_stop_robot" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.stopCam">
+<span class="sig-name descname"><span class="pre">stopCam</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.stopCam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.stopCam" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.stop_multi_processes">
+<span class="sig-name descname"><span class="pre">stop_multi_processes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.stop_multi_processes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.stop_multi_processes" title="Permalink to this definition"></a></dt>
+<dd><p>생성된 모든 멀티 프로세스를 종료한다.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ControlCore.EmbdControlCore.tts_send_msg">
+<span class="sig-name descname"><span class="pre">tts_send_msg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strMsg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ControlCore.html#EmbdControlCore.tts_send_msg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ControlCore.EmbdControlCore.tts_send_msg" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Commons.html" class="btn btn-neutral float-left" title="Commons module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="MainWindow.html" class="btn btn-neutral float-right" title="MainWindow module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

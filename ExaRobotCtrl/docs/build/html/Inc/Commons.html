@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Commons module &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ControlCore module" href="ControlCore.html" />
+    <link rel="prev" title="Include" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../apis.html">Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Include.html">Overview</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../apis.html#include">Include</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="modules.html">Include</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Commons module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ControlCore.html">ControlCore module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="MainWindow.html">MainWindow module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="UiCommon.html">UiCommon module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="AudioRecognition/modules.html">AudioRecognition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpeechSynthesis/modules.html">SpeechSynthesis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Dialog/modules.html">Dialog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="DockWidgets/modules.html">DockWidgets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ExternalComm/modules.html">ExternalComm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MdiBackground/modules.html">MdiBackground</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Misc/modules.html">Misc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MobileRobot/modules.html">MobileRobot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MultiProcessing/modules.html">MultiProcessing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PathPlanning/modules.html">PathPlanning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ROSIntegration/modules.html">ROSIntegration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SubWindow/modules.html">SubWindow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SubWindow/SerialTerm/modules.html">SerialTerm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TrajectoryGenerator/modules.html">TrajectoryGenerator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../apis.html#library">Library</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../apis.html">Modules</a> &raquo;</li>
+          <li><a href="modules.html">Include</a> &raquo;</li>
+      <li>Commons module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/Inc/Commons.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-Commons">
+<span id="commons-module"></span><h1>Commons module<a class="headerlink" href="#module-Commons" title="Permalink to this heading"></a></h1>
+<p>PySignal, 데이터 형변환, 로그, 시스템 체크 등 공통적으로 사용될수 있는 Function 기능이 구현되어 있는 모듈이다.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="Commons.PySignal">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Commons.</span></span><span class="sig-name descname"><span class="pre">PySignal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Commons.html#PySignal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Commons.PySignal" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="Commons.PySignal.connect">
+<span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Commons.html#PySignal.connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Commons.PySignal.connect" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Commons.PySignal.emit">
+<span class="sig-name descname"><span class="pre">emit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Commons.html#PySignal.emit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Commons.PySignal.emit" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Commons.check_argument_type">
+<span class="sig-prename descclassname"><span class="pre">Commons.</span></span><span class="sig-name descname"><span class="pre">check_argument_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Commons.html#check_argument_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Commons.check_argument_type" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Commons.convert_bytearray_to_int_be">
+<span class="sig-prename descclassname"><span class="pre">Commons.</span></span><span class="sig-name descname"><span class="pre">convert_bytearray_to_int_be</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abtaData</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytearray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abIsSigned</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/Commons.html#convert_bytearray_to_int_be"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Commons.convert_bytearray_to_int_be" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Commons.convert_bytearray_to_int_le">
+<span class="sig-prename descclassname"><span class="pre">Commons.</span></span><span class="sig-name descname"><span class="pre">convert_bytearray_to_int_le</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abtaData</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytearray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abIsSigned</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/Commons.html#convert_bytearray_to_int_le"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Commons.convert_bytearray_to_int_le" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Commons.convert_s16_to_bytearray_be">
+<span class="sig-prename descclassname"><span class="pre">Commons.</span></span><span class="sig-name descname"><span class="pre">convert_s16_to_bytearray_be</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anVal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytearray</span></span></span><a class="reference internal" href="../_modules/Commons.html#convert_s16_to_bytearray_be"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Commons.convert_s16_to_bytearray_be" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Commons.convert_s16_to_bytearray_le">
+<span class="sig-prename descclassname"><span class="pre">Commons.</span></span><span class="sig-name descname"><span class="pre">convert_s16_to_bytearray_le</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anVal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytearray</span></span></span><a class="reference internal" href="../_modules/Commons.html#convert_s16_to_bytearray_le"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Commons.convert_s16_to_bytearray_le" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Commons.convert_s32_to_bytearray_be">
+<span class="sig-prename descclassname"><span class="pre">Commons.</span></span><span class="sig-name descname"><span class="pre">convert_s32_to_bytearray_be</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anVal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytearray</span></span></span><a class="reference internal" href="../_modules/Commons.html#convert_s32_to_bytearray_be"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Commons.convert_s32_to_bytearray_be" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Commons.convert_s32_to_bytearray_le">
+<span class="sig-prename descclassname"><span class="pre">Commons.</span></span><span class="sig-name descname"><span class="pre">convert_s32_to_bytearray_le</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anVal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytearray</span></span></span><a class="reference internal" href="../_modules/Commons.html#convert_s32_to_bytearray_le"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Commons.convert_s32_to_bytearray_le" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Commons.convert_str_to_bytearray">
+<span class="sig-prename descclassname"><span class="pre">Commons.</span></span><span class="sig-name descname"><span class="pre">convert_str_to_bytearray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strData</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytearray</span></span></span><a class="reference internal" href="../_modules/Commons.html#convert_str_to_bytearray"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Commons.convert_str_to_bytearray" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Commons.convert_u16_to_bytearray_be">
+<span class="sig-prename descclassname"><span class="pre">Commons.</span></span><span class="sig-name descname"><span class="pre">convert_u16_to_bytearray_be</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anVal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytearray</span></span></span><a class="reference internal" href="../_modules/Commons.html#convert_u16_to_bytearray_be"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Commons.convert_u16_to_bytearray_be" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Commons.convert_u16_to_bytearray_le">
+<span class="sig-prename descclassname"><span class="pre">Commons.</span></span><span class="sig-name descname"><span class="pre">convert_u16_to_bytearray_le</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anVal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytearray</span></span></span><a class="reference internal" href="../_modules/Commons.html#convert_u16_to_bytearray_le"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Commons.convert_u16_to_bytearray_le" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Commons.convert_u32_to_bytearray_be">
+<span class="sig-prename descclassname"><span class="pre">Commons.</span></span><span class="sig-name descname"><span class="pre">convert_u32_to_bytearray_be</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anVal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytearray</span></span></span><a class="reference internal" href="../_modules/Commons.html#convert_u32_to_bytearray_be"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Commons.convert_u32_to_bytearray_be" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Commons.convert_u32_to_bytearray_le">
+<span class="sig-prename descclassname"><span class="pre">Commons.</span></span><span class="sig-name descname"><span class="pre">convert_u32_to_bytearray_le</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anVal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytearray</span></span></span><a class="reference internal" href="../_modules/Commons.html#convert_u32_to_bytearray_le"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Commons.convert_u32_to_bytearray_le" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Commons.get_curr_time">
+<span class="sig-prename descclassname"><span class="pre">Commons.</span></span><span class="sig-name descname"><span class="pre">get_curr_time</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Commons.html#get_curr_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Commons.get_curr_time" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Commons.get_ip_addr_list">
+<span class="sig-prename descclassname"><span class="pre">Commons.</span></span><span class="sig-name descname"><span class="pre">get_ip_addr_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Commons.html#get_ip_addr_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Commons.get_ip_addr_list" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Commons.is_ros_installed">
+<span class="sig-prename descclassname"><span class="pre">Commons.</span></span><span class="sig-name descname"><span class="pre">is_ros_installed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/Commons.html#is_ros_installed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Commons.is_ros_installed" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Commons.is_system_win">
+<span class="sig-prename descclassname"><span class="pre">Commons.</span></span><span class="sig-name descname"><span class="pre">is_system_win</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/Commons.html#is_system_win"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Commons.is_system_win" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Commons.search_pattern">
+<span class="sig-prename descclassname"><span class="pre">Commons.</span></span><span class="sig-name descname"><span class="pre">search_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/Commons.html#search_pattern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Commons.search_pattern" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Commons.set_cpu_affinity">
+<span class="sig-prename descclassname"><span class="pre">Commons.</span></span><span class="sig-name descname"><span class="pre">set_cpu_affinity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">affinity_mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{1,</span> <span class="pre">2}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Commons.html#set_cpu_affinity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Commons.set_cpu_affinity" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Commons.timestamp_to_string">
+<span class="sig-prename descclassname"><span class="pre">Commons.</span></span><span class="sig-name descname"><span class="pre">timestamp_to_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timestamp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Commons.html#timestamp_to_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Commons.timestamp_to_string" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Commons.write_log">
+<span class="sig-prename descclassname"><span class="pre">Commons.</span></span><span class="sig-name descname"><span class="pre">write_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strMsg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logfile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Commons.html#write_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Commons.write_log" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="Include" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ControlCore.html" class="btn btn-neutral float-right" title="ControlCore module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

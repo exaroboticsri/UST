@@ -1,0 +1,4 @@
+Invoking command in '/home/jw/robot/ros_ws/build/velocity_smoother': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/jw/robot/ros_ws/build/velocity_smoother -- -j12 -l12
+Invoked command in '/home/jw/robot/ros_ws/build/velocity_smoother' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/jw/robot/ros_ws/build/velocity_smoother -- -j12 -l12
+Invoking command in '/home/jw/robot/ros_ws/build/velocity_smoother': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/jw/robot/ros_ws/build/velocity_smoother
+Invoked command in '/home/jw/robot/ros_ws/build/velocity_smoother' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/jw/robot/ros_ws/build/velocity_smoother

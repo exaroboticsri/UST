@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MainWindow module &mdash; ExaRobot 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="UiCommon module" href="UiCommon.html" />
+    <link rel="prev" title="ControlCore module" href="ControlCore.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExaRobot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Develop Environment:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/env.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install1.html">Jetson 시스템 설치 (Jetpack 4.6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_env/jetson_install2.html">Jetson 시스템 설치 (Jetpack 5.0.2)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ROS2 기반 서비스 로봇 소프트웨어:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../software/abstract.html">개요</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw1.html">설계</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software/sw2.html">ROS2 패키지</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../apis.html">Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Include.html">Overview</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../apis.html#include">Include</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="modules.html">Include</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="Commons.html">Commons module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ControlCore.html">ControlCore module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">MainWindow module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="UiCommon.html">UiCommon module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="AudioRecognition/modules.html">AudioRecognition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpeechSynthesis/modules.html">SpeechSynthesis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Dialog/modules.html">Dialog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="DockWidgets/modules.html">DockWidgets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ExternalComm/modules.html">ExternalComm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MdiBackground/modules.html">MdiBackground</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Misc/modules.html">Misc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MobileRobot/modules.html">MobileRobot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MultiProcessing/modules.html">MultiProcessing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PathPlanning/modules.html">PathPlanning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ROSIntegration/modules.html">ROSIntegration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SubWindow/modules.html">SubWindow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SubWindow/SerialTerm/modules.html">SerialTerm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TrajectoryGenerator/modules.html">TrajectoryGenerator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../apis.html#library">Library</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExaRobot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../apis.html">Modules</a> &raquo;</li>
+          <li><a href="modules.html">Include</a> &raquo;</li>
+      <li>MainWindow module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/Inc/MainWindow.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-MainWindow">
+<span id="mainwindow-module"></span><h1>MainWindow module<a class="headerlink" href="#module-MainWindow" title="Permalink to this heading"></a></h1>
+<p>PyQt5 기반 제어 GUI의 MainWindow</p>
+<p>ControlCore 모듈을 통해서 얻어지는 상태정보 및 제어를 GUI 사용하여 접근할수 있다.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="MainWindow.MainWindow">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">MainWindow.</span></span><span class="sig-name descname"><span class="pre">MainWindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aembdCore</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="ControlCore.html#ControlCore.EmbdControlCore" title="ControlCore.EmbdControlCore"><span class="pre">EmbdControlCore</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#MainWindow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.MainWindow" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QMainWindow</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="MainWindow.MainWindow.closeEvent">
+<span class="sig-name descname"><span class="pre">closeEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QCloseEvent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#MainWindow.closeEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.MainWindow.closeEvent" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MainWindow.MainWindow.initDialog">
+<span class="sig-name descname"><span class="pre">initDialog</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#MainWindow.initDialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.MainWindow.initDialog" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MainWindow.MainWindow.initDocks">
+<span class="sig-name descname"><span class="pre">initDocks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#MainWindow.initDocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.MainWindow.initDocks" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MainWindow.MainWindow.initMdiBground">
+<span class="sig-name descname"><span class="pre">initMdiBground</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#MainWindow.initMdiBground"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.MainWindow.initMdiBground" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MainWindow.MainWindow.initMenuBar">
+<span class="sig-name descname"><span class="pre">initMenuBar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#MainWindow.initMenuBar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.MainWindow.initMenuBar" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MainWindow.MainWindow.initSlots">
+<span class="sig-name descname"><span class="pre">initSlots</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#MainWindow.initSlots"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.MainWindow.initSlots" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MainWindow.MainWindow.initStatusBar">
+<span class="sig-name descname"><span class="pre">initStatusBar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#MainWindow.initStatusBar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.MainWindow.initStatusBar" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MainWindow.MainWindow.initSubWindows">
+<span class="sig-name descname"><span class="pre">initSubWindows</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#MainWindow.initSubWindows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.MainWindow.initSubWindows" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MainWindow.MainWindow.initThreadMonitoring">
+<span class="sig-name descname"><span class="pre">initThreadMonitoring</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#MainWindow.initThreadMonitoring"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.MainWindow.initThreadMonitoring" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MainWindow.MainWindow.initToolBar">
+<span class="sig-name descname"><span class="pre">initToolBar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#MainWindow.initToolBar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.MainWindow.initToolBar" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MainWindow.MainWindow.initUi">
+<span class="sig-name descname"><span class="pre">initUi</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#MainWindow.initUi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.MainWindow.initUi" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MainWindow.MainWindow.onCloseWindow">
+<span class="sig-name descname"><span class="pre">onCloseWindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subWindow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QWidget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qtAction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QAction</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#MainWindow.onCloseWindow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.MainWindow.onCloseWindow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MainWindow.MainWindow.onConnectStatusExternalComm">
+<span class="sig-name descname"><span class="pre">onConnectStatusExternalComm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#MainWindow.onConnectStatusExternalComm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.MainWindow.onConnectStatusExternalComm" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MainWindow.MainWindow.onConnectStatusMobileRobot">
+<span class="sig-name descname"><span class="pre">onConnectStatusMobileRobot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dockCtrl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QDockWidget</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#MainWindow.onConnectStatusMobileRobot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.MainWindow.onConnectStatusMobileRobot" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MainWindow.MainWindow.onThreadMonitorTerminate">
+<span class="sig-name descname"><span class="pre">onThreadMonitorTerminate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#MainWindow.onThreadMonitorTerminate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.MainWindow.onThreadMonitorTerminate" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MainWindow.MainWindow.onThreadMonitorUpdateTime">
+<span class="sig-name descname"><span class="pre">onThreadMonitorUpdateTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cur_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#MainWindow.onThreadMonitorUpdateTime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.MainWindow.onThreadMonitorUpdateTime" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MainWindow.MainWindow.onToggleAction">
+<span class="sig-name descname"><span class="pre">onToggleAction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dockToSetVisible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">QDockWidget</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">QMdiSubWindow</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#MainWindow.onToggleAction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.MainWindow.onToggleAction" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MainWindow.MainWindow.onTriggeredDlg">
+<span class="sig-name descname"><span class="pre">onTriggeredDlg</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#MainWindow.onTriggeredDlg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.MainWindow.onTriggeredDlg" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MainWindow.MainWindow.onTriggeredDlgFaceRecog">
+<span class="sig-name descname"><span class="pre">onTriggeredDlgFaceRecog</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#MainWindow.onTriggeredDlgFaceRecog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.MainWindow.onTriggeredDlgFaceRecog" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MainWindow.MainWindow.release">
+<span class="sig-name descname"><span class="pre">release</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#MainWindow.release"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.MainWindow.release" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MainWindow.MainWindow.stopThreadMonitoring">
+<span class="sig-name descname"><span class="pre">stopThreadMonitoring</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#MainWindow.stopThreadMonitoring"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.MainWindow.stopThreadMonitoring" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="MainWindow.ThreadMonitoring">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">MainWindow.</span></span><span class="sig-name descname"><span class="pre">ThreadMonitoring</span></span><a class="reference internal" href="../_modules/MainWindow.html#ThreadMonitoring"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.ThreadMonitoring" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QThread</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="MainWindow.ThreadMonitoring.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#ThreadMonitoring.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.ThreadMonitoring.run" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MainWindow.ThreadMonitoring.sig_current_time">
+<span class="sig-name descname"><span class="pre">sig_current_time</span></span><a class="headerlink" href="#MainWindow.ThreadMonitoring.sig_current_time" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MainWindow.ThreadMonitoring.sig_terminated">
+<span class="sig-name descname"><span class="pre">sig_terminated</span></span><a class="headerlink" href="#MainWindow.ThreadMonitoring.sig_terminated" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MainWindow.ThreadMonitoring.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MainWindow.html#ThreadMonitoring.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MainWindow.ThreadMonitoring.stop" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ControlCore.html" class="btn btn-neutral float-left" title="ControlCore module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="UiCommon.html" class="btn btn-neutral float-right" title="UiCommon module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, seyeon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

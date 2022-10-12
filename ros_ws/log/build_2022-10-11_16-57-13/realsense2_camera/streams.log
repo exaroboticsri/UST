@@ -1,0 +1,86 @@
+[0.024s] Invoking command in '/home/jw/robot/ros_ws/build/realsense2_camera': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --build /home/jw/robot/ros_ws/build/realsense2_camera -- -j12 -l12
+[0.051s] -- Create Release Build.
+[0.051s] -- Found ament_cmake: 1.1.5 (/opt/ros/galactic/share/ament_cmake/cmake)
+[0.077s] -- Using PYTHON_EXECUTABLE: /usr/bin/python3
+[0.133s] -- Found builtin_interfaces: 1.0.3 (/opt/ros/galactic/share/builtin_interfaces/cmake)
+[0.151s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.154s] -- Found rosidl_adapter: 2.2.2 (/opt/ros/galactic/share/rosidl_adapter/cmake)
+[0.280s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.301s] -- Found cv_bridge: 2.2.1 (/opt/ros/galactic/share/cv_bridge/cmake)
+[0.314s] -- Found image_transport: 2.5.0 (/opt/ros/galactic/share/image_transport/cmake)
+[0.357s] -- Found rmw_implementation_cmake: 3.3.1 (/opt/ros/galactic/share/rmw_implementation_cmake/cmake)
+[0.358s] -- Found rmw_fastrtps_cpp: 5.0.2 (/opt/ros/galactic/share/rmw_fastrtps_cpp/cmake)
+[0.490s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[0.761s] -- Found rclcpp_components: 9.2.1 (/opt/ros/galactic/share/rclcpp_components/cmake)
+[0.813s] -- Found realsense2_camera_msgs: 4.51.1 (/home/jw/robot/ros_ws/install/realsense2_camera_msgs/share/realsense2_camera_msgs/cmake)
+[0.856s] -- Found nav_msgs: 2.2.4 (/opt/ros/galactic/share/nav_msgs/cmake)
+[0.917s] -- Found tf2_ros: 0.17.4 (/opt/ros/galactic/share/tf2_ros/cmake)
+[1.157s] -- Found diagnostic_updater: 2.1.3 (/opt/ros/galactic/share/diagnostic_updater/cmake)
+[1.215s] -- Build for ROS2 Galactic
+[1.329s] -- Configuring done
+[1.367s] -- Generating done
+[1.369s] -- Build files have been written to: /home/jw/robot/ros_ws/build/realsense2_camera
+[1.404s] [35m[1mScanning dependencies of target realsense2_camera[0m
+[1.410s] [ 12%] Built target realsense2_camera_node
+[1.515s] [ 18%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/realsense_node_factory.cpp.o[0m
+[1.515s] [ 25%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/base_realsense_node.cpp.o[0m
+[1.515s] [ 31%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/t265_realsense_node.cpp.o[0m
+[1.515s] [ 37%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/parameters.cpp.o[0m
+[1.516s] [ 43%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/rs_node_setup.cpp.o[0m
+[1.517s] [ 50%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/dynamic_params.cpp.o[0m
+[1.517s] [ 62%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/sensor_params.cpp.o[0m
+[1.517s] [ 62%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/ros_utils.cpp.o[0m
+[1.518s] [ 75%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/named_filter.cpp.o[0m
+[1.518s] [ 75%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/ros_sensor.cpp.o[0m
+[1.521s] [ 81%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/profile_manager.cpp.o[0m
+[1.527s] [ 87%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/image_publisher.cpp.o[0m
+[7.799s] [ 93%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/ros_param_backend_foxy.cpp.o[0m
+[22.595s] [100%] [32m[1mLinking CXX shared library librealsense2_camera.so[0m
+[25.373s] [100%] Built target realsense2_camera
+[25.385s] Invoked command in '/home/jw/robot/ros_ws/build/realsense2_camera' returned '0': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --build /home/jw/robot/ros_ws/build/realsense2_camera -- -j12 -l12
+[25.426s] Invoking command in '/home/jw/robot/ros_ws/build/realsense2_camera': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --install /home/jw/robot/ros_ws/build/realsense2_camera
+[25.433s] -- Install configuration: "Release"
+[25.433s] -- Up-to-date: /home/jw/robot/ros_ws/install/realsense2_camera/lib/realsense2_camera/realsense2_camera_node
+[25.434s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/lib/librealsense2_camera.so
+[25.437s] -- Set runtime path of "/home/jw/robot/ros_ws/install/realsense2_camera/lib/librealsense2_camera.so" to ""
+[25.437s] -- Up-to-date: /home/jw/robot/ros_ws/install/realsense2_camera/include
+[25.438s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/include/sensor_params.h
+[25.438s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/include/named_filter.h
+[25.438s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/include/t265_realsense_node.h
+[25.438s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/include/base_realsense_node.h
+[25.438s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/include/constants.h
+[25.438s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/include/ros_sensor.h
+[25.439s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/include/realsense_node_factory.h
+[25.439s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/include/ros_param_backend.h
+[25.439s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/include/profile_manager.h
+[25.439s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/include/dynamic_params.h
+[25.439s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/include/ros_utils.h
+[25.439s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/include/image_publisher.h
+[25.439s] -- Up-to-date: /home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/launch
+[25.439s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/launch/rs_intra_process_demo_launch.py
+[25.440s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/launch/rs_d400_and_t265_launch.py
+[25.440s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/launch/rs_multi_camera_launch.py
+[25.440s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/launch/rs_launch.py
+[25.440s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/launch/default.rviz
+[25.440s] -- Up-to-date: /home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/environment/library_path.sh
+[25.440s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/environment/library_path.dsv
+[25.440s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/share/ament_index/resource_index/package_run_dependencies/realsense2_camera
+[25.440s] -- Up-to-date: /home/jw/robot/ros_ws/install/realsense2_camera/share/ament_index/resource_index/parent_prefix_path/realsense2_camera
+[25.441s] -- Up-to-date: /home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/environment/ament_prefix_path.sh
+[25.441s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/environment/ament_prefix_path.dsv
+[25.441s] -- Up-to-date: /home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/environment/path.sh
+[25.441s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/environment/path.dsv
+[25.441s] -- Up-to-date: /home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/local_setup.bash
+[25.441s] -- Up-to-date: /home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/local_setup.sh
+[25.441s] -- Up-to-date: /home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/local_setup.zsh
+[25.441s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/local_setup.dsv
+[25.442s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/package.dsv
+[25.442s] -- Up-to-date: /home/jw/robot/ros_ws/install/realsense2_camera/share/ament_index/resource_index/packages/realsense2_camera
+[25.442s] -- Up-to-date: /home/jw/robot/ros_ws/install/realsense2_camera/share/ament_index/resource_index/rclcpp_components/realsense2_camera
+[25.442s] -- Up-to-date: /home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/cmake/ament_cmake_export_include_directories-extras.cmake
+[25.442s] -- Up-to-date: /home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/cmake/ament_cmake_export_libraries-extras.cmake
+[25.442s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/cmake/ament_cmake_export_dependencies-extras.cmake
+[25.442s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/cmake/realsense2_cameraConfig.cmake
+[25.442s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/cmake/realsense2_cameraConfig-version.cmake
+[25.442s] -- Installing: /home/jw/robot/ros_ws/install/realsense2_camera/share/realsense2_camera/package.xml
+[25.450s] Invoked command in '/home/jw/robot/ros_ws/build/realsense2_camera' returned '0': AMENT_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs:/opt/ros/galactic LD_LIBRARY_PATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jw/robot/ros_ws/install/realsense2_camera_msgs/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --install /home/jw/robot/ros_ws/build/realsense2_camera

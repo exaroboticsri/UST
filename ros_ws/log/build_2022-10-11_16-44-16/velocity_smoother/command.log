@@ -1,0 +1,1 @@
+Invoking command in '/home/jw/robot/ros_ws/build/velocity_smoother': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake /home/jw/robot/ros_ws/src/ExaRobot_ROS2/velocity_smoother -DCMAKE_INSTALL_PREFIX=/home/jw/robot/ros_ws/install/velocity_smoother

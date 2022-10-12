@@ -1,0 +1,8 @@
+
+pip3 install pyqt5
+pip3 install pyserial
+pip3 install opencv-python
+sudo apt-get install ros-galactic-tf-transformations -y
+sudo pip3 install transforms3d
+sudo apt-get install ros-galactic-nav2-simple-commander -y
+

@@ -1,0 +1,1 @@
+geometry_msgs;nav_msgs;rcl_interfaces;rclcpp;rclcpp_components;launch_testing;launch_testing_ament_cmake;launch_testing_ros;python3-matplotlib;ros2test
