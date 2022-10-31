@@ -11,7 +11,7 @@ python3 ControlCore.py
 ## Include
   로봇 제어시 사용되는 노드 모음
 
-### AudioRecognition
+#### AudioRecognition
   - STT 사용을 위한 파이썬 패키지
   - 사용 패키지 : speech_recognition
   - 사용 엔진 : recognize_google
@@ -20,14 +20,14 @@ python3 ControlCore.py
   sst = self._sttEngine.recognize_google(audio, language='ko-KR')
   `
 
-### Dialog
+#### Dialog
   - 디버거 프로그램상 Vision 출력 윈도우
 
-### DockWidgets
+#### DockWidgets
   - 디버거 프로그램 패키지 파일
   - QT
   
-### MobileRobot
+#### MobileRobot
   - 로봇 특성, stm32에서 받아온 패킷 파싱, 모터 제어
   - TMRDiff.py
     - 모터 속도 제어를 위한 패키지
@@ -58,19 +58,29 @@ super(CTMRExaRobot, self).__init__(fWheelRadius, fWheelBase, fMaxVel, fMaxAcc, f
 self.set_wheel_spec(nEncoderRes, fGearRatio)
 ```
 
-### MultiProcessing
+#### MultiProcessing
   - 프로세싱 분할을 위한 패키지
   - 외부 연결, 로봇 이동, 카메라, 속도, AI 등 패키지에 따라 프로세스 분할
   - 각 프로세스간 파이프 및 큐로 통신
   
-### PathPlanning
+#### PathPlanning
   - 경로 생성 패키지
   - Astar, Dijkstra, plotting
   
-### ROSIntegration
+#### ROSIntegration
   - ROS Launch 실행 패키지
   - 각 패키지 실행을 위한 런치 파일 및 해당 패키지에 해당하는 파라메터 변경
   
-### SpeechSynthesis
+#### SpeechSynthesis
   - TTS 패키지
   - 사용 패키지 및 엔진 : pyttsx3 및 libespeak
+
+
+## Library
+
+#### Devices/Camera/CameraCommon.py
+  - Vision Detection 실행 시 RealSense의 효율을 높이기 위해 작성한 패키지
+  - RealSense SDK를 이용하여 카메라가 ROS와 상관없이 별도로 실행
+  
+#### SerialPort.py
+  - 시리얼 연결 관리 ( 보드레이트, 포트, 바이트크기 등 )
